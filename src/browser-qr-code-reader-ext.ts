@@ -1,10 +1,10 @@
 import Reader from "zxing-typescript/src/core/Reader";
-import BinaryBitmap from "zxing-typescript/src/core/BinaryBitmap"
-import HybridBinarizer from "zxing-typescript/src/core/common/HybridBinarizer"
-import Result from "zxing-typescript/src/core/Result"
-import Exception from "zxing-typescript/src/core/Exception"
-import HTMLCanvasElementLuminanceSource from "zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource"
-import QRCodeReader from "zxing-typescript/src/core/qrcode/QRCodeReader"
+import BinaryBitmap from "zxing-typescript/src/core/BinaryBitmap";
+import HybridBinarizer from "zxing-typescript/src/core/common/HybridBinarizer";
+import Result from "zxing-typescript/src/core/Result";
+import Exception from "zxing-typescript/src/core/Exception";
+import HTMLCanvasElementLuminanceSource from "zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource";
+import QRCodeReader from "zxing-typescript/src/core/qrcode/QRCodeReader";
 
 
 /**
@@ -46,11 +46,11 @@ export class BrowserCodeReaderExt {
         this.videoElement.srcObject = stream;
 
         this.videoPlayingEventListener = () => {
-          this.decodeWithDelay(callback)
+          this.decodeWithDelay(callback);
         };
         this.videoElement.addEventListener("playing", this.videoPlayingEventListener);
         this.videoElement.play();
-      })
+      });
   }
 
 
@@ -65,7 +65,7 @@ export class BrowserCodeReaderExt {
   }
 
   private decodeWithDelay(resolve: (result: Result) => any): void {
-    this.timeoutHandler = window.setTimeout(this.decode.bind(this, resolve), this.timeBetweenScansMillis)
+    this.timeoutHandler = window.setTimeout(this.decode.bind(this, resolve), this.timeBetweenScansMillis);
   }
 
   private decode(resolve: (result: Result) => any, retryIfNotFound: boolean = true, retryIfChecksumOrFormatError: boolean = true, once = false): void {

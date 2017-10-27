@@ -35,16 +35,6 @@ gulp.task('copy:source', function () {
 });
 
 /**
- * 2.5. Clone the /src folder into /.tmp. If an npm link inside /src has been made,
- *    then it's likely that a node_modules folder exists. Ignore this folder
- *    when copying to /.tmp.
- */
-gulp.task('copy:source-ext', function () {
-    return gulp.src([`${srcFolder}/../node_modules/zxing-typescript/**/*`])
-        .pipe(gulp.dest(`${tmpFolder}/zxing-typescript`));
-});
-
-/**
  * 3. Inline template (.html) and style (.css) files into the the component .ts files.
  *    We do this on the /.tmp folder to avoid editing the original /src files
  */
@@ -197,7 +187,6 @@ gulp.task('compile', function () {
   runSequence(
     'clean:dist',
     'copy:source',
-    'copy:source-ext',
     'inline-resources',
     'ngc',
     'rollup:fesm',

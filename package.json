@@ -1,6 +1,6 @@
 {
   "name": "ngx-zxing",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -67,12 +67,10 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "zxing-typescript": "^0.1.2"
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "dependencies": {
-    "zxing-typescript": "^0.1.2"
   }
 }

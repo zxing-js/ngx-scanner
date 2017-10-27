@@ -32,7 +32,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     constructor() {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-            (<any>navigator).enumerateDevices = callback => {
+            (<any>navigator).enumerateDevices = (callback: any) => {
                 navigator.mediaDevices.enumerateDevices().then(callback);
             };
         }
@@ -77,7 +77,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     enumerateCams() {
         navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(
             stream => {
-                this.getAllAudioVideoDevices(videoInputDevices => {
+                this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
                         this.onCamsFound.next(videoInputDevices);
                         this.deviceId = videoInputDevices[0].deviceId;
@@ -102,7 +102,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     scan(deviceId: string) {
-        this.codeReader.decodeFromInputVideoDevice(result => {
+        this.codeReader.decodeFromInputVideoDevice((result: any) => {
             this.scanSuccess(result);
         }, deviceId, this.previewElem.nativeElement);
     }
@@ -115,13 +115,13 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.onScan.next(result.text);
     }
 
-    getAllAudioVideoDevices(successCallback) {
+    getAllAudioVideoDevices(successCallback: any) {
         if (!(<any>navigator).enumerateDevices) {
             console.error("Can't enumerate Devices");
             return;
         }
-        const videoInputDevices = [];
-        (<any>navigator).enumerateDevices(devices => {
+        const videoInputDevices: any[] = [];
+        (<any>navigator).enumerateDevices((devices: any[]) => {
             for (let i = 0, len = devices.length; i < len; i++) {
                 const device: any = {};
                 for (const d in devices[i]) {
