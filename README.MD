@@ -30,7 +30,6 @@ To install this library, run:
 
 ```bash
 $ npm install ngx-zxing --save
-$ npm install zxing-typescript --save  # Not sure if needed..
 ```
 
 and then from your Angular `AppModule`:

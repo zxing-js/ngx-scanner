@@ -24,7 +24,7 @@ export class BrowserCodeReaderExt {
   public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) {
   }
 
-  public decodeFromInputVideoDevice(callback, deviceId?: string, videoElement?: HTMLVideoElement): void {
+  public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
     this.reset();
 
     this.prepareVideoElement(videoElement);
@@ -46,7 +46,7 @@ export class BrowserCodeReaderExt {
         this.videoElement.srcObject = stream;
 
         this.videoPlayingEventListener = () => {
-          this.decodeWithDelay(callback);
+          this.decodeWithDelay(callbackFn);
         };
         this.videoElement.addEventListener("playing", this.videoPlayingEventListener);
         this.videoElement.play();
@@ -64,11 +64,11 @@ export class BrowserCodeReaderExt {
     }
   }
 
-  private decodeWithDelay(resolve: (result: Result) => any): void {
-    this.timeoutHandler = window.setTimeout(this.decode.bind(this, resolve), this.timeBetweenScansMillis);
+  private decodeWithDelay(callbackFn: (result: Result) => any): void {
+    this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScansMillis);
   }
 
-  private decode(resolve: (result: Result) => any, retryIfNotFound: boolean = true, retryIfChecksumOrFormatError: boolean = true, once = false): void {
+  private decode(callbackFn: (result: Result) => any, retryIfNotFound: boolean = true, retryIfChecksumOrFormatError: boolean = true, once = false): void {
     if (undefined === this.canvasElementContext) {
       this.prepareCaptureCanvas();
     }
@@ -79,18 +79,18 @@ export class BrowserCodeReaderExt {
     const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
     try {
       const result = this.readerDecode(binaryBitmap);
-      resolve(result);
+        callbackFn(result);
       if (!once) {
-        setTimeout(() => this.decodeWithDelay(resolve), this.timeBetweenScansMillis);
+        setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
       }
     } catch (re) {
       console.debug(retryIfChecksumOrFormatError, re);
       if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
         console.debug("not found, trying again...");
-        this.decodeWithDelay(resolve);
+        this.decodeWithDelay(callbackFn);
       } else if (retryIfChecksumOrFormatError && ( Exception.isOfType(re, Exception.ChecksumException) || Exception.isOfType(re, Exception.FormatException) )) {
         console.debug("checksum or format error, trying again...", re);
-        this.decodeWithDelay(resolve);
+        this.decodeWithDelay(callbackFn);
       }
     }
   }
