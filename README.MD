@@ -19,12 +19,18 @@ This library wraps zxing-typescript into an Angular 2/4 compatible component to 
   * works only with Safari
   * works only if the page is delivered via HTTPS 
 
+## Demo
+
+* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview)
+* [Example](/docs)
+
 ## Installation
 
 To install this library, run:
 
 ```bash
 $ npm install ngx-zxing --save
+$ npm install zxing-typescript --save  # Not sure if needed..
 ```
 
 and then from your Angular `AppModule`:
@@ -32,11 +38,13 @@ and then from your Angular `AppModule`:
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 
 // Import the library
 import { NgxZxingModule } from 'ngx-zxing';
+// Needed as well
+import { FormsModule } from "@angular/forms";
+
 
 @NgModule({
   declarations: [
@@ -44,6 +52,7 @@ import { NgxZxingModule } from 'ngx-zxing';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     NgxZxingModule.forRoot()
   ],
   providers: [],

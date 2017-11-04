@@ -1,4 +1,15 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild} from "@angular/core";
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    Output,
+    SimpleChanges,
+    ViewChild
+} from "@angular/core";
 import {Subject} from "rxjs/Subject";
 import {BrowserQRCodeReaderExt} from "./browser-qr-code-reader-ext";
 
@@ -103,6 +114,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
+            console.debug("ngx-zxing:", "result from scan:", result);
             this.scanSuccess(result);
         }, deviceId, this.previewElem.nativeElement);
     }
