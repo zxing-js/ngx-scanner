@@ -35,14 +35,6 @@ gulp.task('copy:source', function () {
 });
 
 /**
- * 2.5. Copy zxing-typescript source files for compilation
- */
-gulp.task('copy:source:lib', function () {
-    return gulp.src([`node_modules/zxing-typescript/src/**/*`])
-        .pipe(gulp.dest(`${tmpFolder}/zxing-typescript/src/`));
-});
-
-/**
  * 3. Inline template (.html) and style (.css) files into the the component .ts files.
  *    We do this on the /.tmp folder to avoid editing the original /src files
  */
@@ -195,7 +187,6 @@ gulp.task('compile', function () {
   runSequence(
     'clean:dist',
     'copy:source',
-    'copy:source:lib',
     'inline-resources',
     'ngc',
     'rollup:fesm',
