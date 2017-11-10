@@ -1,6 +1,6 @@
 {
   "name": "ngx-zxing",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/werthdavid/ngx-zxing"
@@ -30,7 +30,6 @@
   "peerDependencies": {
     "@angular/core": "^4.0.0",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4",
-    "zxing-typescript": "^0.1.2"
+    "zone.js": "^0.8.4"
   }
 }
