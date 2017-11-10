@@ -9,7 +9,7 @@ see: https://github.com/zxing/zxing
 zxing-typescript is a TypeScript-port of the ZXing library.
 
 ### ngx-typescript
-This library wraps zxing-typescript into an Angular 2/4 compatible component to scan QR-Codes the Angular-way.
+This library wraps zxing-typescript into an Angular 2/4/5/X compatible component to scan QR-Codes the Angular-way.
 
 ## Features & Hints
 

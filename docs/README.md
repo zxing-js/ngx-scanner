@@ -1,1 +1,1 @@
-### Angular Starter Plunker - Typescript
+# Demo ngx-zxing
