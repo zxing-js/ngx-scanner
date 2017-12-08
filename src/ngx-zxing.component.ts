@@ -84,6 +84,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     ngOnDestroy() {
+        this.stopCam();
         this.destroyed$.next();
         this.destroyed$.complete();
     }
