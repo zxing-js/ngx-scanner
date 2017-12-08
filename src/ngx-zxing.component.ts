@@ -17,7 +17,7 @@ import {BrowserQRCodeReaderExt} from "./browser-qr-code-reader-ext";
     selector: "ngx-zxing",
     template: `
         <div class="form">
-            <video id="preview" #preview></video>
+            <video class="{{cssClass}}" id="preview" #preview></video>
         </div>`
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
@@ -34,6 +34,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     @Input()
     device: any;
+
+    @Input()
+    cssClass: string;
 
     @Output()
     onScan = new EventEmitter<string>();
