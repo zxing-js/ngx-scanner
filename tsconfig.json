@@ -1,35 +1,26 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "declaration": true,
-    "stripInternal": true,
-    "experimentalDecorators": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "paths": {
-      "zxing-typescript": ["node_modules/zxing-typescript"],
-      "@angular/core": ["node_modules/@angular/core"],
-      "rxjs/*": ["node_modules/rxjs/*"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es5",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "es2017",
+            "dom"
+        ]
     },
-    "rootDir": "src",
-    "outDir": "dist",
-    "sourceMap": true,
-    "inlineSources": true,
-    "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
+    "files": [
+        "public_api.ts"
     ],
-    "skipLibCheck": true,
-    "lib": [
-      "es2017",
-      "dom"
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts"
     ]
-  },
-  "files": [
-    "index.ts"
-  ],
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true
-  }
 }
