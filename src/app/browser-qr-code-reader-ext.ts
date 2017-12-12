@@ -1,15 +1,17 @@
-import Reader from "./zxing-typescript/src/core/Reader";
-import BinaryBitmap from "./zxing-typescript/src/core/BinaryBitmap";
-import HybridBinarizer from "./zxing-typescript/src/core/common/HybridBinarizer";
-import Result from "./zxing-typescript/src/core/Result";
-import Exception from "./zxing-typescript/src/core/Exception";
-import HTMLCanvasElementLuminanceSource from "./zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource";
-import QRCodeReader from "./zxing-typescript/src/core/qrcode/QRCodeReader";
+import { Reader } from 'zxing-typescript/src/core/Reader';
+import { BinaryBitmap } from 'zxing-typescript/src/core/BinaryBitmap';
+import { HybridBinarizer } from 'zxing-typescript/src/core/common/HybridBinarizer';
+import { Result } from 'zxing-typescript/src/core/Result';
+import { Exception } from 'zxing-typescript/src/core/Exception';
+import { HTMLCanvasElementLuminanceSource } from 'zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource';
+import { QRCodeReader } from 'zxing-typescript/src/core/qrcode/QRCodeReader';
+
 
 /**
  * Based on Zxing-typescript BrowserCodeReader
  */
 export class BrowserCodeReaderExt {
+
   private videoElement: HTMLVideoElement;
   private imageElement: HTMLImageElement;
   private canvasElement: HTMLCanvasElement;
@@ -31,11 +33,11 @@ export class BrowserCodeReaderExt {
     let constraints: MediaStreamConstraints;
     if (undefined === deviceId) {
       constraints = {
-        video: {facingMode: "environment"}
+        video: { facingMode: 'environment' }
       };
     } else {
       constraints = {
-        video: {deviceId: {exact: deviceId}}
+        video: { deviceId: { exact: deviceId } }
       };
     }
 
@@ -47,7 +49,7 @@ export class BrowserCodeReaderExt {
         this.videoPlayingEventListener = () => {
           this.decodeWithDelay(callbackFn);
         };
-        this.videoElement.addEventListener("playing", this.videoPlayingEventListener);
+        this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
         this.videoElement.play();
       });
   }
@@ -55,7 +57,7 @@ export class BrowserCodeReaderExt {
 
   private prepareVideoElement(videoElement?: HTMLVideoElement) {
     if (undefined === videoElement) {
-      this.videoElement = document.createElement("video");
+      this.videoElement = document.createElement('video');
       this.videoElement.width = 200;
       this.videoElement.height = 200;
     } else {
@@ -78,17 +80,17 @@ export class BrowserCodeReaderExt {
     const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
     try {
       const result = this.readerDecode(binaryBitmap);
-        callbackFn(result);
+      callbackFn(result);
       if (!once) {
         setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
       }
     } catch (re) {
       console.debug(retryIfChecksumOrFormatError, re);
       if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-        console.debug("not found, trying again...");
+        console.debug('not found, trying again...');
         this.decodeWithDelay(callbackFn);
-      } else if (retryIfChecksumOrFormatError && ( Exception.isOfType(re, Exception.ChecksumException) || Exception.isOfType(re, Exception.FormatException) )) {
-        console.debug("checksum or format error, trying again...", re);
+      } else if (retryIfChecksumOrFormatError && (Exception.isOfType(re, Exception.ChecksumException) || Exception.isOfType(re, Exception.FormatException))) {
+        console.debug('checksum or format error, trying again...', re);
         this.decodeWithDelay(callbackFn);
       }
     }
@@ -99,7 +101,7 @@ export class BrowserCodeReaderExt {
   }
 
   private prepareCaptureCanvas() {
-    const canvasElement = document.createElement("canvas");
+    const canvasElement = document.createElement('canvas');
     let width, height;
     if (undefined !== this.videoElement) {
       width = this.videoElement.videoWidth;
@@ -114,17 +116,17 @@ export class BrowserCodeReaderExt {
     canvasElement.height = height;
 
     this.canvasElement = canvasElement;
-    this.canvasElementContext = canvasElement.getContext("2d");
+    this.canvasElementContext = canvasElement.getContext('2d');
   }
 
   private stop() {
     if (undefined !== this.timeoutHandler) {
       window.clearTimeout(this.timeoutHandler);
-      this.timeoutHandler = undefined;
+      this.timeoutHandler = null;
     }
     if (undefined !== this.stream) {
       this.stream.getTracks()[0].stop();
-      this.stream = undefined;
+      this.stream = null;
     }
   }
 
@@ -132,22 +134,22 @@ export class BrowserCodeReaderExt {
     this.stop();
 
     if (undefined !== this.videoPlayEndedEventListener && undefined !== this.videoElement) {
-      this.videoElement.removeEventListener("ended", this.videoPlayEndedEventListener);
+      this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
     }
     if (undefined !== this.videoPlayingEventListener && undefined !== this.videoElement) {
-      this.videoElement.removeEventListener("playing", this.videoPlayingEventListener);
+      this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
     }
     if (undefined !== this.videoElement) {
       this.videoElement.srcObject = undefined;
-      this.videoElement.removeAttribute("src");
+      this.videoElement.removeAttribute('src');
       this.videoElement = undefined;
     }
     if (undefined !== this.videoPlayEndedEventListener && undefined !== this.imageElement) {
-      this.imageElement.removeEventListener("load", this.imageLoadedEventListener);
+      this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
     }
     if (undefined !== this.imageElement) {
       this.imageElement.src = undefined;
-      this.imageElement.removeAttribute("src");
+      this.imageElement.removeAttribute('src');
       this.imageElement = undefined;
     }
     this.canvasElementContext = undefined;
@@ -155,11 +157,8 @@ export class BrowserCodeReaderExt {
   }
 }
 
-
 export class BrowserQRCodeReaderExt extends BrowserCodeReaderExt {
-
   public constructor(timeBetweenScansMillis: number = 500) {
     super(new QRCodeReader(), timeBetweenScansMillis);
   }
 }
-
