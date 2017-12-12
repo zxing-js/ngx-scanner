@@ -1,0 +1,53 @@
+{
+    "name": "ngx-zxing",
+    "version": "0.3.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/odahcam/ngx-zxing"
+    },
+    "author": {
+        "name": "Luiz Machado",
+        "email": "machado@odahcam.com"
+    },
+    "keywords": [
+        "angular"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/odahcam/ngx-zxing/issues"
+    },
+    "scripts": {
+        "docs": "npm run docs:build",
+        "docs:build": "compodoc -p tsconfig.json -n ngx-zxing -d docs --hideGenerator",
+        "docs:serve": "npm run docs:build -- -s",
+        "docs:watch": "npm run docs:build -- -s -w",
+        "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
+        "playground:build": "tsc -p playground -w",
+        "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
+        "test": "tsc && karma start",
+        "packagr": "ng-packagr -p ng-package.json"
+    },
+    "private": false,
+    "dependencies": {
+        "@angular/common": "^5.0.0",
+        "@angular/core": "^5.0.0",
+        "@angular/forms": "^5.0.0",
+        "zxing-typescript": "^0.1.2"
+    },
+    "devDependencies": {
+        "@angular/animations": "^5.0.0",
+        "@angular/cli": "1.6.0-rc.2",
+        "@angular/compiler": "^5.0.0",
+        "@angular/compiler-cli": "^5.0.0",
+        "@angular/http": "^5.0.0",
+        "@angular/language-service": "^5.0.0",
+        "@angular/platform-browser": "^5.0.0",
+        "@angular/platform-browser-dynamic": "^5.0.0",
+        "@angular/router": "^5.0.0",
+        "@compodoc/compodoc": "^1.0.5",
+        "ng-packagr": "^1.6.0",
+        "ts-node": "~3.2.0",
+        "tslint": "~5.7.0",
+        "typescript": "~2.4.2"
+    }
+}
