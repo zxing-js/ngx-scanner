@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
-import { BrowserQRCodeReaderExt } from '../browser-qr-code-reader-ext';
+import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
 
 @Component({
     selector: 'app-ngx-zxing',
