@@ -17,15 +17,18 @@
         "url": "https://github.com/odahcam/ngx-zxing/issues"
     },
     "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "build": "ng build",
+        "test": "ng test",
+        "lint": "ng lint",
+        "e2e": "ng e2e",
+        "packagr": "ng-packagr -p ng-package.json",
+
         "docs": "npm run docs:build",
         "docs:build": "compodoc -p tsconfig.json -n ngx-zxing -d docs --hideGenerator",
         "docs:serve": "npm run docs:build -- -s",
-        "docs:watch": "npm run docs:build -- -s -w",
-        "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
-        "playground:build": "tsc -p playground -w",
-        "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
-        "test": "tsc && karma start",
-        "packagr": "ng-packagr -p ng-package.json"
+        "docs:watch": "npm run docs:build -- -s -w"
     },
     "private": false,
     "dependencies": {
