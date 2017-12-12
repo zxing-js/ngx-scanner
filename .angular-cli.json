@@ -7,15 +7,20 @@
     {
       "root": "src",
       "outDir": "dist",
-      "assets": [],
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
       "index": "index.html",
-      "main": "",
+      "main": "main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [],
+      "styles": [
+        "styles.css"
+      ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,1 +1,1 @@
-export * from './src/ngx-zxing/ngx-zxing.module';
+export * from './src/app/modules/ngx-zxing/ngx-zxing.module';

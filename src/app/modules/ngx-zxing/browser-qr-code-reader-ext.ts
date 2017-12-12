@@ -3,8 +3,8 @@ import BinaryBitmap from 'zxing-typescript/src/core/BinaryBitmap';
 import HybridBinarizer from 'zxing-typescript/src/core/common/HybridBinarizer';
 import Result from 'zxing-typescript/src/core/Result';
 import Exception from 'zxing-typescript/src/core/Exception';
-import HTMLCanvasElementLuminanceSource from 'zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource';
 import QRCodeReader from 'zxing-typescript/src/core/qrcode/QRCodeReader';
+import HTMLCanvasElementLuminanceSource from 'zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource';
 
 /**
  * Based on Zxing-typescript BrowserCodeReader

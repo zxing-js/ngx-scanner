@@ -15,12 +15,5 @@
             "es2017",
             "dom"
         ]
-    },
-    "files": [
-        "public_api.ts"
-    ],
-    "exclude": [
-        "test.ts",
-        "**/*.spec.ts"
-    ]
+    }
 }
