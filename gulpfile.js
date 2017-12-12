@@ -1,12 +1,12 @@
 /* eslint-disable */
-var gulp = require('gulp'),
-  path = require('path'),
-  ngc = require('@angular/compiler-cli/src/main').main,
-  rollup = require('gulp-rollup'),
-  rename = require('gulp-rename'),
-  del = require('del'),
-  runSequence = require('run-sequence'),
-  inlineResources = require('./tools/gulp/inline-resources');
+const gulp = require('gulp');
+const path = require('path');
+const ngc = require('@angular/compiler-cli/src/main').main;
+const rollup = require('gulp-rollup');
+const rename = require('gulp-rename');
+const del = require('del');
+const runSequence = require('run-sequence');
+const inlineResources = require('./tools/gulp/inline-resources');
 
 const rootFolder = path.join(__dirname);
 const srcFolder = path.join(rootFolder, 'src');
@@ -30,7 +30,8 @@ gulp.task('clean:dist', function () {
  *    when copying to /.tmp.
  */
 gulp.task('copy:source', function () {
-  return gulp.src([`${srcFolder}/**/*`, `!${srcFolder}/node_modules`])
+  return gulp
+    .src([`${srcFolder}/**/*`, `!${srcFolder}/node_modules`])
     .pipe(gulp.dest(tmpFolder));
 });
 
@@ -39,7 +40,8 @@ gulp.task('copy:source', function () {
  *    We do this on the /.tmp folder to avoid editing the original /src files
  */
 gulp.task('inline-resources', function () {
-  return Promise.resolve()
+  return Promise
+    .resolve()
     .then(() => inlineResources(tmpFolder));
 });
 
@@ -50,8 +52,8 @@ gulp.task('inline-resources', function () {
  */
 gulp.task('ngc', function () {
   return ngc({
-    project: `${tmpFolder}/tsconfig.es5.json`
-  })
+      project: `${tmpFolder}/tsconfig.app.json`
+    })
     .then((exitCode) => {
       if (exitCode === 1) {
         // This error is caught in the 'compile' task by the runSequence method callback
@@ -67,7 +69,7 @@ gulp.task('ngc', function () {
  */
 gulp.task('rollup:fesm', function () {
   return gulp.src(`${buildFolder}/**/*.js`)
-  // transform the files here.
+    // transform the files here.
     .pipe(rollup({
 
       // Bundle's entry point
@@ -100,7 +102,7 @@ gulp.task('rollup:fesm', function () {
  */
 gulp.task('rollup:umd', function () {
   return gulp.src(`${buildFolder}/**/*.js`)
-  // transform the files here.
+    // transform the files here.
     .pipe(rollup({
 
       // Bundle's entry point

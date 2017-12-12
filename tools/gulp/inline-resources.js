@@ -38,7 +38,9 @@ const writeFile = promiseify(fs.writeFile);
 function inlineResources(projectPath) {
 
   // Match only TypeScript files in projectPath.
-  const files = glob.sync('**/*.ts', {cwd: projectPath});
+  const files = glob.sync('**/*.ts', {
+    cwd: projectPath
+  });
 
   // For each file, inline the templates and styles under it and write the new file.
   return Promise.all(files.map(filePath => {
@@ -99,8 +101,9 @@ function inlineTemplate(content, urlResolver) {
 function inlineStyle(content, urlResolver) {
   return content.replace(/styleUrls\s*:\s*(\[[\s\S]*?\])/gm, function (m, styleUrls) {
     const urls = eval(styleUrls);
-    return 'styles: ['
-      + urls.map(styleUrl => {
+
+    return 'styles: [' +
+      urls.map(styleUrl => {
         const styleFile = urlResolver(styleUrl);
         const originContent = fs.readFileSync(styleFile, 'utf-8');
         const styleContent = styleFile.endsWith('.scss') ? buildSass(originContent, styleFile) : originContent;
@@ -109,8 +112,8 @@ function inlineStyle(content, urlResolver) {
           .replace(/"/g, '\\"');
         return `"${shortenedStyle}"`;
       })
-        .join(',\n')
-      + ']';
+      .join(',\n') +
+      ']';
   });
 }
 
