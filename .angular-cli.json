@@ -1,0 +1,17 @@
+{
+  "apps": [{
+    "root": "src",
+    "main": "app/index.ts",
+    "outDir": "dist",
+    "tsconfig": "tsconfig.app.json",
+    "testTsconfig": "tsconfig.spec.json"
+  }],
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json"
+    },
+    {
+      "project": "src/tsconfig.spec.json"
+    }
+  ]
+}

@@ -1,14 +1,35 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": ".",
+    "declaration": true,
+    "stripInternal": true,
     "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
     "moduleResolution": "node",
-    "rootDir": "./src",
-    "lib": [
-      "es2015",
-      "dom"
+    "paths": {
+      "zxing-typescript": ["node_modules/zxing-typescript"],
+      "@angular/core": ["node_modules/@angular/core"],
+      "rxjs/*": ["node_modules/rxjs/*"]
+    },
+    "rootDir": "src",
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
     ],
     "skipLibCheck": true,
-    "types": []
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "files": [
+    "index.ts"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true
   }
 }
