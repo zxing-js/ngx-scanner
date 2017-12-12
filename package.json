@@ -24,7 +24,6 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "packagr": "ng-packagr -p ng-package.json",
-
         "docs": "npm run docs:build",
         "docs:build": "compodoc -p tsconfig.json -n ngx-zxing -d docs --hideGenerator",
         "docs:serve": "npm run docs:build -- -s",
@@ -35,6 +34,7 @@
         "@angular/common": "^5.0.0",
         "@angular/core": "^5.0.0",
         "@angular/forms": "^5.0.0",
+        "rxjs": "^5.5.5",
         "zxing-typescript": "^0.1.2"
     },
     "devDependencies": {
