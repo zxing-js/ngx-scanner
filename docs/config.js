@@ -1,4 +1,5 @@
 var angularVersion;
+
 if (window.AngularVersionForThisPlunker === 'latest') {
   angularVersion = ''; //picks up latest
 } else {
