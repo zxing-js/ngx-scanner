@@ -128,7 +128,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     scanSuccess(result: any) {
-        this.onScan.next(result.text);
+        if (this.start) {
+            this.onScan.next(result.text);
+        }
     }
 
     getAllAudioVideoDevices(successCallback: any) {
