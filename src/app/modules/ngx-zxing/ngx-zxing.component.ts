@@ -37,10 +37,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     cssClass: string;
 
     @Output()
-    onScan = new EventEmitter<string>();
+    scanHandler = new EventEmitter<string>();
 
     @Output()
-    onCamsFound = new EventEmitter<any[]>();
+    camerasFoundHandler = new EventEmitter<any[]>();
 
     constructor() {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
@@ -68,6 +68,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     ngAfterViewInit() {
+
+        // Chrome 63 fix
+        if (!this.previewElem) return;
+
         // iOS 11 Fix
         this.previewElem.nativeElement.setAttribute('autoplay', true);
         this.previewElem.nativeElement.setAttribute('muted', true);
@@ -90,21 +94,26 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     enumerateCams() {
         navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(
             stream => {
+
                 this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
-                        this.onCamsFound.next(videoInputDevices);
+                        this.camerasFoundHandler.next(videoInputDevices);
                         this.deviceId = videoInputDevices[0].deviceId;
                     }
                 });
+
                 // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
                 this.previewElem.nativeElement.srcObject = stream;
+
                 // After permission was granted, we can stop it again
                 stream.getVideoTracks().forEach(track => {
                     track.stop();
                 });
+
                 stream.getAudioTracks().forEach(track => {
                     track.stop();
                 });
+
             }).catch(error => {
                 console.error(error);
             });
@@ -116,8 +125,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
+
             console.debug('ngx-zxing:', 'result from scan:', result);
+
             this.scanSuccess(result);
+
         }, deviceId, this.previewElem.nativeElement);
     }
 
@@ -127,7 +139,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     scanSuccess(result: any) {
         if (this.start) {
-            this.onScan.next(result.text);
+            this.scanHandler.next(result.text);
         }
     }
 
@@ -163,6 +175,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                     videoInputDevices.push(device);
                 }
             }
+
             successCallback(videoInputDevices);
         });
     }

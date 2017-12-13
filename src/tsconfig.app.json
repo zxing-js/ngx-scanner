@@ -8,10 +8,11 @@
     },
     "include": [
         "./**.ts",
-        "../node_modules/zxing-typescript/src/browser/*.ts"
+        "../node_modules/zxing-typescript/src/**/*.ts"
     ],
     "exclude": [
         "test.ts",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "../node_modules/zxing-typescript/src/test/"
     ]
 }

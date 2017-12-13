@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    NgxZxingModule,
+    NgxZxingModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
