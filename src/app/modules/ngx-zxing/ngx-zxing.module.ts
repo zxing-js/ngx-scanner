@@ -7,10 +7,7 @@ import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
 
 @NgModule({
     imports: [CommonModule],
-    declarations: [
-        NgxZxingComponent,
-        BrowserQRCodeReaderExt,
-    ],
+    declarations: [NgxZxingComponent],
     exports: [NgxZxingComponent],
 })
 export class NgxZxingModule {

@@ -15,7 +15,7 @@ import { Subject } from 'rxjs/Subject';
 import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
 
 @Component({
-    selector: 'app-ngx-zxing',
+    selector: 'ngx-zxing',
     templateUrl: './ngx-zxing.component.html',
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
