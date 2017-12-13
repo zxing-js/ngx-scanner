@@ -79,7 +79,7 @@ export class BrowserCodeReaderExt {
     try {
       const result = this.readerDecode(binaryBitmap);
         callbackFn(result);
-      if (!once) {
+      if (!once && undefined !== this.stream) {
         setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
       }
     } catch (re) {
