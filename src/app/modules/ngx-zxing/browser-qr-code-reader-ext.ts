@@ -77,14 +77,18 @@ export class BrowserCodeReaderExt {
 
         const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
         const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+
         try {
             const result = this.readerDecode(binaryBitmap);
+
             callbackFn(result);
-            if (!once) {
+
+            if (!once && undefined !== this.stream) {
                 setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
             }
         } catch (re) {
             console.debug(retryIfChecksumOrFormatError, re);
+
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
                 console.debug('not found, trying again...');
                 this.decodeWithDelay(callbackFn);
