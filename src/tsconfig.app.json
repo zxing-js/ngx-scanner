@@ -6,6 +6,10 @@
         "module": "es2015",
         "types": []
     },
+    "include": [
+        "./**.ts",
+        "../node_modules/zxing-typescript/src/browser/*.ts"
+    ],
     "exclude": [
         "test.ts",
         "**/*.spec.ts"
