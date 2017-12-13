@@ -53,14 +53,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.start) {
-            if (this.start) {
-                this.startCam();
-            } else {
-                this.stopCam();
-            }
-        }
-        if (changes.device && this.device) {
+        if ((changes.start || changes.device) && this.device) {
             this.stopCam();
             this.deviceId = this.device.deviceId;
             if (this.start) {
