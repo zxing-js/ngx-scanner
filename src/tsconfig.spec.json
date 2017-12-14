@@ -15,6 +15,10 @@
     ],
     "include": [
         "**/*.spec.ts",
-        "**/*.d.ts"
+        "**/*.d.ts",
+        "../node_modules/zxing-typescript/src/**/*.ts"
+    ],
+    "exclude": [
+        "../node_modules/zxing-typescript/src/test/"
     ]
 }
