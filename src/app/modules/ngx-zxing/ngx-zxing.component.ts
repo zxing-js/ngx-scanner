@@ -156,6 +156,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 const device: any = {};
 
+                // @NOTE: maybe for-of would be a better option here.
                 // for (const d of devices[i]) {
                 for (const d in devices[i]) {
                     device[d] = devices[i][d];
