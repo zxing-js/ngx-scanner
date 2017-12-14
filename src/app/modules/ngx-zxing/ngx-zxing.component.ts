@@ -15,7 +15,7 @@ import { Subject } from 'rxjs/Subject';
 import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
 
 @Component({
-    selector: 'ngx-zxing',
+    selector: 'app-ngx-zxing',
     templateUrl: './ngx-zxing.component.html',
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
@@ -70,7 +70,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     ngAfterViewInit() {
 
         // Chrome 63 fix
-        if (!this.previewElem) return;
+        if (!this.previewElem) {
+            return;
+        }
 
         // iOS 11 Fix
         this.previewElem.nativeElement.setAttribute('autoplay', true);
@@ -126,7 +128,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-            console.debug('ngx-zxing:', 'result from scan:', result);
+            // console.debug('ngx-zxing:', 'result from scan:', result);
 
             this.scanSuccess(result);
 
@@ -154,6 +156,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 const device: any = {};
 
+                // for (const d of devices[i]) {
                 for (const d in devices[i]) {
                     device[d] = devices[i][d];
                 }
