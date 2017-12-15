@@ -30,6 +30,7 @@ export class BrowserCodeReaderExt {
         this.prepareVideoElement(videoElement);
 
         let constraints: MediaStreamConstraints;
+
         if (undefined === deviceId) {
             constraints = {
                 video: { facingMode: 'environment' }
@@ -40,7 +41,9 @@ export class BrowserCodeReaderExt {
             };
         }
 
-        navigator.mediaDevices.getUserMedia(constraints)
+        navigator
+            .mediaDevices
+            .getUserMedia(constraints)
             .then((stream: MediaStream) => {
                 this.stream = stream;
                 this.videoElement.srcObject = stream;
@@ -48,6 +51,7 @@ export class BrowserCodeReaderExt {
                 this.videoPlayingEventListener = () => {
                     this.decodeWithDelay(callbackFn);
                 };
+
                 this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
                 this.videoElement.play();
             });
@@ -68,7 +72,13 @@ export class BrowserCodeReaderExt {
         this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScansMillis);
     }
 
-    private decode(callbackFn: (result: Result) => any, retryIfNotFound: boolean = true, retryIfChecksumOrFormatError: boolean = true, once = false): void {
+    private decode(
+        callbackFn: (result: Result) => any,
+        retryIfNotFound: boolean = true,
+        retryIfChecksumOrFormatError: boolean = true,
+        once = false
+    ): void {
+
         if (undefined === this.canvasElementContext) {
             this.prepareCaptureCanvas();
         }
@@ -87,13 +97,22 @@ export class BrowserCodeReaderExt {
                 setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
             }
         } catch (re) {
-            console.debug(retryIfChecksumOrFormatError, re);
+
+            // console.debug(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-                console.debug('not found, trying again...');
+                // console.debug('not found, trying again...');
+
                 this.decodeWithDelay(callbackFn);
-            } else if (retryIfChecksumOrFormatError && (Exception.isOfType(re, Exception.ChecksumException) || Exception.isOfType(re, Exception.FormatException))) {
-                console.debug('checksum or format error, trying again...', re);
+            } else if (
+                retryIfChecksumOrFormatError &&
+                (
+                    Exception.isOfType(re, Exception.ChecksumException) ||
+                    Exception.isOfType(re, Exception.FormatException)
+                )
+            ) {
+                // console.debug('checksum or format error, trying again...', re);
+
                 this.decodeWithDelay(callbackFn);
             }
         }
@@ -106,6 +125,7 @@ export class BrowserCodeReaderExt {
     private prepareCaptureCanvas() {
         const canvasElement = document.createElement('canvas');
         let width, height;
+
         if (undefined !== this.videoElement) {
             width = this.videoElement.videoWidth;
             height = this.videoElement.videoHeight;
@@ -113,6 +133,7 @@ export class BrowserCodeReaderExt {
             width = this.imageElement.naturalWidth || this.imageElement.width;
             height = this.imageElement.naturalHeight || this.imageElement.height;
         }
+
         canvasElement.style.width = `${width}px`;
         canvasElement.style.height = `${height}px`;
         canvasElement.width = width;
@@ -134,27 +155,33 @@ export class BrowserCodeReaderExt {
     }
 
     public reset() {
+
         this.stop();
 
         if (undefined !== this.videoPlayEndedEventListener && undefined !== this.videoElement) {
             this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
         }
+
         if (undefined !== this.videoPlayingEventListener && undefined !== this.videoElement) {
             this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
         }
+
         if (undefined !== this.videoElement) {
             this.videoElement.srcObject = undefined;
             this.videoElement.removeAttribute('src');
             this.videoElement = undefined;
         }
+
         if (undefined !== this.videoPlayEndedEventListener && undefined !== this.imageElement) {
             this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
         }
+
         if (undefined !== this.imageElement) {
             this.imageElement.src = undefined;
             this.imageElement.removeAttribute('src');
             this.imageElement = undefined;
         }
+
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
     }
