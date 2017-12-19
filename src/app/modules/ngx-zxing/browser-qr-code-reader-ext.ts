@@ -23,10 +23,10 @@ export class BrowserCodeReaderExt {
     private videoPlayingEventListener: EventListener;
     private imageLoadedEventListener: EventListener;
 
-    public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) {
-    }
+    public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) { }
 
     public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+
         this.reset();
 
         this.prepareVideoElement(videoElement);
