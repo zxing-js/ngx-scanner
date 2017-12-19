@@ -1,10 +1,12 @@
-import Reader from 'zxing-typescript/src/core/Reader';
-import BinaryBitmap from 'zxing-typescript/src/core/BinaryBitmap';
-import HybridBinarizer from 'zxing-typescript/src/core/common/HybridBinarizer';
-import Result from 'zxing-typescript/src/core/Result';
-import Exception from 'zxing-typescript/src/core/Exception';
-import QRCodeReader from 'zxing-typescript/src/core/qrcode/QRCodeReader';
-import HTMLCanvasElementLuminanceSource from 'zxing-typescript/src/browser/HTMLCanvasElementLuminanceSource';
+import {
+    Reader,
+    BinaryBitmap,
+    HybridBinarizer,
+    Result,
+    Exception,
+    QRCodeReader,
+    HTMLCanvasElementLuminanceSource,
+} from '@barn/zxing';
 
 /**
  * Based on Zxing-typescript BrowserCodeReader
