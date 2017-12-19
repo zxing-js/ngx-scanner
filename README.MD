@@ -1,5 +1,7 @@
 # NgxZxing
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d28849bd6fc6461d91397602c0b3c91f)](https://www.codacy.com/app/odahcam/ngx-zxing?utm_source=github.com&utm_medium=referral&utm_content=odahcam/ngx-zxing&utm_campaign=badger)
+
 ## zxing-typescript
 
 zxing-typescript is a TypeScript-port of the [ZXing](https://github.com/zxing/zxing) library.
