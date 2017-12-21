@@ -156,9 +156,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 const device: any = {};
 
-                // @NOTE: maybe for-of would be a better option here.
-                // for (const d of devices[i]) {
-                for (const d in devices[i]) {
+                for (const d of devices[i]) {
+                // for (const d in devices[i]) {
+                    // @NOTE: keep an eye here to see if the in -> of change affects the camera recuperation task
                     device[d] = devices[i][d];
                 }
 
