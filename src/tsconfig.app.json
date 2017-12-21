@@ -7,12 +7,10 @@
         "types": []
     },
     "include": [
-        "./**.ts",
-        "../node_modules/zxing-typescript/src/**/*.ts"
+        "./**.ts"
     ],
     "exclude": [
         "test.ts",
-        "**/*.spec.ts",
-        "../node_modules/zxing-typescript/src/test/"
+        "**/*.spec.ts"
     ]
 }
