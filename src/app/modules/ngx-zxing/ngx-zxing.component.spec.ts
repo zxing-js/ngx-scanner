@@ -7,9 +7,10 @@ describe('NgxZxingComponent', () => {
     let fixture: ComponentFixture<NgxZxingComponent>;
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [NgxZxingComponent]
-        })
+        TestBed
+            .configureTestingModule({
+                declarations: [NgxZxingComponent]
+            })
             .compileComponents();
     }));
 
