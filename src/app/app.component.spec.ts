@@ -1,10 +1,20 @@
 import { TestBed, async } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
+import { NgxZxingModule } from './modules/ngx-zxing/ngx-zxing.module';
+
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                BrowserModule,
+                FormsModule,
+                NgxZxingModule.forRoot()
+            ],
             declarations: [
                 AppComponent
             ],
