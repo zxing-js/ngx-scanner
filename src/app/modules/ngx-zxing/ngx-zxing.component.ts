@@ -12,10 +12,11 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
+
 import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
 
 @Component({
-    selector: 'app-ngx-zxing',
+    selector: 'ngx-zxing',
     templateUrl: './ngx-zxing.component.html',
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
@@ -37,10 +38,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     cssClass: string;
 
     @Output()
-    scanHandler = new EventEmitter<string>();
+    onScan = new EventEmitter<string>();
 
     @Output()
-    camerasFoundHandler = new EventEmitter<any[]>();
+    onCamsFound = new EventEmitter<any[]>();
 
     constructor() {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
@@ -94,35 +95,30 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     enumerateCams() {
-        navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(
-            stream => {
+        navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(stream => {
 
-                this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
-                    if (videoInputDevices && videoInputDevices.length > 0) {
-                        this.camerasFoundHandler.next(videoInputDevices);
-                        this.deviceId = videoInputDevices[0].deviceId;
-                    }
-                });
-
-                // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                this.previewElem.nativeElement.srcObject = stream;
-
-                // After permission was granted, we can stop it again
-                stream.getVideoTracks().forEach(track => {
-                    track.stop();
-                });
-
-                stream.getAudioTracks().forEach(track => {
-                    track.stop();
-                });
-
-            }).catch(error => {
-                console.error(error);
+            this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
+                if (videoInputDevices && videoInputDevices.length > 0) {
+                    this.onCamsFound.next(videoInputDevices);
+                    this.deviceId = videoInputDevices[0].deviceId;
+                }
             });
-    }
 
-    startCam() {
-        this.scan(this.deviceId);
+            // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
+            this.previewElem.nativeElement.srcObject = stream;
+
+            // After permission was granted, we can stop it again
+            stream.getVideoTracks().forEach(track => {
+                track.stop();
+            });
+
+            stream.getAudioTracks().forEach(track => {
+                track.stop();
+            });
+
+        }).catch(error => {
+            console.error(error);
+        });
     }
 
     scan(deviceId: string) {
@@ -135,13 +131,17 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         }, deviceId, this.previewElem.nativeElement);
     }
 
+    startCam() {
+        this.scan(this.deviceId);
+    }
+
     stopCam() {
         this.codeReader.reset();
     }
 
     scanSuccess(result: any) {
         if (this.start) {
-            this.scanHandler.next(result.text);
+            this.onScan.next(result.text);
         }
     }
 
@@ -157,7 +157,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 const device: any = {};
 
                 for (const d of devices[i]) {
-                // for (const d in devices[i]) {
+                    // for (const d in devices[i]) {
                     // @NOTE: keep an eye here to see if the in -> of change affects the camera recuperation task
                     device[d] = devices[i][d];
                 }
@@ -165,12 +165,15 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 if (device.kind === 'video') {
                     device.kind = 'videoinput';
                 }
+
                 if (!device.deviceId) {
                     device.deviceId = device.id;
                 }
+
                 if (!device.id) {
                     device.id = device.deviceId;
                 }
+
                 if (!device.label) {
                     device.label = 'Camera (No Permission)';
                 }
