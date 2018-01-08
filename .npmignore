@@ -30,5 +30,13 @@ Desktop.ini
 **/*.ngfactory.ts
 
 # Library files
-src/*
-build/*
+src/
+build/
+docs/
+e2e/
+node_modules/
+
+*.lock
+.*
+karma.*
+protactor.*
