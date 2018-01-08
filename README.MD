@@ -10,26 +10,16 @@
 [![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d28849bd6fc6461d91397602c0b3c91f)](https://www.codacy.com/app/odahcam/ngx-zxing?utm_source=github.com&utm_medium=referral&utm_content=odahcam/ngx-zxing&utm_campaign=badger)
 
-## zxing-typescript
-
-`zxing-typescript` is a TypeScript-port of the [ZXing](https://github.com/zxing/zxing) library.
-
-## ngx-typescript
-
-This library wraps zxing-typescript into an Angular 5 component to scan QR-Codes the Angular-way.
-
 ## Features & Hints
 
-- supports continuous scanning
-- there is a delay of 1500ms after each successful scan, before a new QR-Code can be detected
-- supports iOS 11
-
-  - works only with Safari
-  - works only if the page is delivered via HTTPS
+- upports continuous scanning.
+- There is a delay of 1500ms after each successful scan, before a new QR-Code can be detected.
+- Supports iOS 11 (only in Safari via HTTPS).
 
 ## Demo
 
-* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview)
+* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-exemple) _(preview needs to be openned in new window)_
+* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _(preview needs to be openned in new window)_
 * [Example](https://werthdavid.github.io/ngx-zxing/index.html)
 
 ## Installation
@@ -37,7 +27,19 @@ This library wraps zxing-typescript into an Angular 5 component to scan QR-Codes
 To install this library, run:
 
 ```bash
-$ npm install ngx-zxing --save
+npm i ngx-zxing -S
+```
+
+or
+
+```bash
+npm install ngx-zxing --save
+```
+
+or
+
+```bash
+yarn add ngx-zxing
 ```
 
 and then from your Angular `AppModule`:
@@ -50,20 +52,15 @@ import { AppComponent } from './app.component';
 // Import the library
 import { NgxZxingModule } from 'ngx-zxing';
 
-// Needed as well
-import { FormsModule } from "@angular/forms";
-
-
 @NgModule({
     declarations: [
         AppComponent
     ],
     imports: [
         BrowserModule,
-        FormsModule,
+        // make sure to add to the imports
         NgxZxingModule.forRoot()
     ],
-    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -73,7 +70,7 @@ export class AppModule { }
 
 Once the library is imported, you can use it in your Angular application:
 
-```xml
+```html
 <ngx-zxing
     [start]="camStarted"
     [device]="selectedDevice"
