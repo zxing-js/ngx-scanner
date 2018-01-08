@@ -95,15 +95,15 @@ export class BrowserScanner {
 
             callbackFn(result);
 
-            if (!once && undefined !== this.stream) {
+            if (!once && !!this.stream) {
                 setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
             }
         } catch (re) {
 
-            // console.debug(retryIfChecksumOrFormatError, re);
+            console.log(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-                // console.debug('not found, trying again...');
+                console.warn('Not found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
             } else if (
@@ -113,7 +113,7 @@ export class BrowserScanner {
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                // console.debug('checksum or format error, trying again...', re);
+                console.log('Checksum or format error, trying again...', re);
 
                 this.decodeWithDelay(callbackFn);
             }
@@ -146,11 +146,12 @@ export class BrowserScanner {
     }
 
     private stop() {
-        if (undefined !== this.timeoutHandler) {
+        if (!!this.timeoutHandler) {
             window.clearTimeout(this.timeoutHandler);
             this.timeoutHandler = null;
         }
-        if (undefined !== this.stream) {
+
+        if (!!this.stream) {
             this.stream.getTracks()[0].stop();
             this.stream = null;
         }
