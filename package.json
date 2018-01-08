@@ -1,14 +1,19 @@
 {
-    "name": "ngx-zxing",
+    "name": "@barn/ngx-zxing",
     "version": "0.3.5",
     "repository": {
         "type": "git",
         "url": "https://github.com/odahcam/ngx-zxing"
     },
-    "author": {
-        "name": "Luiz Machado",
-        "email": "machado@odahcam.com"
-    },
+    "authors": [{
+            "name": "David Werth",
+            "email": "werth.david@gmail.com"
+        },
+        {
+            "name": "Luiz Machado",
+            "email": "machado@odahcam.com"
+        }
+    ],
     "keywords": [
         "angular"
     ],
