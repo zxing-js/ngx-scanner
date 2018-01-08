@@ -13,7 +13,7 @@ import {
 
 import { Subject } from 'rxjs/Subject';
 
-import { BrowserQRCodeReaderExt } from './browser-scanner';
+import { BrowserQRCodeReader } from './browser-qr-code-reader';
 
 @Component({
     selector: 'ngx-zxing',
@@ -22,7 +22,7 @@ import { BrowserQRCodeReaderExt } from './browser-scanner';
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     private destroyed$: Subject<any> = new Subject<any>();
-    private codeReader = new BrowserQRCodeReaderExt(1500);
+    private codeReader = new BrowserQRCodeReader(1500);
     private deviceId: string;
 
     @ViewChild('preview')
@@ -104,28 +104,28 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     enumerateCams() {
         navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(stream => {
 
-                this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
-                    if (videoInputDevices && videoInputDevices.length > 0) {
-                        this.onCamsFound.next(videoInputDevices);
-                        this.deviceId = videoInputDevices[0].deviceId;
-                    }
-                });
-
-                // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                this.previewElem.nativeElement.srcObject = stream;
-
-                // After permission was granted, we can stop it again
-                stream.getVideoTracks().forEach(track => {
-                    track.stop();
-                });
-
-                stream.getAudioTracks().forEach(track => {
-                    track.stop();
-                });
-
-            }).catch(error => {
-                console.error(error);
+            this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
+                if (videoInputDevices && videoInputDevices.length > 0) {
+                    this.onCamsFound.next(videoInputDevices);
+                    this.deviceId = videoInputDevices[0].deviceId;
+                }
             });
+
+            // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
+            this.previewElem.nativeElement.srcObject = stream;
+
+            // After permission was granted, we can stop it again
+            stream.getVideoTracks().forEach(track => {
+                track.stop();
+            });
+
+            stream.getAudioTracks().forEach(track => {
+                track.stop();
+            });
+
+        }).catch(error => {
+            console.error(error);
+        });
     }
 
     scan(deviceId: string) {

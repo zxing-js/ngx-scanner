@@ -4,14 +4,13 @@ import {
     HybridBinarizer,
     Result,
     Exception,
-    QRCodeReader,
     HTMLCanvasElementLuminanceSource,
 } from '@barn/zxing';
 
 /**
  * Based on Zxing-typescript BrowserCodeReader
  */
-export class BrowserScanner {
+export class BrowserCodeReader {
 
     private videoElement: HTMLVideoElement;
     private imageElement: HTMLImageElement;
@@ -187,11 +186,5 @@ export class BrowserScanner {
 
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
-    }
-}
-
-export class BrowserQRCodeReaderExt extends BrowserScanner {
-    public constructor(timeBetweenScansMillis: number = 500) {
-        super(new QRCodeReader(), timeBetweenScansMillis);
     }
 }
