@@ -5,7 +5,8 @@
     <br>
     <ngx-zxing [start]="cameraStarted" [device]="selectedDevice" (onCamsFound)="displayCameras($event)" (onScan)="handleQrCodeResult($event)"></ngx-zxing>
     <br>
-    <span>Result:
+    <span>
+        Result:
         <strong>{{qrResult}}</strong>
     </span>
 </div>
