@@ -1,5 +1,7 @@
 # NgxZxing
+**Angular QR-Code scanner component**
 
+[![NPM version](https://badge.fury.io/js/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing) [![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing) [![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) [![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d28849bd6fc6461d91397602c0b3c91f)](https://www.codacy.com/app/odahcam/ngx-zxing?utm_source=github.com&utm_medium=referral&utm_content=odahcam/ngx-zxing&utm_campaign=badger)
 
 ## zxing-typescript
@@ -21,8 +23,8 @@ This library wraps zxing-typescript into an Angular 5 component to scan QR-Codes
 
 ## Demo
 
-- [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview)
-- [Example](https://werthdavid.github.io/ngx-zxing/index.html)
+* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview)
+* [Example](https://werthdavid.github.io/ngx-zxing/index.html)
 
 ## Installation
 
