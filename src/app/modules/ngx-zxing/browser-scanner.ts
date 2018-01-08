@@ -11,7 +11,7 @@ import {
 /**
  * Based on Zxing-typescript BrowserCodeReader
  */
-export class BrowserCodeReaderExt {
+export class BrowserScanner {
 
     private videoElement: HTMLVideoElement;
     private imageElement: HTMLImageElement;
@@ -189,7 +189,7 @@ export class BrowserCodeReaderExt {
     }
 }
 
-export class BrowserQRCodeReaderExt extends BrowserCodeReaderExt {
+export class BrowserQRCodeReaderExt extends BrowserScanner {
     public constructor(timeBetweenScansMillis: number = 500) {
         super(new QRCodeReader(), timeBetweenScansMillis);
     }
