@@ -13,11 +13,11 @@ import {
 
 import { Subject } from 'rxjs/Subject';
 
-import { BrowserQRCodeReaderExt } from './browser-qr-code-reader-ext';
+import { BrowserQRCodeReaderExt } from './browser-scanner';
 
 @Component({
     selector: 'ngx-zxing',
-    templateUrl: './ngx-zxing.component.html',
+    templateUrl: './ngx-zxing.component.html'
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
@@ -25,7 +25,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     private codeReader = new BrowserQRCodeReaderExt(1500);
     private deviceId: string;
 
-    @ViewChild('ngx-zxing-preview')
+    @ViewChild('preview')
     previewElem: ElementRef;
 
     @Input()
@@ -35,7 +35,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     device: any;
 
     @Input()
-    cssClass: string;
+    cssClass: any;
 
     @Output()
     onScan = new EventEmitter<string>();
@@ -52,16 +52,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.start) {
-            if (this.start) {
-                this.startCam();
-            } else {
-                this.stopCam();
-            }
-        }
-        if (changes.device && this.device) {
+        if ((changes.start || changes.device) && this.device) {
             this.stopCam();
             this.deviceId = this.device.deviceId;
+
             if (this.start) {
                 this.startCam();
             }
@@ -72,6 +66,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         // Chrome 63 fix
         if (!this.previewElem) {
+            console.error('Preview element not found!');
             return;
         }
 
@@ -124,7 +119,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-            // console.debug('ngx-zxing:', 'result from scan:', result);
+            console.log('ngx-zxing:', 'result from scan: ', result);
 
             this.scanSuccess(result);
 
@@ -146,19 +141,21 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     getAllAudioVideoDevices(successCallback: any) {
+
         if (!(<any>navigator).enumerateDevices) {
             console.error('Can\'t enumerate Devices');
             return;
         }
+
         const videoInputDevices: any[] = [];
+
         (<any>navigator).enumerateDevices((devices: any[]) => {
             for (let i = 0, len = devices.length; i < len; i++) {
 
                 const device: any = {};
 
-                for (const d of devices[i]) {
-                    // for (const d in devices[i]) {
-                    // @NOTE: keep an eye here to see if the in -> of change affects the camera recuperation task
+                // tslint:disable-next-line:forin
+                for (const d in devices[i]) {
                     device[d] = devices[i][d];
                 }
 

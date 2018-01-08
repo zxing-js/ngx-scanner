@@ -1,34 +1,41 @@
-import { Component, VERSION } from '@angular/core'
+import { Component, VERSION } from '@angular/core';
 
 @Component({
-    selector: 'my-app',
+    selector: 'app-root',
     templateUrl: 'app.component.html',
 })
 export class AppComponent {
 
-    camStarted = false;
-    selectedDevice = undefined;
-    qrResult = "";
-    availableDevices = [];
+    cameraStarted = false;
+    qrResult: string;
+    selectedDevice: object;
+    availableDevices: object[] = [];
 
-    displayCameras(cams: any[]) {
-        this.availableDevices = cams;
-        console.log("Devices", cams);
-        if (cams && cams.length > 0) {
-            this.selectedDevice = cams[0];
-            this.camStarted = true;
+    displayCameras(cameras: object[]) {
+
+        console.log('Devices: ', cameras);
+
+        this.availableDevices = cameras;
+
+        if (cameras && cameras.length > 0) {
+            this.selectedDevice = cameras[0];
+            this.cameraStarted = true;
         }
     }
 
     handleQrCodeResult(result: string) {
-        console.log("Result", result);
+
+        console.log('Result: ', result);
+
         this.qrResult = result;
     }
 
-    onChange(selectedValue: string) {
-        console.log("Selection changed", selectedValue);
-        this.camStarted = false;
+    onChange(selectedValue: object) {
+
+        console.log('Selection changed: ', selectedValue);
+
+        this.cameraStarted = false;
         this.selectedDevice = selectedValue;
-        this.camStarted = true;
+        this.cameraStarted = true;
     }
 }

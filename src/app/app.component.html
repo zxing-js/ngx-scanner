@@ -3,7 +3,7 @@
         <option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</option>
     </select>
     <br>
-    <ngx-zxing [start]="camStarted" [device]="selectedDevice" (onCamsFound)="displayCameras($event)" (onScan)="handleQrCodeResult($event)"></ngx-zxing>
+    <ngx-zxing [start]="cameraStarted" [device]="selectedDevice" (onCamsFound)="displayCameras($event)" (onScan)="handleQrCodeResult($event)"></ngx-zxing>
     <br>
     <span>Result:
         <strong>{{qrResult}}</strong>
