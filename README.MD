@@ -1,12 +1,18 @@
+<img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png"/>
+
 # NgxZxing
 **Angular QR-Code scanner component**
 
-[![NPM version](https://badge.fury.io/js/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing) [![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing) [![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) [![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
+[![NPM version](https://badge.fury.io/js/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
+[![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing)
+[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d28849bd6fc6461d91397602c0b3c91f)](https://www.codacy.com/app/odahcam/ngx-zxing?utm_source=github.com&utm_medium=referral&utm_content=odahcam/ngx-zxing&utm_campaign=badger)
 
 ## zxing-typescript
 
-zxing-typescript is a TypeScript-port of the [ZXing](https://github.com/zxing/zxing) library.
+`zxing-typescript` is a TypeScript-port of the [ZXing](https://github.com/zxing/zxing) library.
 
 ## ngx-typescript
 
