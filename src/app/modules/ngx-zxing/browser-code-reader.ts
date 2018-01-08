@@ -86,6 +86,7 @@ export class BrowserCodeReader {
 
         this.canvasElementContext.drawImage(this.videoElement || this.imageElement, 0, 0);
 
+        // generates zone.js error when switching cameras
         const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
         const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
 
