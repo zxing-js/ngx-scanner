@@ -26,7 +26,7 @@ This library wraps zxing-typescript into an Angular 2/4/5/X compatible component
 
 ## Demo
 
-* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-exemple) _(preview needs to be openned in new window)_
+* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-example) _(preview needs to be openned in new window)_
 * [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _(preview needs to be openned in new window)_
 * [Example](https://werthdavid.github.io/ngx-zxing/index.html)
 
