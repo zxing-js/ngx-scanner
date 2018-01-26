@@ -47,6 +47,7 @@ export class BrowserCodeReader {
             .getUserMedia(constraints)
             .then((stream: MediaStream) => {
                 this.stream = stream;
+                // @NOTE throws: a play request was interrupted by a new loaded request
                 this.videoElement.srcObject = stream;
 
                 this.videoPlayingEventListener = () => {

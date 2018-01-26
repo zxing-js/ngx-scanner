@@ -37,13 +37,17 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     @Input()
     cssClass: any;
 
-    // tslint:disable-next-line:no-output-on-prefix
     @Output()
-    onScan = new EventEmitter<string>();
+    scanSuccess = new EventEmitter<string>();
 
-    // tslint:disable-next-line:no-output-on-prefix
     @Output()
-    onCamsFound = new EventEmitter<any[]>();
+    scanFailure = new EventEmitter<string>();
+
+    @Output()
+    scanError = new EventEmitter<string>();
+
+    @Output()
+    camerasFound = new EventEmitter<any[]>();
 
     constructor() {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
@@ -78,7 +82,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         // Chrome 63 fix
         if (!this.previewElem) {
-            console.error('Preview element not found!');
+            console.warn('ngx-zxing', 'Preview element not found!');
             return;
         }
 
@@ -106,7 +110,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
                 if (videoInputDevices && videoInputDevices.length > 0) {
-                    this.onCamsFound.next(videoInputDevices);
+                    this.camerasFound.next(videoInputDevices);
                     this.deviceId = videoInputDevices[0].deviceId;
                 }
             });
@@ -124,16 +128,16 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             });
 
         }).catch(error => {
-            console.error(error);
+            console.error('ngx-zxing', error);
         });
     }
 
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-            console.log('ngx-zxing:', 'result from scan: ', result);
+            console.log('ngx-zxing', 'result from scan: ', result);
 
-            this.scanSuccess(result);
+            this.dispatchScanSuccess(result);
 
         }, deviceId, this.previewElem.nativeElement);
     }
@@ -146,22 +150,26 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.codeReader.reset();
     }
 
-    scanSuccess(result: any) {
+    dispatchScanSuccess(result: any) {
         if (this.start) {
-            this.onScan.next(result.text);
+            this.scanSuccess.next(result.text);
         }
     }
 
     getAllAudioVideoDevices(successCallback: any) {
 
         if (!(<any>navigator).enumerateDevices) {
-            console.error('Can\'t enumerate Devices');
+            console.error('ngx-zxing', 'Can\'t enumerate Devices');
             return;
         }
 
         const videoInputDevices: any[] = [];
 
         (<any>navigator).enumerateDevices((devices: any[]) => {
+
+            /*
+             * forof and .forEach doesn't work.
+             */
             for (let i = 0, len = devices.length; i < len; i++) {
 
                 const device: any = {};
