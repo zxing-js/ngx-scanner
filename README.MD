@@ -74,7 +74,7 @@ Once the library is imported, you can use it in your Angular application:
 <ngx-zxing
     [start]="camStarted"
     [device]="selectedDevice"
-    [cssClass]="small-video"
+    [cssClass]="'small-video'"
     (onCamsFound)="displayCameras($event)"
     (onScan)="handleQrCodeResult($event)"
 ></ngx-zxing>
