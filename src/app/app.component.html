@@ -6,7 +6,7 @@
 
 <ngx-zxing class="test-class" [start]="cameraStarted" [device]="selectedDevice" (camerasFound)="displayCameras($event)" (scanSuccess)="handleQrCodeResult($event)"></ngx-zxing>
 
-<div>
+<p>
     Result:
     <strong>{{ qrResult }}</strong>
-</div>
+</p>

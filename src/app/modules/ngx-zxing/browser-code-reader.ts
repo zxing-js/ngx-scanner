@@ -45,20 +45,23 @@ export class BrowserCodeReader {
         navigator
             .mediaDevices
             .getUserMedia(constraints)
-            .then((stream: MediaStream) => {
-                this.stream = stream;
-                // @NOTE throws: a play request was interrupted by a new loaded request
-                this.videoElement.srcObject = stream;
-
-                this.videoPlayingEventListener = () => {
-                    this.decodeWithDelay(callbackFn);
-                };
-
-                this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
-                this.videoElement.play();
-            });
+            .then((stream: MediaStream) => this.getUserMediaCallback(stream, callbackFn));
     }
 
+    private getUserMediaCallback(stream: MediaStream, callbackFn: (result: Result) => any): void {
+
+        this.stream = stream;
+
+        // @NOTE throws: a play request was interrupted by a new loaded request
+        this.videoElement.srcObject = stream;
+
+        this.videoPlayingEventListener = () => {
+            this.decodeWithDelay(callbackFn);
+        };
+
+        this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
+        this.videoElement.play(); // video is already playing
+    }
 
     private prepareVideoElement(videoElement?: HTMLVideoElement) {
         if (undefined === videoElement) {
@@ -146,16 +149,18 @@ export class BrowserCodeReader {
         this.canvasElementContext = canvasElement.getContext('2d');
     }
 
-    private stop() {
-        if (!!this.timeoutHandler) {
+    private stop(): void {
+
+        if (this.timeoutHandler) {
             window.clearTimeout(this.timeoutHandler);
             this.timeoutHandler = null;
         }
 
-        if (!!this.stream) {
+        if (this.stream) {
             this.stream.getTracks()[0].stop();
             this.stream = null;
         }
+
     }
 
     public reset() {

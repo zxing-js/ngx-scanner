@@ -106,30 +106,32 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     enumerateCams() {
-        navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(stream => {
+        navigator.mediaDevices
+            .getUserMedia({ audio: false, video: true })
+            .then(stream => {
 
-            this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
-                if (videoInputDevices && videoInputDevices.length > 0) {
-                    this.camerasFound.next(videoInputDevices);
-                    this.deviceId = videoInputDevices[0].deviceId;
-                }
+                this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
+                    if (videoInputDevices && videoInputDevices.length > 0) {
+                        this.camerasFound.next(videoInputDevices);
+                        this.deviceId = videoInputDevices[0].deviceId;
+                    }
+                });
+
+                // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
+                this.previewElem.nativeElement.srcObject = stream;
+
+                // After permission was granted, we can stop it again
+                stream.getVideoTracks().forEach(track => {
+                    track.stop();
+                });
+
+                stream.getAudioTracks().forEach(track => {
+                    track.stop();
+                });
+
+            }).catch(error => {
+                console.error('ngx-zxing', error);
             });
-
-            // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-            this.previewElem.nativeElement.srcObject = stream;
-
-            // After permission was granted, we can stop it again
-            stream.getVideoTracks().forEach(track => {
-                track.stop();
-            });
-
-            stream.getAudioTracks().forEach(track => {
-                track.stop();
-            });
-
-        }).catch(error => {
-            console.error('ngx-zxing', error);
-        });
     }
 
     scan(deviceId: string) {

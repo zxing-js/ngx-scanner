@@ -6,7 +6,8 @@
         "type": "git",
         "url": "https://github.com/odahcam/ngx-zxing"
     },
-    "authors": [{
+    "authors": [
+        {
             "name": "David Werth",
             "email": "werth.david@gmail.com"
         },
@@ -44,6 +45,7 @@
         "zone.js": "^0.8.19"
     },
     "devDependencies": {
+        "@angular-devkit/core": "^0.0.29",
         "@angular/animations": "^5.1.3",
         "@angular/cli": "1.6.0",
         "@angular/compiler": "^5.1.3",
