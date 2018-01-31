@@ -12,14 +12,14 @@
 
 ## Features & Hints
 
-- upports continuous scanning.
+- Supports continuous scanning.
 - There is a delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Supports iOS 11 (only in Safari via HTTPS).
 
 ## Demo
 
-* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-example) _(preview needs to be openned in new window)_
-* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _(preview needs to be openned in new window)_
+* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-example) _(preview needs to be opened in new window)_
+* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _(preview needs to be opened in new window)_
 * [Example](https://werthdavid.github.io/ngx-zxing/index.html)
 
 ## Installation
@@ -74,7 +74,7 @@ Once the library is imported, you can use it in your Angular application:
 <ngx-zxing
     [start]="camStarted"
     [device]="selectedDevice"
-    [cssClass]="small-video"
+    [cssClass]="'small-video'"
     (onCamsFound)="displayCameras($event)"
     (onScan)="handleQrCodeResult($event)"
 ></ngx-zxing>
