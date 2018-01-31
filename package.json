@@ -6,7 +6,8 @@
         "type": "git",
         "url": "https://github.com/odahcam/ngx-zxing"
     },
-    "authors": [{
+    "authors": [
+        {
             "name": "David Werth",
             "email": "werth.david@gmail.com"
         },
