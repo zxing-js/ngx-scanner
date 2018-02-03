@@ -130,7 +130,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 });
 
             }).catch(error => {
-                console.error('ngx-zxing', error);
+                console.error('ngx-zxing', 'enumerateCams', error);
             });
     }
 

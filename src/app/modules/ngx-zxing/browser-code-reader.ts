@@ -30,17 +30,11 @@ export class BrowserCodeReader {
 
         this.prepareVideoElement(videoElement);
 
-        let constraints: MediaStreamConstraints;
+        const video = deviceId === undefined
+            ? { facingMode: 'environment' }
+            : { deviceId: { exact: deviceId } };
 
-        if (undefined === deviceId) {
-            constraints = {
-                video: { facingMode: 'environment' }
-            };
-        } else {
-            constraints = {
-                video: { deviceId: { exact: deviceId } }
-            };
-        }
+        const constraints: MediaStreamConstraints = { video };
 
         navigator
             .mediaDevices
@@ -52,7 +46,8 @@ export class BrowserCodeReader {
 
         this.stream = stream;
 
-        // @NOTE throws: a play request was interrupted by a new loaded request
+        // @NOTE a play request was interrupted by a new loaded request
+        // @throws Exception
         this.videoElement.srcObject = stream;
 
         this.videoPlayingEventListener = () => {
@@ -60,6 +55,7 @@ export class BrowserCodeReader {
         };
 
         this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
+        // see if the `play` is not responsible for the error
         this.videoElement.play(); // video is already playing
     }
 
@@ -157,6 +153,7 @@ export class BrowserCodeReader {
         }
 
         if (this.stream) {
+            // @TODO see if the `stop` is not responsible for the cam switch error
             this.stream.getTracks()[0].stop();
             this.stream = null;
         }
