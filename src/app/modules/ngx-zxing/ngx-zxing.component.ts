@@ -26,7 +26,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     private deviceId: string;
 
     @ViewChild('preview')
-    previewElem: ElementRef;
+    previewElemRef: ElementRef;
 
     @Input()
     start = false;
@@ -81,16 +81,16 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     ngAfterViewInit() {
 
         // Chrome 63 fix
-        if (!this.previewElem) {
+        if (!this.previewElemRef) {
             console.warn('ngx-zxing', 'Preview element not found!');
             return;
         }
 
         // iOS 11 Fix
-        this.previewElem.nativeElement.setAttribute('autoplay', true);
-        this.previewElem.nativeElement.setAttribute('muted', true);
-        this.previewElem.nativeElement.setAttribute('playsinline', true);
-        this.previewElem.nativeElement.setAttribute('autofocus', true);
+        this.previewElemRef.nativeElement.setAttribute('autoplay', false);
+        this.previewElemRef.nativeElement.setAttribute('muted', true);
+        this.previewElemRef.nativeElement.setAttribute('playsinline', true);
+        this.previewElemRef.nativeElement.setAttribute('autofocus', true);
 
         this.enumerateCams();
 
@@ -106,19 +106,20 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     enumerateCams() {
-        navigator.mediaDevices
+        navigator
+            .mediaDevices
             .getUserMedia({ audio: false, video: true })
             .then(stream => {
 
                 this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
                         this.camerasFound.next(videoInputDevices);
-                        this.deviceId = videoInputDevices[0].deviceId;
+                        this.deviceId = videoInputDevices[videoInputDevices.length - 1].deviceId;
                     }
                 });
 
                 // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                this.previewElem.nativeElement.srcObject = stream;
+                // this.previewElemRef.nativeElement.srcObject = stream;
 
                 // After permission was granted, we can stop it again
                 stream.getVideoTracks().forEach(track => {
@@ -129,7 +130,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                     track.stop();
                 });
 
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.error('ngx-zxing', 'enumerateCams', error);
             });
     }
@@ -141,7 +143,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.dispatchScanSuccess(result);
 
-        }, deviceId, this.previewElem.nativeElement);
+        }, deviceId, this.previewElemRef.nativeElement);
     }
 
     startCam() {
