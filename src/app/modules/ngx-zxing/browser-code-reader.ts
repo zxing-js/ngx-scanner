@@ -12,19 +12,38 @@ import {
  */
 export class BrowserCodeReader {
 
+    /**
+     * The HTML video element, used to display the camera stream.
+     */
     private videoElement: HTMLVideoElement;
     private imageElement: HTMLImageElement;
     private canvasElement: HTMLCanvasElement;
     private canvasElementContext: CanvasRenderingContext2D;
     private timeoutHandler: number;
+    /**
+     * The stream output from camera.
+     */
     private stream: MediaStream;
     private videoPlayEndedEventListener: EventListener;
     private videoPlayingEventListener: EventListener;
     private videoLoadedMetadataEventListener: EventListener;
     private imageLoadedEventListener: EventListener;
 
-    public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) { }
+    /**
+     * Constructor for dependency injection.
+     *
+     * @param reader The barcode reader to be used to decode the stream.
+     * @param timeBetweenScans The scan throttling in milliseconds.
+     */
+    public constructor(private reader: Reader, private timeBetweenScans: number = 500) { }
 
+    /**
+     * Starts the decoding from the actual or a new video element.
+     *
+     * @param callbackFn The callback to be executed after every scan attempt
+     * @param deviceId The device's to be used Id
+     * @param videoElement A new video element
+     */
     public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
 
         this.reset();
@@ -43,14 +62,20 @@ export class BrowserCodeReader {
         navigator
             .mediaDevices
             .getUserMedia(constraints)
-            .then((stream: MediaStream) => this.getUserMediaCallback(stream, callbackFn))
+            .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
             .catch((err: any) => {
-                /* handle the error */
+                /* handle the error, or not */
                 console.error(err);
             });
     }
 
-    private getUserMediaCallback(stream: MediaStream, callbackFn: (result: Result) => any): void {
+    /**
+     * Sets the new stream and request a new decoding-with-delay.
+     *
+     * @param stream The stream to be shown in the video element.
+     * @param callbackFn A callback for the decode method.
+     */
+    private startDecodeFromStream(stream: MediaStream, callbackFn: (result: Result) => any): void {
 
         this.stream = stream;
 
@@ -77,8 +102,13 @@ export class BrowserCodeReader {
         this.videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
 
+    /**
+     * Sets a HTMLVideoElement for scanning or creates a new one.
+     *
+     * @param videoElement The HTMLVideoElement to be set.
+     */
     private prepareVideoElement(videoElement?: HTMLVideoElement) {
-        if (undefined === videoElement) {
+        if (!videoElement) {
             this.videoElement = document.createElement('video');
             this.videoElement.width = 200;
             this.videoElement.height = 200;
@@ -87,10 +117,22 @@ export class BrowserCodeReader {
         }
     }
 
+    /**
+     *
+     * @param callbackFn
+     */
     private decodeWithDelay(callbackFn: (result: Result) => any): void {
-        this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScansMillis);
+        this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScans);
     }
 
+    /**
+     * Does the real image decoding job.
+     *
+     * @param callbackFn
+     * @param retryIfNotFound
+     * @param retryIfChecksumOrFormatError
+     * @param once
+     */
     private decode(
         callbackFn: (result: Result) => any,
         retryIfNotFound: boolean = true,
@@ -115,7 +157,7 @@ export class BrowserCodeReader {
             callbackFn(result);
 
             if (!once && !!this.stream) {
-                setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
+                setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScans);
             }
 
         } catch (re) {
@@ -140,10 +182,18 @@ export class BrowserCodeReader {
         }
     }
 
+    /**
+     * Alias for this.reader.decode
+     *
+     * @param binaryBitmap
+     */
     protected readerDecode(binaryBitmap: BinaryBitmap): Result {
         return this.reader.decode(binaryBitmap);
     }
 
+    /**
+     *
+     */
     private prepareCaptureCanvas() {
 
         const canvasElement = document.createElement('canvas');
@@ -168,6 +218,9 @@ export class BrowserCodeReader {
         this.canvasElementContext = canvasElement.getContext('2d');
     }
 
+    /**
+     * Stops the continuous scan and cleans the stream.
+     */
     private stop(): void {
 
         if (this.timeoutHandler) {
@@ -183,7 +236,10 @@ export class BrowserCodeReader {
 
     }
 
-    public reset() {
+    /**
+     * Resets the scanner and it's configurations.
+     */
+    public reset(): void {
 
         this.stop();
 
