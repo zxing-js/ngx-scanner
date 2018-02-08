@@ -14,6 +14,7 @@ import {
 import { Subject } from 'rxjs/Subject';
 
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { Result } from '@barn/zxing';
 
 @Component({
     selector: 'ngx-zxing',
@@ -48,10 +49,13 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     scanFailure = new EventEmitter<void>();
 
     @Output()
-    scanError = new EventEmitter<string>();
+    scanError = new EventEmitter<Error>();
 
     @Output()
-    camerasFound = new EventEmitter<any[]>();
+    scanComplete = new EventEmitter<Result>();
+
+    @Output()
+    camerasFound = new EventEmitter<MediaDeviceInfo[]>();
 
     @Output()
     camerasNotFound = new EventEmitter<void>();
@@ -92,7 +96,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.previewElemRef.nativeElement.setAttribute('playsinline', true);
         this.previewElemRef.nativeElement.setAttribute('autofocus', true);
 
-        if (!this.videoInputDevices) this.enumerateCams();
+        if (!this.videoInputDevices) {
+            this.enumerateCams();
+        }
 
         this.startScan();
     }
@@ -145,13 +151,24 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     scan(deviceId: string) {
-        this.codeReader.decodeFromInputVideoDevice((result: any) => {
+        try {
+            this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-            console.log('ngx-zxing', 'scan', 'result from scan: ', result);
+                console.log('ngx-zxing', 'scan', 'result from scan: ', result);
 
-            this.dispatchScanSuccess(result);
+                if (result) {
+                    this.dispatchScanSuccess(result);
+                } else {
+                    this.dispatchScanFailure();
+                }
 
-        }, deviceId, this.previewElemRef.nativeElement);
+                this.dispatchScanComplete(result);
+
+            }, deviceId, this.previewElemRef.nativeElement);
+        } catch (err) {
+            this.dispatchScanError(err);
+            this.dispatchScanComplete(undefined);
+        }
     }
 
     startScan() {
@@ -164,8 +181,38 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.codeReader.reset();
     }
 
-    dispatchScanSuccess(result: any) {
-        this.scanSuccess.next(result.text);
+    /**
+     * Dispatches the scan success event.
+     *
+     * @param result the scan result.
+     */
+    dispatchScanSuccess(result: Result): void {
+        this.scanSuccess.next(result.getText());
+    }
+
+    /**
+     * Dispatches the scan failure event.
+     */
+    dispatchScanFailure(): void {
+        this.scanFailure.next();
+    }
+
+    /**
+     * Dispatches the scan error event.
+     *
+     * @param err the error thing.
+     */
+    dispatchScanError(error: any): void {
+        this.scanError.next(error);
+    }
+
+    /**
+     * Dispatches the scan event.
+     *
+     * @param result the scan result.
+     */
+    dispatchScanComplete(result: Result): void {
+        this.scanComplete.next(result);
     }
 
     /**
