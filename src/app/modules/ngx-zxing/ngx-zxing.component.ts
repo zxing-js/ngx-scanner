@@ -25,7 +25,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     private codeReader = new BrowserQRCodeReader(1500);
     private deviceId: string;
     private isEnumerateDevicesSuported: boolean;
-    private videoInputDevices: any[];
+    private videoInputDevices: MediaDeviceInfo[];
 
     @ViewChild('preview')
     previewElemRef: ElementRef;
@@ -56,9 +56,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
 
         if (!this.isEnumerateDevicesSuported) {
-
             console.error('ngx-zxing', 'enumerateDevices() not supported.');
-
         }
     }
 
@@ -116,7 +114,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         navigator
             .mediaDevices
             .getUserMedia({ audio: false, video: true })
-            .then(stream => {
+            .then((stream: MediaStream) => {
 
                 this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
@@ -146,7 +144,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-            console.log('ngx-zxing', 'result from scan: ', result);
+            console.log('ngx-zxing', 'scan', 'result from scan: ', result);
 
             this.dispatchScanSuccess(result);
 
@@ -172,25 +170,24 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     getAllAudioVideoDevices(successCallback: any) {
 
         if (!this.isEnumerateDevicesSuported) {
-            console.error('ngx-zxing', 'Can\'t enumerate Devices');
+            console.error('ngx-zxing', 'getAllAudioVideoDevices', 'Can\'t enumerate Devices');
             return;
         }
 
-        navigator.mediaDevices.enumerateDevices().then((devices: object[]) => {
+        navigator.mediaDevices.enumerateDevices().then((devices: MediaDeviceInfo[]) => {
 
             this.videoInputDevices = [];
 
-            /*
-             * forof and .forEach doesn't work.
-             */
-            for (let i = 0, len = devices.length; i < len; i++) {
+            for (const deviceI of devices) {
 
                 const device: any = {};
 
                 // tslint:disable-next-line:forin
-                for (const d in devices[i]) {
-                    device[d] = devices[i][d];
+                for (const d in deviceI) {
+                    device[d] = deviceI[d];
                 }
+
+                // const device: any = Object.assign({}, devices[i]);
 
                 if (device.kind === 'video') {
                     device.kind = 'videoinput';
