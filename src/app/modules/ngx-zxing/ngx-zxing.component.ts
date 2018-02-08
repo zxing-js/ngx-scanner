@@ -62,19 +62,20 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         if (changes.start) {
             if (this.start) {
-                this.startCam();
+                this.startScan();
             } else {
-                this.stopCam();
+                this.stopScan();
             }
         }
 
         if (changes.device && this.device) {
 
-            this.stopCam();
+            this.stopScan();
+
             this.deviceId = this.device.deviceId;
 
             if (this.start) {
-                this.startCam();
+                this.startScan();
             }
         }
     }
@@ -96,12 +97,12 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.enumerateCams();
 
         if (this.start) {
-            this.startCam();
+            this.startScan();
         }
     }
 
     ngOnDestroy() {
-        this.stopCam();
+        this.stopScan();
         this.destroyed$.next();
         this.destroyed$.complete();
     }
@@ -147,11 +148,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         }, deviceId, this.previewElemRef.nativeElement);
     }
 
-    startCam() {
+    startScan() {
         this.scan(this.deviceId);
     }
 
-    stopCam() {
+    stopScan() {
         this.codeReader.reset();
     }
 
