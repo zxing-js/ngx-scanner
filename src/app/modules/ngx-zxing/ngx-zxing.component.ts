@@ -22,8 +22,8 @@ import { Result } from '@barn/zxing';
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-    private destroyed$: Subject<any> = new Subject<any>();
-    private codeReader = new BrowserQRCodeReader(1500);
+    private destroyed$: Subject<any> = new Subject;
+    private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
 
     private isEnumerateDevicesSuported: boolean;
 
@@ -34,7 +34,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     previewElemRef: ElementRef;
 
     @Input()
-    start = false;
+    scanThrottling: number = 1500;
+
+    @Input()
+    start: boolean = false;
 
     @Input()
     device: MediaDeviceInfo;
@@ -64,25 +67,32 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
     }
 
+    /**
+     * Manages the bindinded property changes.
+     * @param changes
+     */
     ngOnChanges(changes: SimpleChanges): void {
 
         if (changes.start) {
-
             if (!this.start) {
                 this.stopScan();
             }
-
             this.startScan();
         }
 
         if (changes.device && this.device) {
-
             this.changeDevice(this.device);
+        }
 
+        if (changes.scanThrottling) {
+            this.setCodeReaderThrottling(this.scanThrottling);
         }
     }
 
-    ngAfterViewInit() {
+    /**
+     * Executed after the view initialization.
+     */
+    ngAfterViewInit(): void {
 
         // Chrome 63 fix
         if (!this.previewElemRef) {
@@ -103,19 +113,39 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.startScan();
     }
 
-    ngOnDestroy() {
+    /**
+     * Executes some actions before destroy the component.
+     */
+    ngOnDestroy(): void {
         this.stopScan();
         this.destroyed$.next();
         this.destroyed$.complete();
     }
 
-    changeDevice(device: MediaDeviceInfo) {
+    /**
+     * Starts a new QR-scanner to set a new scan throttling.
+     *
+     * @param throttling The scan speed in milliseconds.
+     */
+    setCodeReaderThrottling(throttling: number): void {
+        this.codeReader = new BrowserQRCodeReader(throttling);
+    }
+
+    /**
+     * Properly changes the actual target device.
+     *
+     * @param device
+     */
+    changeDevice(device: MediaDeviceInfo): void {
         this.stopScan();
         this.videoInputDevice = this.device;
         this.startScan();
     }
 
-    enumerateCams() {
+    /**
+     * Gets and registers all cammeras.
+     */
+    enumerateCams(): void {
         navigator
             .mediaDevices
             .getUserMedia({ audio: false, video: true })
@@ -123,6 +153,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
+
                         this.camerasFound.next(videoInputDevices);
 
                         this.changeDevice(videoInputDevices[videoInputDevices.length - 1]);
@@ -150,11 +181,17 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             });
     }
 
-    scan(deviceId: string) {
+    /**
+     * Starts the continuous scanning for the given device.
+     *
+     * @param deviceId The deviceId from the device.
+     */
+    scan(deviceId: string): void {
         try {
+
             this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-                console.log('ngx-zxing', 'scan', 'result from scan: ', result);
+                console.log('ngx-zxing', 'scan', 'result: ', result);
 
                 if (result) {
                     this.dispatchScanSuccess(result);
@@ -165,19 +202,26 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 this.dispatchScanComplete(result);
 
             }, deviceId, this.previewElemRef.nativeElement);
+
         } catch (err) {
             this.dispatchScanError(err);
             this.dispatchScanComplete(undefined);
         }
     }
 
-    startScan() {
+    /**
+     * Starts the scanning if allowed.
+     */
+    startScan(): void {
         if (this.start) {
             this.scan(this.videoInputDevice.deviceId);
         }
     }
 
-    stopScan() {
+    /**
+     * Stops the scan service.
+     */
+    stopScan(): void {
         this.codeReader.reset();
     }
 
@@ -220,7 +264,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      *
      * @param successCallback
      */
-    enumarateVideoDevices(successCallback: any) {
+    enumarateVideoDevices(successCallback: any): void {
 
         if (!this.isEnumerateDevicesSuported) {
             console.error('ngx-zxing', 'enumarateVideoDevices', 'Can\'t enumerate devices, method not supported.');
