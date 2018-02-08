@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { NgxZxingComponent } from './ngx-zxing.component';
 
+export type NgxZxingComponent = NgxZxingComponent;
+
 @NgModule({
     imports: [
         CommonModule,
