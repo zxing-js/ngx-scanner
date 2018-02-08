@@ -44,7 +44,7 @@ export class BrowserCodeReader {
             .mediaDevices
             .getUserMedia(constraints)
             .then((stream: MediaStream) => this.getUserMediaCallback(stream, callbackFn))
-            .catch(function (err) {
+            .catch((err: any) => {
                 /* handle the error */
                 console.error(err);
             });
