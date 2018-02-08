@@ -20,6 +20,7 @@ export class BrowserCodeReader {
     private stream: MediaStream;
     private videoPlayEndedEventListener: EventListener;
     private videoPlayingEventListener: EventListener;
+    private videoLoadedMetadataEventListener: EventListener;
     private imageLoadedEventListener: EventListener;
 
     public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) { }
@@ -30,34 +31,51 @@ export class BrowserCodeReader {
 
         this.prepareVideoElement(videoElement);
 
-        let constraints: MediaStreamConstraints;
+        const video = deviceId === undefined
+            ? { facingMode: { exact: 'environment' } }
+            : { deviceId: { exact: deviceId } };
 
-        if (undefined === deviceId) {
-            constraints = {
-                video: { facingMode: 'environment' }
-            };
-        } else {
-            constraints = {
-                video: { deviceId: { exact: deviceId } }
-            };
-        }
+        const constraints: MediaStreamConstraints = {
+            audio: false,
+            video
+        };
 
         navigator
             .mediaDevices
             .getUserMedia(constraints)
-            .then((stream: MediaStream) => {
-                this.stream = stream;
-                this.videoElement.srcObject = stream;
-
-                this.videoPlayingEventListener = () => {
-                    this.decodeWithDelay(callbackFn);
-                };
-
-                this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
-                this.videoElement.play();
+            .then((stream: MediaStream) => this.getUserMediaCallback(stream, callbackFn))
+            .catch((err: any) => {
+                /* handle the error */
+                console.error(err);
             });
     }
 
+    private getUserMediaCallback(stream: MediaStream, callbackFn: (result: Result) => any): void {
+
+        this.stream = stream;
+
+        // Older browsers may not have srcObject
+        if ('srcObject' in this.videoElement) {
+            // @NOTE a play request was interrupted by a new loaded request
+            // @throws Exception
+            this.videoElement.srcObject = stream;
+        } else {
+            // Avoid using this in new browsers, as it is going away.
+            this.videoElement.src = window.URL.createObjectURL(stream);
+        }
+
+        this.videoPlayingEventListener = () => {
+            this.decodeWithDelay(callbackFn);
+        };
+
+        this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
+
+        this.videoLoadedMetadataEventListener = () => {
+            this.videoElement.play();
+        };
+
+        this.videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+    }
 
     private prepareVideoElement(videoElement?: HTMLVideoElement) {
         if (undefined === videoElement) {
@@ -91,6 +109,7 @@ export class BrowserCodeReader {
         const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
 
         try {
+
             const result = this.readerDecode(binaryBitmap);
 
             callbackFn(result);
@@ -98,6 +117,7 @@ export class BrowserCodeReader {
             if (!once && !!this.stream) {
                 setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScansMillis);
             }
+
         } catch (re) {
 
             console.log(retryIfChecksumOrFormatError, re);
@@ -125,8 +145,11 @@ export class BrowserCodeReader {
     }
 
     private prepareCaptureCanvas() {
+
         const canvasElement = document.createElement('canvas');
-        let width, height;
+
+        let width: number;
+        let height: number;
 
         if (undefined !== this.videoElement) {
             width = this.videoElement.videoWidth;
@@ -136,8 +159,8 @@ export class BrowserCodeReader {
             height = this.imageElement.naturalHeight || this.imageElement.height;
         }
 
-        canvasElement.style.width = `${width}px`;
-        canvasElement.style.height = `${height}px`;
+        canvasElement.style.width = width + 'px';
+        canvasElement.style.height = height + 'px';
         canvasElement.width = width;
         canvasElement.height = height;
 
@@ -145,44 +168,53 @@ export class BrowserCodeReader {
         this.canvasElementContext = canvasElement.getContext('2d');
     }
 
-    private stop() {
-        if (!!this.timeoutHandler) {
+    private stop(): void {
+
+        if (this.timeoutHandler) {
             window.clearTimeout(this.timeoutHandler);
             this.timeoutHandler = null;
         }
 
-        if (!!this.stream) {
+        if (this.stream) {
+            // @TODO see if the `stop` is not responsible for the cam switch error
             this.stream.getTracks()[0].stop();
             this.stream = null;
         }
+
     }
 
     public reset() {
 
         this.stop();
 
-        if (undefined !== this.videoPlayEndedEventListener && undefined !== this.videoElement) {
-            this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
-        }
-
-        if (undefined !== this.videoPlayingEventListener && undefined !== this.videoElement) {
-            this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
-        }
-
         if (undefined !== this.videoElement) {
+
             this.videoElement.srcObject = undefined;
             this.videoElement.removeAttribute('src');
             this.videoElement = undefined;
-        }
 
-        if (undefined !== this.videoPlayEndedEventListener && undefined !== this.imageElement) {
-            this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
+            if (undefined !== this.videoPlayEndedEventListener) {
+                this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
+            }
+
+            if (undefined !== this.videoPlayingEventListener) {
+                this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
+            }
+
+            if (undefined !== this.videoLoadedMetadataEventListener) {
+                this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+            }
         }
 
         if (undefined !== this.imageElement) {
+
             this.imageElement.src = undefined;
             this.imageElement.removeAttribute('src');
             this.imageElement = undefined;
+
+            if (undefined !== this.videoPlayEndedEventListener) {
+                this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
+            }
         }
 
         this.canvasElementContext = undefined;

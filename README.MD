@@ -74,17 +74,17 @@ Once the library is imported, you can use it in your Angular application:
 <ngx-zxing
     [start]="camStarted"
     [device]="selectedDevice"
-    [cssClass]="'small-video'"
-    (onCamsFound)="displayCameras($event)"
-    (onScan)="handleQrCodeResult($event)"
+    [cssClass]="small-video"
+    (camerasFound)="displayCameras($event)"
+    (scanSuccess)="handleQrCodeResult($event)"
 ></ngx-zxing>
 ```
 
 - `start` can be used to start and stop the scanning (defaults to `false`)
-- `device` is the video-device used for scanning (use one of the devices emitted by `onCamsFound`)
+- `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
 - `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
-- `onCamsFound` will emit an array of video-devices after view was initialized
-- `onScan` will emit the result as string, after a valid QR-Code was scanned
+- `camerasFound` will emit an array of video-devices after view was initialized
+- `scanSuccess` will emit the result as string, after a valid QR-Code was scanSuccess
 
 ### Change the size of the preview-element
 
