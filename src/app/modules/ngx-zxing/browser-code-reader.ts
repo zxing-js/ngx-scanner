@@ -16,18 +16,50 @@ export class BrowserCodeReader {
      * The HTML video element, used to display the camera stream.
      */
     private videoElement: HTMLVideoElement;
+    /**
+     * Should contain the actual registered listener for video play-ended,
+     * used to unregister that listener when needed.
+     */
+    private videoPlayEndedEventListener: EventListener;
+    /**
+     * Should contain the actual registered listener for video playing,
+     * used to unregister that listener when needed.
+     */
+    private videoPlayingEventListener: EventListener;
+    /**
+     * Should contain the actual registered listener for video loaded-metadata,
+     * used to unregister that listener when needed.
+     */
+    private videoLoadedMetadataEventListener: EventListener;
+
+    /**
+     * The HTML image element, used as a fallback for the video element when decoding.
+     */
     private imageElement: HTMLImageElement;
+    /**
+     * Should contain the actual registered listener for image loading,
+     * used to unregister that listener when needed.
+     */
+    private imageLoadedEventListener: EventListener;
+
+    /**
+     * The HTML canvas element, used to draw the video or image's frame for decoding.
+     */
     private canvasElement: HTMLCanvasElement;
+    /**
+     * The HTML canvas element context.
+     */
     private canvasElementContext: CanvasRenderingContext2D;
+
+    /**
+     * The continuous scan timeout Id.
+     */
     private timeoutHandler: number;
+
     /**
      * The stream output from camera.
      */
     private stream: MediaStream;
-    private videoPlayEndedEventListener: EventListener;
-    private videoPlayingEventListener: EventListener;
-    private videoLoadedMetadataEventListener: EventListener;
-    private imageLoadedEventListener: EventListener;
 
     /**
      * Constructor for dependency injection.
