@@ -118,7 +118,7 @@ export class BrowserCodeReader {
             this.videoElement.srcObject = stream;
         } else {
             // Avoid using this in new browsers, as it is going away.
-            this.videoElement.src = window.URL.createObjectURL(stream);
+            (<HTMLVideoElement>this.videoElement).src = window.URL.createObjectURL(stream);
         }
 
         this.videoPlayingEventListener = () => {
@@ -275,7 +275,7 @@ export class BrowserCodeReader {
 
         this.stop();
 
-        if (undefined !== this.videoElement) {
+        if (this.videoElement) {
 
             this.videoElement.srcObject = undefined;
             this.videoElement.removeAttribute('src');
@@ -294,7 +294,7 @@ export class BrowserCodeReader {
             }
         }
 
-        if (undefined !== this.imageElement) {
+        if (this.imageElement) {
 
             this.imageElement.src = undefined;
             this.imageElement.removeAttribute('src');
