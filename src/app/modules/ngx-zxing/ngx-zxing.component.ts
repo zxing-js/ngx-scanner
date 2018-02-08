@@ -21,8 +21,8 @@ import { BrowserQRCodeReader } from './browser-qr-code-reader';
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-    private destroyed$: Subject<any> = new Subject<any>();
-    private codeReader = new BrowserQRCodeReader(1500);
+    private destroyed$: Subject<any> = new Subject;
+    private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
 
     private isEnumerateDevicesSuported: boolean;
 
@@ -33,7 +33,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     previewElemRef: ElementRef;
 
     @Input()
-    start = false;
+    scanThrottling: number = 1500;
+
+    @Input()
+    start: boolean = false;
 
     @Input()
     device: MediaDeviceInfo;
@@ -63,18 +66,18 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
 
         if (changes.start) {
-
             if (!this.start) {
                 this.stopScan();
             }
-
             this.startScan();
         }
 
         if (changes.device && this.device) {
-
             this.changeDevice(this.device);
+        }
 
+        if (changes.scanThrottling) {
+            this.setCodeReaderThrottling(this.scanThrottling);
         }
     }
 
@@ -103,6 +106,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.destroyed$.complete();
     }
 
+    setCodeReaderThrottling(throttling: number) {
+        this.codeReader = new BrowserQRCodeReader(throttling);
+    }
+
     changeDevice(device: MediaDeviceInfo) {
         this.stopScan();
         this.videoInputDevice = this.device;
@@ -117,6 +124,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
+
                         this.camerasFound.next(videoInputDevices);
 
                         this.changeDevice(videoInputDevices[videoInputDevices.length - 1]);

@@ -6,36 +6,23 @@ import { Component, VERSION } from '@angular/core';
 })
 export class AppComponent {
 
-    cameraStarted = false;
     qrResult: string;
-    selectedDevice: object;
-    availableDevices: object[] = [];
 
-    displayCameras(cameras: object[]) {
+    availableDevices: MediaDeviceInfo[];
+    selectedDevice: MediaDeviceInfo;
 
+    displayCameras(cameras: MediaDeviceInfo[]) {
         console.log('Devices: ', cameras);
-
         this.availableDevices = cameras;
-
-        if (cameras && cameras.length > 0) {
-            this.selectedDevice = cameras[0];
-            this.cameraStarted = true;
-        }
     }
 
     handleQrCodeResult(result: string) {
-
         console.log('Result: ', result);
-
         this.qrResult = result;
     }
 
-    onChange(selectedValue: object) {
-
+    onChange(selectedValue: MediaDeviceInfo) {
         console.log('Selection changed: ', selectedValue);
-
-        this.cameraStarted = false;
         this.selectedDevice = selectedValue;
-        this.cameraStarted = true;
     }
 }
