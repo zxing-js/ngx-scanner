@@ -65,11 +65,12 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
 
         if (changes.start) {
-            if (this.start) {
-                this.startScan();
-            } else {
+
+            if (!this.start) {
                 this.stopScan();
             }
+
+            this.startScan();
         }
 
         if (changes.device && this.device) {
@@ -78,9 +79,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.deviceId = this.device.deviceId;
 
-            if (this.start) {
-                this.startScan();
-            }
+            this.startScan();
         }
     }
 
@@ -100,9 +99,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         if (!this.videoInputDevices) this.enumerateCams();
 
-        if (this.start) {
-            this.startScan();
-        }
+        this.startScan();
     }
 
     ngOnDestroy() {
@@ -157,7 +154,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     startScan() {
-        this.scan(this.deviceId);
+        if (this.start) {
+            this.scan(this.deviceId);
+        }
     }
 
     stopScan() {
@@ -178,6 +177,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
 
         navigator.mediaDevices.enumerateDevices().then((devices: object[]) => {
+
+            this.videoInputDevices = [];
 
             /*
              * forof and .forEach doesn't work.
