@@ -36,6 +36,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     @Input()
     cssClass: any;
+    cssClass: string;
 
     @Output()
     scanSuccess = new EventEmitter<string>();
