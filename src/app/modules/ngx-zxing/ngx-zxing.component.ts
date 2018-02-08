@@ -23,9 +23,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     private destroyed$: Subject<any> = new Subject<any>();
     private codeReader = new BrowserQRCodeReader(1500);
-    private deviceId: string;
+
     private isEnumerateDevicesSuported: boolean;
+
     private videoInputDevices: MediaDeviceInfo[];
+    private videoInputDevice: MediaDeviceInfo;
 
     @ViewChild('preview')
     previewElemRef: ElementRef;
@@ -34,7 +36,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     start = false;
 
     @Input()
-    device: any;
+    device: MediaDeviceInfo;
 
     @Input()
     cssClass: string;
@@ -43,7 +45,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     scanSuccess = new EventEmitter<string>();
 
     @Output()
-    scanFailure = new EventEmitter<string>();
+    scanFailure = new EventEmitter<void>();
 
     @Output()
     scanError = new EventEmitter<string>();
@@ -51,13 +53,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     @Output()
     camerasFound = new EventEmitter<any[]>();
 
+    @Output()
+    camerasNotFound = new EventEmitter<void>();
+
     constructor() {
-
         this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
-
-        if (!this.isEnumerateDevicesSuported) {
-            console.error('ngx-zxing', 'enumerateDevices() not supported.');
-        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -75,7 +75,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.stopScan();
 
-            this.deviceId = this.device.deviceId;
+            this.videoInputDevice = this.device;
 
             this.startScan();
         }
@@ -116,15 +116,17 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             .getUserMedia({ audio: false, video: true })
             .then((stream: MediaStream) => {
 
-                this.getAllAudioVideoDevices((videoInputDevices: any[]) => {
+                this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
                         this.camerasFound.next(videoInputDevices);
-                        this.deviceId = videoInputDevices[videoInputDevices.length - 1].deviceId;
+                        this.videoInputDevice = videoInputDevices[videoInputDevices.length - 1];
+                    } else {
+                        this.camerasNotFound.next();
                     }
                 });
 
                 // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                // this.previewElemRef.nativeElement.srcObject = stream;
+                this.previewElemRef.nativeElement.srcObject = stream;
 
                 // After permission was granted, we can stop it again
                 stream.getVideoTracks().forEach(track => {
@@ -153,7 +155,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     startScan() {
         if (this.start) {
-            this.scan(this.deviceId);
+            this.scan(this.videoInputDevice.deviceId);
         }
     }
 
@@ -162,15 +164,18 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     dispatchScanSuccess(result: any) {
-        if (this.start) {
-            this.scanSuccess.next(result.text);
-        }
+        this.scanSuccess.next(result.text);
     }
 
-    getAllAudioVideoDevices(successCallback: any) {
+    /**
+     * Enumerates all the available devices.
+     *
+     * @param successCallback
+     */
+    enumarateVideoDevices(successCallback: any) {
 
         if (!this.isEnumerateDevicesSuported) {
-            console.error('ngx-zxing', 'getAllAudioVideoDevices', 'Can\'t enumerate Devices');
+            console.error('ngx-zxing', 'enumarateVideoDevices', 'Can\'t enumerate devices, method not supported.');
             return;
         }
 
@@ -183,22 +188,16 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 const device: any = {};
 
                 // tslint:disable-next-line:forin
-                for (const d in deviceI) {
-                    device[d] = deviceI[d];
+                for (const key in deviceI) {
+                    device[key] = deviceI[key];
                 }
-
-                // const device: any = Object.assign({}, devices[i]);
 
                 if (device.kind === 'video') {
                     device.kind = 'videoinput';
                 }
 
                 if (!device.deviceId) {
-                    device.deviceId = device.id;
-                }
-
-                if (!device.id) {
-                    device.id = device.deviceId;
+                    device.deviceId = (<any>device).id;
                 }
 
                 if (!device.label) {
