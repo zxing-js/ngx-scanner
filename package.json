@@ -6,13 +6,16 @@
         "type": "git",
         "url": "https://github.com/werthdavid/ngx-zxing"
     },
-    "authors": [{
-        "name": "David Werth",
-        "email": "werth.david@gmail.com"
-    }, {
-        "name": "Luiz Machado",
-        "email": "machado@odahcam.com"
-    }],
+    "authors": [
+        {
+            "name": "David Werth",
+            "email": "werth.david@gmail.com"
+        },
+        {
+            "name": "Luiz Machado",
+            "email": "machado@odahcam.com"
+        }
+    ],
     "keywords": [
         "angular"
     ],
@@ -38,6 +41,7 @@
         "@angular/core": "^5.2.4",
         "@angular/forms": "^5.2.4",
         "@barn/zxing": "^0.2.2",
+        "copy-webpack-plugin": "^4.4.1",
         "rxjs": "^5.5.6",
         "zone.js": "^0.8.20"
     },
@@ -69,7 +73,7 @@
         "protractor": "^5.3.0",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "^2.7.1"
+        "typescript": "^2.6.2"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
