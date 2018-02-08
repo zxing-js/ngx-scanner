@@ -71,14 +71,10 @@ export class BrowserCodeReader {
         this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
         this.videoLoadedMetadataEventListener = () => {
-            this.playVideo();
+            this.videoElement.play();
         };
 
         this.videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
-    }
-
-    private playVideo() {
-        this.videoElement.play();
     }
 
     private prepareVideoElement(videoElement?: HTMLVideoElement) {
