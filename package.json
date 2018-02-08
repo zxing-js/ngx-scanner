@@ -1,6 +1,6 @@
 {
     "name": "@zxing/ngx-scanner",
-    "version": "v1.0.0-dev",
+    "version": "1.0.0-dev.1999a3d",
     "private": false,
     "repository": {
         "type": "git",
