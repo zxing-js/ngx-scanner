@@ -35,7 +35,6 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     device: any;
 
     @Input()
-    cssClass: any;
     cssClass: string;
 
     @Output()
