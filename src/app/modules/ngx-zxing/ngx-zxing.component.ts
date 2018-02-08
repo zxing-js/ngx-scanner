@@ -34,10 +34,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     previewElemRef: ElementRef;
 
     @Input()
-    scanThrottling: number = 1500;
+    scanThrottling = 1500;
 
     @Input()
-    start: boolean = false;
+    start = false;
 
     @Input()
     device: MediaDeviceInfo;
