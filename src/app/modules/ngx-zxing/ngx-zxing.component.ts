@@ -73,11 +73,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         if (changes.device && this.device) {
 
-            this.stopScan();
+            this.changeDevice(this.device);
 
-            this.videoInputDevice = this.device;
-
-            this.startScan();
         }
     }
 
@@ -106,8 +103,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.destroyed$.complete();
     }
 
-    chooseDevice(deviceId: string) {
-
+    changeDevice(device: MediaDeviceInfo) {
+        this.stopScan();
+        this.videoInputDevice = this.device;
+        this.startScan();
     }
 
     enumerateCams() {
@@ -119,7 +118,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
                     if (videoInputDevices && videoInputDevices.length > 0) {
                         this.camerasFound.next(videoInputDevices);
-                        this.videoInputDevice = videoInputDevices[videoInputDevices.length - 1];
+
+                        this.changeDevice(videoInputDevices[videoInputDevices.length - 1]);
+
                     } else {
                         this.camerasNotFound.next();
                     }
