@@ -191,7 +191,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      */
     changeDevice(device: MediaDeviceInfo): void {
         this.stopScan();
-        this.videoInputDevice = this.device;
+        this.videoInputDevice = device;
         this.startScan();
     }
 
