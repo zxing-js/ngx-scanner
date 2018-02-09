@@ -196,6 +196,24 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     /**
+     * Properly changes the actual target device using it's deviceId.
+     *
+     * @param deviceId
+     */
+    changeDeviceById(deviceId: string): void {
+        this.changeDevice(this.getDeviceById(deviceId));
+    }
+
+    /**
+     * Properly returns the target device using it's deviceId.
+     *
+     * @param deviceId
+     */
+    getDeviceById(deviceId: string): MediaDeviceInfo {
+        return this.videoInputDevices.find(device => device.deviceId === deviceId);
+    }
+
+    /**
      * Gets and registers all cammeras.
      */
     enumerateCams(): void {
