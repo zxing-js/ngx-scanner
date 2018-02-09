@@ -160,7 +160,19 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.previewElemRef.nativeElement.setAttribute('autofocus', true);
 
         if (!this.videoInputDevices) {
-            this.enumerateCams();
+
+            this.askForPermission();
+
+            // gets and enumerates all video devices
+            this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
+                if (videoInputDevices && videoInputDevices.length > 0) {
+
+                    this.camerasFound.next(videoInputDevices);
+
+                } else {
+                    this.camerasNotFound.next();
+                }
+            });
         }
 
         this.startScan();
@@ -216,23 +228,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     /**
      * Gets and registers all cammeras.
      */
-    enumerateCams(): void {
+    askForPermission(): void {
         navigator
             .mediaDevices
             .getUserMedia({ audio: false, video: true })
             .then((stream: MediaStream) => {
-
-                this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
-                    if (videoInputDevices && videoInputDevices.length > 0) {
-
-                        this.camerasFound.next(videoInputDevices);
-
-                        this.changeDevice(videoInputDevices[videoInputDevices.length - 1]);
-
-                    } else {
-                        this.camerasNotFound.next();
-                    }
-                });
 
                 // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
                 this.previewElemRef.nativeElement.srcObject = stream;
@@ -248,7 +248,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             })
             .catch(error => {
-                console.error('ngx-zxing', 'enumerateCams', error);
+                console.error('ngx-zxing', 'askForPermission', error);
                 this.camerasNotFound.next(error);
             });
     }
