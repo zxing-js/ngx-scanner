@@ -61,7 +61,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     camerasFound = new EventEmitter<MediaDeviceInfo[]>();
 
     @Output()
-    camerasNotFound = new EventEmitter<void>();
+    camerasNotFound = new EventEmitter<any[]>();
 
     constructor() {
         this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
@@ -178,6 +178,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             })
             .catch(error => {
                 console.error('ngx-zxing', 'enumerateCams', error);
+                this.camerasNotFound.next(error);
             });
     }
 
