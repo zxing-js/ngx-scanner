@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         this.qrResultString = resultString;
     }
 
-    onChange(selectedValue: string) {
+    onDeviceSelectChange(selectedValue: string) {
         console.log('Selection changed: ', selectedValue);
         this.selectedDevice = this.availableDevices.find(device => device.deviceId === selectedValue);
     }
