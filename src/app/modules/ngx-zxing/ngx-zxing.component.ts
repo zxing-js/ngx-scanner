@@ -23,47 +23,98 @@ import { BrowserQRCodeReader } from './browser-qr-code-reader';
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
+    /**
+     * I have no idea. - @odahcam
+     */
     private destroyed$: Subject<any> = new Subject;
+    /**
+     * The ZXing code reader.
+     */
     private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
 
+    /**
+     * Says if some native API is supported.
+     */
     private isEnumerateDevicesSuported: boolean;
 
+    /**
+     * List of enable video-input devices.
+     */
     private videoInputDevices: MediaDeviceInfo[];
+    /**
+     * The actual device used to scan things.
+     */
     private videoInputDevice: MediaDeviceInfo;
 
+    /**
+     * Reference to the preview element, should be the `video` tag.
+     */
     @ViewChild('preview')
     previewElemRef: ElementRef;
 
+    /**
+     * The scan throttling (time between scans) in milliseconds.
+     */
     @Input()
     scanThrottling = 1500;
 
+    /**
+     * Allow start scan or not.
+     */
     @Input()
     start = false;
 
+    /**
+     * The device that should be used to scan things.
+     */
     @Input()
     device: MediaDeviceInfo;
 
+    /**
+     * The value of the HTML video's class attribute.
+     */
     @Input()
     cssClass: string;
 
+    /**
+     * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
+     */
     @Output()
     scanSuccess = new EventEmitter<string>();
 
+    /**
+     * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
+     */
     @Output()
     scanFailure = new EventEmitter<void>();
 
+    /**
+     * Emitts events when a scan throws some error, will inject the error to the callback.
+     */
     @Output()
     scanError = new EventEmitter<Error>();
 
+    /**
+     * Emitts events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
+     */
     @Output()
     scanComplete = new EventEmitter<Result>();
 
+    /**
+     * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+     */
     @Output()
     camerasFound = new EventEmitter<MediaDeviceInfo[]>();
 
+    /**
+     * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+     */
     @Output()
     camerasNotFound = new EventEmitter<any[]>();
 
+    /**
+     * Constructor to build the object and do some DI.
+     */
     constructor() {
         this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
     }
