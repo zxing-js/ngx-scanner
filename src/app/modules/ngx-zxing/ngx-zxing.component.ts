@@ -132,8 +132,12 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             this.startScan();
         }
 
-        if (changes.device && this.device) {
-            this.changeDevice(this.device);
+        if (changes.device) {
+            if (this.device) {
+                this.changeDevice(this.device);
+            } else {
+                console.warn('ngx-zxing', 'device', 'Selected undefined device.');
+            }
         }
 
         if (changes.scanThrottling) {
@@ -269,7 +273,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         if (this.start) {
 
             if (!this.videoInputDevice) {
-                console.warn('ngx-zxing', 'startScan', 'Scan-start try aborted cause there\'s no device selected.');
+                console.warn('ngx-zxing', 'startScan', 'Aborted cause there is no device selected.');
                 return;
             }
 

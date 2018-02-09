@@ -1,12 +1,24 @@
-<div *ngIf="availableDevices">
-    <select (change)="onChange($event.target.value)">
-        <option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</option>
-    </select>
+<div [hidden]="!hasCameras">
+
+    <div *ngIf="availableDevices">
+        <select (change)="onChange($event.target.value)">
+            <option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</option>
+        </select>
+    </div>
+
+    <ngx-zxing #scanner class="test-class" start="true" [device]="selectedDevice" (camerasFound)="displayCameras($event)" (scanSuccess)="handleQrCodeResult($event)"></ngx-zxing>
+
+    <p>
+        Result:
+        <strong>{{ qrResultString }}</strong>
+    </p>
+
 </div>
 
-<ngx-zxing class="test-class" start="true" [device]="selectedDevice" (camerasFound)="displayCameras($event)" (scanSuccess)="handleQrCodeResult($event)"></ngx-zxing>
+<div [hidden]="hasCameras">
 
-<p>
-    Result:
-    <strong>{{ qrResult }}</strong>
-</p>
+    <h1>Looks like your actual device does not has cameras, or I could no find'em. </h1>
+
+</div>
+
+<p>Angular version: {{ ngVersion }}</p>
