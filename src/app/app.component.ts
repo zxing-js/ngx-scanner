@@ -50,6 +50,6 @@ export class AppComponent implements OnInit {
 
     onDeviceSelectChange(selectedValue: string) {
         console.log('Selection changed: ', selectedValue);
-        this.selectedDevice = this.availableDevices.find(device => device.deviceId === selectedValue);
+        this.selectedDevice = this.scanner.getDeviceById(selectedValue);
     }
 }
