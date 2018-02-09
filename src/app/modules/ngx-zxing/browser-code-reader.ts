@@ -8,7 +8,7 @@ import {
 } from '@barn/zxing';
 
 /**
- * Based on Zxing-typescript BrowserCodeReader
+ * Based on zxing-typescript BrowserCodeReader
  */
 export class BrowserCodeReader {
 
@@ -224,7 +224,7 @@ export class BrowserCodeReader {
     }
 
     /**
-     *
+     * 🖌 Prepares the canvas for capture and scan frames.
      */
     private prepareCaptureCanvas() {
 
@@ -273,13 +273,13 @@ export class BrowserCodeReader {
      */
     public reset(): void {
 
+        // stops the scan 🔴
+
         this.stop();
 
         if (this.videoElement) {
 
-            this.videoElement.srcObject = undefined;
-            this.videoElement.removeAttribute('src');
-            this.videoElement = undefined;
+            // first gives freedon to the element 🕊
 
             if (undefined !== this.videoPlayEndedEventListener) {
                 this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
@@ -292,18 +292,30 @@ export class BrowserCodeReader {
             if (undefined !== this.videoLoadedMetadataEventListener) {
                 this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
             }
+
+            // then forgets about that element 😢
+
+            this.videoElement.srcObject = undefined;
+            this.videoElement.removeAttribute('src');
+            this.videoElement = undefined;
         }
 
         if (this.imageElement) {
 
-            this.imageElement.src = undefined;
-            this.imageElement.removeAttribute('src');
-            this.imageElement = undefined;
+            // first gives freedon to the element 🕊
 
             if (undefined !== this.videoPlayEndedEventListener) {
                 this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
             }
+
+            // then forgets about that element 😢
+
+            this.imageElement.src = undefined;
+            this.imageElement.removeAttribute('src');
+            this.imageElement = undefined;
         }
+
+        // cleans canvas references 🖌
 
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
