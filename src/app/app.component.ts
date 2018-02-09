@@ -27,9 +27,9 @@ export class AppComponent implements OnInit {
         this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
             this.hasCameras = true;
 
-            this.selectedDevice = devices[devices.length - 1];
+            // this.selectedDevice = devices[devices.length - 1];
 
-            this.scanner.changeDevice(this.selectedDevice);
+            // this.scanner.changeDevice(this.selectedDevice);
         });
 
         this.scanner.scanComplete.subscribe((result: Result) => {
@@ -48,8 +48,8 @@ export class AppComponent implements OnInit {
         this.qrResultString = resultString;
     }
 
-    onChange(selectedValue: MediaDeviceInfo) {
+    onChange(selectedValue: string) {
         console.log('Selection changed: ', selectedValue);
-        this.selectedDevice = selectedValue;
+        this.selectedDevice = this.availableDevices.find(device => device.deviceId === selectedValue);
     }
 }
