@@ -47,6 +47,11 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     private videoInputDevice: MediaDeviceInfo;
 
     /**
+     * Says if the user allowedthe use of the camera or not.
+     */
+    private hasPermission: boolean;
+
+    /**
      * Reference to the preview element, should be the `video` tag.
      */
     @ViewChild('preview')
@@ -110,7 +115,13 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
      */
     @Output()
-    camerasNotFound = new EventEmitter<any[]>();
+    camerasNotFound = new EventEmitter<any>();
+
+    /**
+     * Emitts events when the users answers for permission.
+     */
+    @Output()
+    permissionResponse = new EventEmitter<boolean>();
 
     /**
      * Constructor to build the object and do some DI.
@@ -127,9 +138,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         if (changes.start) {
             if (!this.start) {
-                this.stopScan();
+                this.resetScan();
+            } else if (this.videoInputDevice) {
+                this.scan(this.videoInputDevice.deviceId);
             }
-            this.startScan();
         }
 
         if (changes.device) {
@@ -159,30 +171,35 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.previewElemRef.nativeElement.setAttribute('playsinline', true);
         this.previewElemRef.nativeElement.setAttribute('autofocus', true);
 
-        if (!this.videoInputDevices) {
+        this.askForPermission().subscribe((hasPermission: boolean) => {
 
-            this.askForPermission();
+            if (hasPermission) {
 
-            // gets and enumerates all video devices
-            this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
-                if (videoInputDevices && videoInputDevices.length > 0) {
+                // gets and enumerates all video devices
+                this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
 
-                    this.camerasFound.next(videoInputDevices);
+                    if (videoInputDevices && videoInputDevices.length > 0) {
+                        this.camerasFound.next(videoInputDevices);
+                    } else {
+                        this.camerasNotFound.next();
+                    }
 
-                } else {
-                    this.camerasNotFound.next();
-                }
-            });
-        }
+                });
 
-        this.startScan();
+                this.startScan(this.videoInputDevice);
+
+            } else {
+                console.warn('User has denied permission.');
+            }
+
+        });
     }
 
     /**
      * Executes some actions before destroy the component.
      */
     ngOnDestroy(): void {
-        this.stopScan();
+        this.resetScan();
         this.destroyed$.next();
         this.destroyed$.complete();
     }
@@ -202,9 +219,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      * @param device
      */
     changeDevice(device: MediaDeviceInfo): void {
-        this.stopScan();
         this.videoInputDevice = device;
-        this.startScan();
+        this.startScan(device);
     }
 
     /**
@@ -228,29 +244,74 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     /**
      * Gets and registers all cammeras.
      */
-    askForPermission(): void {
+    askForPermission(): EventEmitter<boolean> {
+
+        // Will try to ask for permission
         navigator
             .mediaDevices
             .getUserMedia({ audio: false, video: true })
             .then((stream: MediaStream) => {
 
-                // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                this.previewElemRef.nativeElement.srcObject = stream;
+                try {
 
-                // After permission was granted, we can stop it again
-                stream.getVideoTracks().forEach(track => {
-                    track.stop();
-                });
+                    // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
+                    this.previewElemRef.nativeElement.srcObject = stream;
 
-                stream.getAudioTracks().forEach(track => {
-                    track.stop();
-                });
+                    // After permission was granted, we can stop it again
+                    stream.getVideoTracks().forEach(track => {
+                        track.stop();
+                    });
+
+                    this.previewElemRef.nativeElement.srcObject = undefined;
+
+                    // if the scripts lives until here, that's only one mean:
+
+                    // permission granted
+                    this.hasPermission = true;
+
+                    this.permissionResponse.next(this.hasPermission);
+
+                } catch (err) {
+
+                    console.error('ngx-zxing', 'askForPermission', err);
+
+                    // permission aborted
+                    this.hasPermission = undefined;
+
+                    this.permissionResponse.next(undefined);
+                }
 
             })
-            .catch(error => {
-                console.error('ngx-zxing', 'askForPermission', error);
-                this.camerasNotFound.next(error);
+            .catch((err: DOMException) => {
+
+                // failed to grant permission to video input
+
+                console.warn('ngx-zxing', 'askForPermission', err);
+
+                switch (err.name) {
+
+                    case 'NotAllowedError':
+
+                        // permission denied
+                        this.hasPermission = false;
+
+                        this.permissionResponse.next(this.hasPermission);
+                        break;
+
+                    case 'NotFoundError':
+                        this.camerasNotFound.next(err);
+                        break;
+
+                    default:
+                        this.permissionResponse.next(undefined);
+                        break;
+
+                }
+
             });
+
+        // Returns the event emitter, so thedev can subscribe to it
+        return this.permissionResponse;
     }
 
     /**
@@ -283,23 +344,19 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     /**
      * Starts the scanning if allowed.
+     *
+     * @param device The device to be used in the scan.
      */
-    startScan(): void {
-        if (this.start) {
-
-            if (!this.videoInputDevice) {
-                console.warn('ngx-zxing', 'startScan', 'Aborted cause there is no device selected.');
-                return;
-            }
-
-            this.scan(this.videoInputDevice.deviceId);
+    startScan(device: MediaDeviceInfo): void {
+        if (this.start && device) {
+            this.scan(device.deviceId);
         }
     }
 
     /**
      * Stops the scan service.
      */
-    stopScan(): void {
+    resetScan(): void {
         this.codeReader.reset();
     }
 
