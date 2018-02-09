@@ -13,8 +13,9 @@ import {
 
 import { Subject } from 'rxjs/Subject';
 
-import { BrowserQRCodeReader } from './browser-qr-code-reader';
 import { Result } from '@barn/zxing';
+
+import { BrowserQRCodeReader } from './browser-qr-code-reader';
 
 @Component({
     selector: 'ngx-zxing',
@@ -215,6 +216,12 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      */
     startScan(): void {
         if (this.start) {
+
+            if (!this.videoInputDevice) {
+                console.warn('ngx-zxing', 'startScan', 'Scan-start try aborted cause there\'s no device selected.');
+                return;
+            }
+
             this.scan(this.videoInputDevice.deviceId);
         }
     }
