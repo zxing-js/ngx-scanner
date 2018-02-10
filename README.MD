@@ -15,6 +15,7 @@
 - Supports continuous scanning.
 - There is a delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Supports iOS 11 (only in Safari via HTTPS).
+- Nice devs behind it. 🤓
 
 ## Demo
 
@@ -24,67 +25,57 @@
 
 ## Installation
 
-To install this library, run:
+To install this package, run:
 
 ```bash
-npm i ngx-zxing -S
+yarn add @zxing/ngx-scanner@latest
 ```
 
-or
-
-```bash
-npm install ngx-zxing --save
-```
-
-or
-
-```bash
-yarn add ngx-zxing
-```
-
-and then from your Angular `AppModule`:
+Then import it into your Angular `AppModule`:
 
 ```typescript
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+// Common imports
+import { NgModule /* , ... */ } from '@angular/core';
 
-// Import the library
+// Import the package's module
 import { NgxZxingModule } from 'ngx-zxing';
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
+    declarations: [ /* AppComponent ... */ ],
     imports: [
-        BrowserModule,
-        // make sure to add to the imports
-        NgxZxingModule.forRoot()
+    
+        // BrowserModule, 
+        // ...
+        
+        // ZXing scanner module
+        NgxZxingModule.forRoot(),
+        
+        // another imports...
     ],
-    bootstrap: [AppComponent]
+    // ...
 })
 export class AppModule { }
 ```
 
 ## Usage
 
-Once the library is imported, you can use it in your Angular application:
+Once the package is imported, you can use it in your Angular application:
 
 ```html
 <ngx-zxing
     [start]="camStarted"
     [device]="selectedDevice"
     [cssClass]="'small-video'"
-    (onCamsFound)="displayCameras($event)"
-    (onScan)="handleQrCodeResult($event)"
+    (camerasFound)="displayCameras($event)"
+    (scanSuccess)="handleQrCodeResult($event)"
 ></ngx-zxing>
 ```
 
 - `start` can be used to start and stop the scanning (defaults to `false`)
 - `device` is the video-device used for scanning (use one of the devices emitted by `onCamsFound`)
 - `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
-- `onCamsFound` will emit an array of video-devices after view was initialized
-- `onScan` will emit the result as string, after a valid QR-Code was scanned
+- `camerasFound` will emit an array of video-devices after view was initialized
+- `scanSuccess` will emit the result as string, after a valid QR-Code was scanned
 
 ### Change the size of the preview-element
 
@@ -97,3 +88,14 @@ In your CSS, define an extra class and pass it to the component with the `cssCla
     object-fit: contain;
 }
 ```
+
+## API
+
+| Method                                                                                              | Description                                                  |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `changeDevice(device: MediaDeviceInfo): void`                                                       | Allows you to properly change the scanner device on the fly. |
+| `camerasFound(callback: (devices: MediaDeviceInfo[]): void => {}): EventEmitter<MediaDeviceInfo[]>` | Emits an event when cameras are found.                       |
+| `camerasNotFound(callback: (): void => {}): EventEmitter<void>`                                     | Emits an event when cameras are not found.                   |
+| `scanSuccess(callback: (result: string): void => {}): EventEmitter<string>`                         | Emits an event when a scan is successful performed.          |
+| `scanFailure(callback: (): void => {}): EventEmitter<void>`                                         | Emits an event when a scan fails.                            |
+| `scanError(callback: (error: any): void => {}): EventEmitter<any>`                                  | Emits an event when a scan throws an error.                  |
