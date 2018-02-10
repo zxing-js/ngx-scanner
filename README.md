@@ -91,11 +91,11 @@ In your CSS, define an extra class and pass it to the component with the `cssCla
 
 ## API
 
-| Method                                                                                              | Description                                                  |
-|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `changeDevice(device: MediaDeviceInfo): void`                                                       | Allows you to properly change the scanner device on the fly. |
-| `camerasFound(callback: (devices: MediaDeviceInfo[]): void => {}): EventEmitter<MediaDeviceInfo[]>` | Emits an event when cameras are found.                       |
-| `camerasNotFound(callback: (): void => {}): EventEmitter<void>`                                     | Emits an event when cameras are not found.                   |
-| `scanSuccess(callback: (result: string): void => {}): EventEmitter<string>`                         | Emits an event when a scan is successful performed.          |
-| `scanFailure(callback: (): void => {}): EventEmitter<void>`                                         | Emits an event when a scan fails.                            |
-| `scanError(callback: (error: any): void => {}): EventEmitter<any>`                                  | Emits an event when a scan throws an error.                  |
+| Method              | Parameters                                     | Returns                          | Description                                                  |
+|---------------------|------------------------------------------------|----------------------------------|--------------------------------------------------------------|
+| **changeDevice**    | `device: MediaDeviceInfo`                      | `void`                           | Allows you to properly change the scanner device on the fly. |
+| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]`) => {} | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
+| **camerasNotFound** | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when cameras are not found.                   |
+| **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
+| **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
+| **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
