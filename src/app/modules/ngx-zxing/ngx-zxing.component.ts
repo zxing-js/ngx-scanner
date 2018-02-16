@@ -365,14 +365,14 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      *
      * @param result the scan result.
      */
-    dispatchScanSuccess(result: Result): void {
+    private dispatchScanSuccess(result: Result): void {
         this.scanSuccess.next(result.getText());
     }
 
     /**
      * Dispatches the scan failure event.
      */
-    dispatchScanFailure(): void {
+    private dispatchScanFailure(): void {
         this.scanFailure.next();
     }
 
@@ -381,7 +381,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      *
      * @param err the error thing.
      */
-    dispatchScanError(error: any): void {
+    private dispatchScanError(error: any): void {
         this.scanError.next(error);
     }
 
@@ -390,7 +390,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      *
      * @param result the scan result.
      */
-    dispatchScanComplete(result: Result): void {
+    private dispatchScanComplete(result: Result): void {
         this.scanComplete.next(result);
     }
 
