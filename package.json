@@ -1,6 +1,6 @@
 {
     "name": "@zxing/ngx-scanner",
-    "version": "1.0.0-dev.a5265f",
+    "version": "1.0.1-dev.5faf1f",
     "private": false,
     "repository": {
         "type": "git",
@@ -27,7 +27,7 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
-        "test": "ng test",
+        "test": "ng test --single-run",
         "lint": "ng lint",
         "e2e": "ng e2e",
         "build:packagr": "ng-packagr -p ng-package.json",
