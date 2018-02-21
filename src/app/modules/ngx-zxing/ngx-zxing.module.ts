@@ -14,10 +14,11 @@ import { ZXING_CONFIG, ZXING_DEFAULT_CONFIG, ZXingConfig } from './ngx-zxing.con
     exports: [NgxZxingComponent],
 })
 export class NgxZxingModule {
-    static forRoot(config?: ZXingConfig): ModuleWithProviders {
-        if (config === undefined) {
-            config = ZXING_DEFAULT_CONFIG;
-        }
+    static forRoot(config: ZXingConfig = {}): ModuleWithProviders {
+        config = {
+            ...ZXING_DEFAULT_CONFIG,
+            ...config,
+        };
         return {
             ngModule: NgxZxingModule,
             providers: [

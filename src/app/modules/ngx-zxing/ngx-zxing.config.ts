@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 export interface ZXingConfig {
-    defaultThrottling: number;
+    defaultThrottling?: number;
 }
 export const ZXING_CONFIG = new InjectionToken<ZXingConfig>('zxing.config');
 
