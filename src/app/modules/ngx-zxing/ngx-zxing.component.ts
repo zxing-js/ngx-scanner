@@ -8,12 +8,14 @@ import {
     OnDestroy,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    Inject,
 } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { ZXING_CONFIG, ZXingConfig } from './ngx-zxing.config';
 
 @Component({
     selector: 'ngx-zxing',
@@ -22,7 +24,7 @@ import { BrowserQRCodeReader } from './browser-qr-code-reader';
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     private destroyed$: Subject<any> = new Subject<any>();
-    private codeReader = new BrowserQRCodeReader(1500);
+    private codeReader: BrowserQRCodeReader;
     private deviceId: string;
 
     @ViewChild('preview')
@@ -45,7 +47,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     @Output()
     onCamsFound = new EventEmitter<any[]>();
 
-    constructor() {
+    constructor(@Inject(ZXING_CONFIG) private config: ZXingConfig) {
+        this.codeReader = new BrowserQRCodeReader(config.defaultThrottling);
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
             (<any>navigator).enumerateDevices = (callback: any) => {
                 navigator.mediaDevices.enumerateDevices().then(callback);
