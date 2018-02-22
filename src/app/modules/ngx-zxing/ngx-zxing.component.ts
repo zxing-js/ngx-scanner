@@ -145,8 +145,12 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
 
         if (changes.device) {
-            this.changeDevice(this.device);
-            console.warn('ngx-zxing', 'device', 'Selected undefined device.');
+            if (this.device) {
+                this.changeDevice(this.device);
+            } else {
+                console.warn('ngx-zxing', 'device', 'Unselected device.');
+                this.resetScan();
+            }
         }
 
         if (changes.scanThrottling) {
