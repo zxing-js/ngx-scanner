@@ -2,7 +2,7 @@ import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
 
 import { NgxZxingComponent } from './modules/ngx-zxing/ngx-zxing.module';
 
-import { Result } from '@barn/zxing';
+import { Result } from '@zxing/library';
 
 @Component({
     selector: 'app-root',

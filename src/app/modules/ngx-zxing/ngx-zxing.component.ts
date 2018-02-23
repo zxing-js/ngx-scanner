@@ -13,7 +13,7 @@ import {
 
 import { Subject } from 'rxjs/Subject';
 
-import { Result } from '@barn/zxing';
+import { Result } from '@zxing/library';
 
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
 

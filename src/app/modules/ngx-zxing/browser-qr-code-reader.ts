@@ -1,4 +1,4 @@
-import { QRCodeReader } from '@barn/zxing';
+import { QRCodeReader } from '@zxing/library';
 
 import { BrowserCodeReader } from './browser-code-reader';
 
