@@ -228,9 +228,9 @@
   version "0.0.30"
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
 
-"@zxing/library@^0.3.0-dev.8edb5d":
-  version "0.3.0-dev.8edb5d"
-  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.3.0-dev.8edb5d.tgz#46727cae8c0d60991ca484aa982212c334be82d1"
+"@zxing/library@^0.3.0-dev.0153e8":
+  version "0.3.0-dev.0153e8"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.3.0-dev.0153e8.tgz#c022a6075ffe0db21d449c9f7efa23029f705a9b"
   dependencies:
     sharp "^0.19.0"
     text-encoding "^0.6.4"
