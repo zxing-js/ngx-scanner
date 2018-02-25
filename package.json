@@ -1,7 +1,13 @@
 {
+    "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
     "version": "1.0.0-dev.a2af42",
     "private": false,
+    "ngPackage": {
+        "lib": {
+            "entryFile": "public_api.ts"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/werthdavid/ngx-zxing"
@@ -17,7 +23,10 @@
         }
     ],
     "keywords": [
-        "angular"
+        "angular",
+        "zxing",
+        "qr-code",
+        "scanner"
     ],
     "license": "MIT",
     "bugs": {
@@ -30,7 +39,7 @@
         "test": "ng test --single-run",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "build:packagr": "ng-packagr -p ng-package.json",
+        "build:packagr": "ng-packagr -p package.json",
         "docs": "npm run docs:build",
         "docs:build": "compodoc -p tsconfig.json -n ngx-zxing -d docs --hideGenerator",
         "docs:serve": "npm run docs:build -- -s",
