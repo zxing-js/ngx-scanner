@@ -194,7 +194,7 @@ export class BrowserCodeReader {
 
         } catch (re) {
 
-            console.log(retryIfChecksumOrFormatError, re);
+            console.debug(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
                 console.warn('Not found, trying again...');
@@ -207,7 +207,7 @@ export class BrowserCodeReader {
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.log('Checksum or format error, trying again...', re);
+                console.warn('Checksum or format error, trying again...', re);
 
                 this.decodeWithDelay(callbackFn);
             }
