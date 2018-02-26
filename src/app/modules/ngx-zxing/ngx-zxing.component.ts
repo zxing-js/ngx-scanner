@@ -67,7 +67,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      * Allow start scan or not.
      */
     @Input()
-    start = false;
+    scanningActive = true;
 
     /**
      * The device that should be used to scan things.
@@ -136,8 +136,8 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      */
     ngOnChanges(changes: SimpleChanges): void {
 
-        if (changes.start) {
-            if (!this.start) {
+        if (changes.scanningActive) {
+            if (!this.scanningActive) {
                 this.resetScan();
             } else if (this.videoInputDevice) {
                 this.scan(this.videoInputDevice.deviceId);
@@ -352,7 +352,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      * @param device The device to be used in the scan.
      */
     startScan(device: MediaDeviceInfo): void {
-        if (this.start && device) {
+        if (this.scanningActive && device) {
             this.scan(device.deviceId);
         }
     }

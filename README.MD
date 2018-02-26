@@ -30,6 +30,12 @@ To install this package, run:
 yarn add @zxing/ngx-scanner@latest
 ```
 
+or
+
+```bash
+npm i @zxing/ngx-scanner@latest --save
+```
+
 Then import it into your Angular `AppModule`:
 
 ```typescript
@@ -62,7 +68,7 @@ Once the package is imported, you can use it in your Angular application:
 
 ```html
 <ngx-zxing
-    [start]="camStarted"
+    [scanningActive]="scanningActive"
     [device]="selectedDevice"
     [cssClass]="'small-video'"
     (camerasFound)="displayCameras($event)"
@@ -70,7 +76,7 @@ Once the package is imported, you can use it in your Angular application:
 ></ngx-zxing>
 ```
 
-- `start` can be used to start and stop the scanning (defaults to `false`)
+- `scanningActive` can be used to start and stop the scanning (defaults to `true`)
 - `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
 - `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
 - `camerasFound` will emit an array of video-devices after view was initialized
