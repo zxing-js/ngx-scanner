@@ -328,7 +328,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-                console.log('ngx-zxing', 'scan', 'result: ', result);
+                console.debug('ngx-zxing', 'scan', 'result: ', result);
 
                 if (result) {
                     this.dispatchScanSuccess(result);
@@ -416,6 +416,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             for (const deviceI of devices) {
 
+                // @todo type this as `MediaDeviceInfo`
                 const device: any = {};
 
                 // tslint:disable-next-line:forin
@@ -432,7 +433,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 }
 
                 if (!device.label) {
-                    device.label = 'Camera (No Permission)';
+                    device.label = 'Camera (no-permission)';
                 }
 
                 if (device.kind === 'videoinput') {
