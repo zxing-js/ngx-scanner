@@ -105,6 +105,30 @@ In your CSS, define an extra class and pass it to the component with the `cssCla
 | **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
 | **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
 
+## Performance
+
+Copied from [Instascan](https://github.com/schmich/instascan) by Chris Schmich:
+
+Many factors affect how quickly and reliably ZXing can detect QR codes.
+
+If you control creation of the QR code, consider the following:
+
+- A larger physical code is better. A 2" square code is better than a 1" square code.
+- Flat, smooth, matte surfaces are better than curved, rough, glossy surfaces.
+- Include a sufficient quiet zone, the white border surrounding QR code. The quiet zone should be at least four times the width of an individual element in your QR code.
+- A simpler code is better. You can use [this QR code generator](https://werthdavid.github.io/ngx-kjua/index.html) to see how your input affects complexity.
+- For the same length, numeric content is simpler than ASCII content, which is simpler than Unicode content.
+- Shorter content is simpler. If you're encoding a URL, consider using a shortener such as [goo.gl](https://goo.gl/) or [bit.ly](https://bitly.com/).
+
+When scanning, consider the following:
+
+- QR code orientation doesn't matter.
+- Higher resolution video is better, but is more CPU intensive.
+- Direct, orthogonal scanning is better than scanning at an angle.
+- Blurry video greatly reduces scanner performance.
+- Auto-focus can cause lags in detection as the camera adjusts focus. Consider disabling it or using a fixed-focus camera with the subject positioned at the focal point.
+- Exposure adjustment on cameras can cause lags in detection. Consider disabling it or having a fixed white backdrop.
+
 ## Generator
 
 Looking for a way to generate QR-Codes? Check-out [ngx-kjua](https://github.com/werthdavid/ngx-kjua)
