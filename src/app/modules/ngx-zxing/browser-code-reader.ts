@@ -113,11 +113,10 @@ export class BrowserCodeReader {
 
         // Older browsers may not have srcObject
         if ('srcObject' in this.videoElement) {
-            // @NOTE a play request was interrupted by a new loaded request
-            // @throws Exception
+            // @NOTE Throws Exception if interrupted by a new loaded request
             this.videoElement.srcObject = stream;
         } else {
-            // Avoid using this in new browsers, as it is going away.
+            // @NOTE Avoid using this in new browsers, as it is going away.
             (<HTMLVideoElement>this.videoElement).src = window.URL.createObjectURL(stream);
         }
 
@@ -178,7 +177,6 @@ export class BrowserCodeReader {
 
         this.canvasElementContext.drawImage(this.videoElement || this.imageElement, 0, 0);
 
-        // @note generates zone.js error when switching cameras
         const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
         const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
 
@@ -197,9 +195,11 @@ export class BrowserCodeReader {
             console.debug(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-                console.warn('Not found, trying again...');
+
+                console.debug('ngx-zxing', 'QR-code not-found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
+
             } else if (
                 retryIfChecksumOrFormatError &&
                 (
@@ -207,7 +207,7 @@ export class BrowserCodeReader {
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.debug('Checksum or format error, trying again...', re);
+                console.warn('ngx-zxing', 'Checksum or format error, trying again...', re);
 
                 this.decodeWithDelay(callbackFn);
             }
@@ -261,7 +261,6 @@ export class BrowserCodeReader {
         }
 
         if (this.stream) {
-            // @TODO see if the `stop` is not responsible for the cam switch error
             this.stream.getTracks()[0].stop();
             this.stream = null;
         }
@@ -273,7 +272,7 @@ export class BrowserCodeReader {
      */
     public reset(): void {
 
-        // stops the scan 🔴
+        // stops the camera, preview and scan 🔴
 
         this.stop();
 
