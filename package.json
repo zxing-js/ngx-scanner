@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
-    "version": "1.0.0-dev.a83b9e",
+    "version": "1.0.0-dev.cc756a",
     "private": false,
     "ngPackage": {
         "lib": {
@@ -82,7 +82,7 @@
         "protractor": "^5.3.0",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "^2.6.2"
+        "typescript": "2.6.2"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
