@@ -34,7 +34,8 @@
     },
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "ng serve --host=0.0.0.0",
+        "start-ssl": "ng serve --ssl --host=0.0.0.0",
         "build": "ng build",
         "test": "ng test --single-run",
         "lint": "ng lint",
