@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     EventEmitter,
@@ -11,22 +12,17 @@ import {
     ViewChild
 } from '@angular/core';
 
-import { Subject } from 'rxjs/Subject';
+import {Result} from '@zxing/library';
 
-import { Result } from '@zxing/library';
-
-import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import {BrowserQRCodeReader} from './browser-qr-code-reader';
 
 @Component({
     selector: 'ngx-zxing',
-    templateUrl: './ngx-zxing.component.html'
+    templateUrl: './ngx-zxing.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-    /**
-     * I have no idea. - @odahcam
-     */
-    private destroyed$: Subject<any> = new Subject;
     /**
      * The ZXing code reader.
      */
@@ -204,8 +200,6 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      */
     ngOnDestroy(): void {
         this.resetScan();
-        this.destroyed$.next();
-        this.destroyed$.complete();
     }
 
     /**
@@ -253,7 +247,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         // Will try to ask for permission
         navigator
             .mediaDevices
-            .getUserMedia({ audio: false, video: true })
+            .getUserMedia({audio: false, video: true})
             .then((stream: MediaStream) => {
 
                 try {
