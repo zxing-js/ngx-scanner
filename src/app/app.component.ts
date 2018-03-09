@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     hasCameras = false;
     qrResultString: string;
     qrResult: Result;
-    scannerActive = true;
+    scannerEnabled = true;
 
     availableDevices: MediaDeviceInfo[];
     selectedDevice: MediaDeviceInfo;

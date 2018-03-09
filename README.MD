@@ -69,7 +69,7 @@ Once the package is imported, you can use it in your Angular application:
 
 ```html
 <ngx-zxing
-    [scannerActive]="scannerActive"
+    [scannerEnabled]="scannerEnabled"
     [autofocusEnabled]="autofocusEnabled"
     [device]="selectedDevice"
     [cssClass]="'small-video'"
@@ -78,7 +78,7 @@ Once the package is imported, you can use it in your Angular application:
 ></ngx-zxing>
 ```
 
-- `scannerActive` can be used to start and stop the scanning (defaults to `true`)
+- `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)
 - `autofocusEnabled` can be used to enable or disable the autofocus-feature of the camera (defaults to `true`)
 - `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
 - `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
