@@ -14,7 +14,7 @@
     <h2 *ngIf="!this.selectedDevice">No camera selected.</h2>
 
     <p>
-        <button (click)="scannerActive=!scannerActive">Toggle Scanning</button>
+        <button (click)="scannerActive=!scannerActive">Toggle Scanner [{{ scannerActive ? 'On': 'Off' }}]</button>
     </p>
 
     <p>
