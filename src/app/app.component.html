@@ -1,9 +1,10 @@
-<div *ngIf="availableDevices">
-    <select (change)="onDeviceSelectChange($event.target.value)">
+<p *ngIf="availableDevices">
+    <label for="video-input-select">Select your camera:</label>
+    <select id="video-input-select" (change)="onDeviceSelectChange($event.target.value)">
         <option value="" [selected]="!selectedDevice">No Device</option>
         <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="selectedDevice && device.deviceId === selectedDevice.deviceId">{{ device.label }}</option>
     </select>
-</div>
+</p>
 
 <div [hidden]="!hasCameras">
 
