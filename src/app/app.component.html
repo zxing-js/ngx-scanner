@@ -8,7 +8,8 @@
 
 <div [hidden]="!hasCameras">
 
-    <ngx-zxing #scanner class="test-class" [scannerActive]="scannerActive" [device]="selectedDevice" (camerasFound)="displayCameras($event)" (scanSuccess)="handleQrCodeResult($event)"></ngx-zxing>
+    <ngx-zxing #scanner class="test-class" [scannerActive]="scannerActive" [device]="selectedDevice" (camerasFound)="displayCameras($event)"
+        (scanSuccess)="handleQrCodeResult($event)" [cssClass]="{customClass:true}"></ngx-zxing>
 
     <h2 *ngIf="!this.selectedDevice">No camera selected.</h2>
 
