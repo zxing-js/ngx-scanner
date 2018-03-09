@@ -81,7 +81,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
      * Enable or disable autofocus of the camera (might have an impact on performance)
      */
     @Input()
-    cameraAutofocusEnabled = true;
+    autofocusEnabled = true;
 
     /**
      * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
@@ -175,7 +175,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.previewElemRef.nativeElement.setAttribute('autoplay', false);
         this.previewElemRef.nativeElement.setAttribute('muted', true);
         this.previewElemRef.nativeElement.setAttribute('playsinline', true);
-        this.previewElemRef.nativeElement.setAttribute('autofocus', this.cameraAutofocusEnabled);
+        this.previewElemRef.nativeElement.setAttribute('autofocus', this.autofocusEnabled);
 
         this.askForPermission().subscribe((hasPermission: boolean) => {
 
