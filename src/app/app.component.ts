@@ -1,6 +1,6 @@
 import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
 
-import { NgxZxingComponent } from './modules/ngx-zxing/ngx-zxing.module';
+import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.module';
 
 import { Result } from '@zxing/library';
 
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
     ngVersion = VERSION.full;
 
     @ViewChild('scanner')
-    scanner: NgxZxingComponent;
+    scanner: ZXingScannerComponent;
 
     hasCameras = false;
     qrResultString: string;

@@ -17,11 +17,11 @@ import {Result} from '@zxing/library';
 import {BrowserQRCodeReader} from './browser-qr-code-reader';
 
 @Component({
-    selector: 'ngx-zxing',
-    templateUrl: './ngx-zxing.component.html',
+    selector: 'zxing-scanner',
+    templateUrl: './zxing-scanner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     /**
      * The ZXing code reader.
@@ -150,7 +150,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             if (this.device) {
                 this.changeDevice(this.device);
             } else {
-                console.warn('ngx-zxing', 'device', 'Unselected device.');
+                console.warn('zxing-scanner', 'device', 'Unselected device.');
                 this.resetScan();
             }
         }
@@ -167,7 +167,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         // Chrome 63 fix
         if (!this.previewElemRef) {
-            console.warn('ngx-zxing', 'Preview element not found!');
+            console.warn('zxing-scanner', 'Preview element not found!');
             return;
         }
 
@@ -277,7 +277,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 } catch (err) {
 
-                    console.error('ngx-zxing', 'askForPermission', err);
+                    console.error('zxing-scanner', 'askForPermission', err);
 
                     // permission aborted
                     this.hasPermission = undefined;
@@ -290,7 +290,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
                 // failed to grant permission to video input
 
-                console.warn('ngx-zxing', 'askForPermission', err);
+                console.warn('zxing-scanner', 'askForPermission', err);
 
                 switch (err.name) {
 
@@ -328,7 +328,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
             this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-                console.debug('ngx-zxing', 'scan', 'result: ', result);
+                console.debug('zxing-scanner', 'scan', 'result: ', result);
 
                 if (result) {
                     this.dispatchScanSuccess(result);
@@ -406,7 +406,7 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     enumarateVideoDevices(successCallback: any): void {
 
         if (!this.isEnumerateDevicesSuported) {
-            console.error('ngx-zxing', 'enumarateVideoDevices', 'Can\'t enumerate devices, method not supported.');
+            console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, method not supported.');
             return;
         }
 

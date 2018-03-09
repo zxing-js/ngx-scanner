@@ -1,1 +1,1 @@
-export * from './app/modules/ngx-zxing/ngx-zxing.module';
+export * from './app/modules/zxing-scanner/zxing-scanner.module';

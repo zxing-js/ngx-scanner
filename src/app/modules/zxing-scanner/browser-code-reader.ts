@@ -196,7 +196,7 @@ export class BrowserCodeReader {
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
 
-                console.debug('ngx-zxing', 'QR-code not-found, trying again...');
+                console.debug('zxing-scanner', 'QR-code not-found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
 
@@ -207,7 +207,7 @@ export class BrowserCodeReader {
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.warn('ngx-zxing', 'Checksum or format error, trying again...', re);
+                console.warn('zxing-scanner', 'Checksum or format error, trying again...', re);
 
                 this.decodeWithDelay(callbackFn);
             }

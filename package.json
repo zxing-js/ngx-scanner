@@ -42,7 +42,7 @@
         "e2e": "ng e2e",
         "build:packagr": "ng-packagr -p package.json",
         "docs": "npm run docs:build",
-        "docs:build": "compodoc -p tsconfig.json -n ngx-zxing -d docs --hideGenerator",
+        "docs:build": "compodoc -p tsconfig.json -n zxing-scanner -d docs --hideGenerator",
         "docs:serve": "npm run docs:build -- -s",
         "docs:watch": "npm run docs:build -- -s -w",
         "publish:dist": "cd ./dist && yarn publish --access=public"

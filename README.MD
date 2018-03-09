@@ -44,7 +44,7 @@ Then import it into your Angular `AppModule`:
 import { NgModule /* , ... */ } from '@angular/core';
 
 // Import the package's module
-import { NgxZxingModule } from 'ngx-zxing';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
     declarations: [ /* AppComponent ... */ ],
@@ -54,7 +54,7 @@ import { NgxZxingModule } from 'ngx-zxing';
         // ...
 
         // ZXing scanner module
-        NgxZxingModule.forRoot(),
+        ZXingScannerModule.forRoot(),
 
         // another imports...
     ],
@@ -68,14 +68,14 @@ export class AppModule { }
 Once the package is imported, you can use it in your Angular application:
 
 ```html
-<ngx-zxing
+<zxing-scanner
     [scannerEnabled]="scannerEnabled"
     [autofocusEnabled]="autofocusEnabled"
     [device]="selectedDevice"
     [cssClass]="'small-video'"
     (camerasFound)="displayCameras($event)"
     (scanSuccess)="handleQrCodeResult($event)"
-></ngx-zxing>
+></zxing-scanner>
 ```
 
 - `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import { NgxZxingModule } from './modules/ngx-zxing/ngx-zxing.module';
+import { ZXingScannerModule } from './modules/zxing-scanner/zxing-scanner.module';
 
 import { AppComponent } from './app.component';
 
@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
     imports: [
         BrowserModule,
         FormsModule,
-        NgxZxingModule.forRoot()
+        ZXingScannerModule.forRoot()
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

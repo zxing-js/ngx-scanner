@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('ngx-zxing App', () => {
+describe('zxing-scanner App', () => {
   let page: AppPage;
 
   beforeEach(() => {
