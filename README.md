@@ -123,6 +123,9 @@ When scanning, consider the following:
 - Auto-focus can cause lags in detection as the camera adjusts focus. Consider disabling it or using a fixed-focus camera with the subject positioned at the focal point.
 - Exposure adjustment on cameras can cause lags in detection. Consider disabling it or having a fixed white backdrop.
 
+## Limitations
+
+ - The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
 
 ## Generator
 
