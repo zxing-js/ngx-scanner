@@ -32,6 +32,9 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
     start = false;
 
     @Input()
+    debug: boolean;
+
+    @Input()
     device: any;
 
     @Input()
@@ -61,6 +64,10 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
             } else {
                 this.stopCam();
             }
+        }
+
+        if (changes.debug) {
+            this.codeReader.setDebugEnabled(changes.debug.currentValue);
         }
 
         if (changes.device && this.device) {
@@ -111,9 +118,6 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
                 }
             });
 
-            // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-            this.previewElem.nativeElement.srcObject = stream;
-
             // After permission was granted, we can stop it again
             stream.getVideoTracks().forEach(track => {
                 track.stop();
@@ -130,8 +134,6 @@ export class NgxZxingComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     scan(deviceId: string) {
         this.codeReader.decodeFromInputVideoDevice((result: any) => {
-
-            console.log('ngx-zxing:', 'result from scan: ', result);
 
             this.scanSuccess(result);
 
