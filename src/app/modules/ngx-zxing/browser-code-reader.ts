@@ -21,6 +21,7 @@ export class BrowserCodeReader {
     private videoPlayEndedEventListener: EventListener;
     private videoPlayingEventListener: EventListener;
     private imageLoadedEventListener: EventListener;
+    private isDebugEnabled: boolean = false;
 
     public constructor(private reader: Reader, private timeBetweenScansMillis: number = 500) { }
 
@@ -58,6 +59,9 @@ export class BrowserCodeReader {
             });
     }
 
+    public setDebugEnabled(enabled: boolean) {
+        this.isDebugEnabled = enabled;
+    }
 
     private prepareVideoElement(videoElement?: HTMLVideoElement) {
         if (undefined === videoElement) {
@@ -100,10 +104,10 @@ export class BrowserCodeReader {
             }
         } catch (re) {
 
-            console.log(retryIfChecksumOrFormatError, re);
+            this.log(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-                console.warn('Not found, trying again...');
+                this.log('Not found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
             } else if (
@@ -113,7 +117,7 @@ export class BrowserCodeReader {
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.log('Checksum or format error, trying again...', re);
+                this.log('Checksum or format error, trying again...', re);
 
                 this.decodeWithDelay(callbackFn);
             }
@@ -143,6 +147,12 @@ export class BrowserCodeReader {
 
         this.canvasElement = canvasElement;
         this.canvasElementContext = canvasElement.getContext('2d');
+    }
+
+    private log(message?: any, ...optionalParams: any[]) {
+        if (this.isDebugEnabled) {
+            console.log(message, optionalParams);
+        }
     }
 
     private stop() {
