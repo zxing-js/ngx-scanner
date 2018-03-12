@@ -21,7 +21,7 @@
 > Previews needs to be opened in new standalone windows.
 
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
-- [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _`v0.3.x`_
+- [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
 ## Installation
 
