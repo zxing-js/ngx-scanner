@@ -5,6 +5,8 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e108806ba914d64ac77c19fd01548c9)](https://www.codacy.com/app/werthdavid/ngx-zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-zxing&amp;utm_campaign=Badge_Grade)
 <img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png"/>
 
+# Deprecated! Please install @zxing/ngx-scanner instead!
+
 # ngx-zxing
 
 > Angular QR-Code scanner component.

@@ -5,7 +5,7 @@ import {
     Result,
     Exception,
     HTMLCanvasElementLuminanceSource,
-} from '@barn/zxing';
+} from '@zxing/library';
 
 /**
  * Based on Zxing-typescript BrowserCodeReader
