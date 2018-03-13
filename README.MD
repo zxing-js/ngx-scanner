@@ -1,8 +1,8 @@
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
-[![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing)
-[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e108806ba914d64ac77c19fd01548c9)](https://www.codacy.com/app/werthdavid/ngx-zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-zxing&amp;utm_campaign=Badge_Grade)
+[![Dependency Status](https://david-dm.org/werthdavid/ngx-scanner.svg)](https://david-dm.org/werthdavid/ngx-scanner)
+[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-scanner.svg)](https://travis-ci.org/werthdavid/ngx-scanner)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9611c347a3034ec987d6fb89eea591a9)](https://www.codacy.com/app/werthdavid/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-scanner&amp;utm_campaign=Badge_Grade)
 <img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png"/>
 
 # @zxing/ngx-scanner 
@@ -20,7 +20,7 @@
 
 > Previews needs to be opened in new standalone windows.
 
-- [Demo](https://werthdavid.github.io/ngx-zxing/)
+- [Demo](https://werthdavid.github.io/ngx-scanner/)
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
