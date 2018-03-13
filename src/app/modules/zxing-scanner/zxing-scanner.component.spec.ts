@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxZxingComponent } from './ngx-zxing.component';
+import { ZXingScannerComponent } from './zxing-scanner.component';
 
-describe('NgxZxingComponent', () => {
-    let component: NgxZxingComponent;
-    let fixture: ComponentFixture<NgxZxingComponent>;
+describe('ZXingScannerComponent', () => {
+    let component: ZXingScannerComponent;
+    let fixture: ComponentFixture<ZXingScannerComponent>;
 
     beforeEach(async(() => {
         TestBed
             .configureTestingModule({
-                declarations: [NgxZxingComponent]
+                declarations: [ZXingScannerComponent]
             })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(NgxZxingComponent);
+        fixture = TestBed.createComponent(ZXingScannerComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

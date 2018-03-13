@@ -2,20 +2,22 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { NgxZxingComponent } from './ngx-zxing.component';
+import { ZXingScannerComponent } from './zxing-scanner.component';
+
+export type ZXingScannerComponent = ZXingScannerComponent;
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule
     ],
-    declarations: [NgxZxingComponent],
-    exports: [NgxZxingComponent],
+    declarations: [ZXingScannerComponent],
+    exports: [ZXingScannerComponent],
 })
-export class NgxZxingModule {
+export class ZXingScannerModule {
     static forRoot(): ModuleWithProviders {
         return {
-            ngModule: NgxZxingModule
+            ngModule: ZXingScannerModule
         };
     }
 }

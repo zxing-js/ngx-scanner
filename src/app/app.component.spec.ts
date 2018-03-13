@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import { NgxZxingModule } from './modules/ngx-zxing/ngx-zxing.module';
+import { ZXingScannerModule } from './modules/zxing-scanner/zxing-scanner.module';
 
 import { AppComponent } from './app.component';
 
@@ -13,7 +13,7 @@ describe('AppComponent', () => {
             imports: [
                 BrowserModule,
                 FormsModule,
-                NgxZxingModule.forRoot()
+                ZXingScannerModule.forRoot()
             ],
             declarations: [
                 AppComponent
@@ -27,7 +27,7 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     }));
 
-    it('should render ngx-zxing tag', async(() => {
+    it('should render zxing-scanner tag', async(() => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;

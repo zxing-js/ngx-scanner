@@ -1,28 +1,27 @@
-[![NPM version](https://img.shields.io/npm/v/ngx-zxing.svg?&label=npm)](https://www.npmjs.com/package/ngx-zxing) 
+[![NPM version](https://img.shields.io/npm/v/ngx-zxing.svg?&label=npm)](https://www.npmjs.com/package/ngx-zxing)
 [![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
 [![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing)
 [![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e108806ba914d64ac77c19fd01548c9)](https://www.codacy.com/app/werthdavid/ngx-zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-zxing&amp;utm_campaign=Badge_Grade)
 <img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png"/>
 
-# Deprecated! Please install @zxing/ngx-scanner instead!
-
-# ngx-zxing
+# ngx-scanner
 
 > Angular QR-Code scanner component.
 
 ## Features & Hints
 
 - Supports continuous scanning.
-- There is a delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Supports iOS 11 (only in Safari via HTTPS).
+- There is a configurable delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Nice devs behind it. 🤓
 
 ## Demo
 
-* [StackBlitz](https://stackblitz.com/edit/ngx-zxing-example) _(preview needs to be opened in new window)_
-* [Plunkr](https://plnkr.co/edit/U13ufJHexw2ugZbHx8kR?p=preview) _(preview needs to be opened in new window)_
-* [Example](https://werthdavid.github.io/ngx-zxing/index.html)
+> Previews needs to be opened in new standalone windows.
+
+- [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
+- [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
 ## Installation
 
@@ -32,6 +31,12 @@ To install this package, run:
 yarn add @zxing/ngx-scanner@latest
 ```
 
+or
+
+```bash
+npm i @zxing/ngx-scanner@latest --save
+```
+
 Then import it into your Angular `AppModule`:
 
 ```typescript
@@ -39,18 +44,18 @@ Then import it into your Angular `AppModule`:
 import { NgModule /* , ... */ } from '@angular/core';
 
 // Import the package's module
-import { NgxZxingModule } from 'ngx-zxing';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
     declarations: [ /* AppComponent ... */ ],
     imports: [
-    
-        // BrowserModule, 
+
+        // BrowserModule,
         // ...
-        
+
         // ZXing scanner module
-        NgxZxingModule.forRoot(),
-        
+        ZXingScannerModule.forRoot(),
+
         // another imports...
     ],
     // ...
@@ -63,17 +68,19 @@ export class AppModule { }
 Once the package is imported, you can use it in your Angular application:
 
 ```html
-<ngx-zxing
-    [start]="camStarted"
+<zxing-scanner
+    [scannerEnabled]="scannerEnabled"
+    [autofocusEnabled]="autofocusEnabled"
     [device]="selectedDevice"
     [cssClass]="'small-video'"
     (camerasFound)="displayCameras($event)"
     (scanSuccess)="handleQrCodeResult($event)"
-></ngx-zxing>
+></zxing-scanner>
 ```
 
-- `start` can be used to start and stop the scanning (defaults to `false`)
-- `device` is the video-device used for scanning (use one of the devices emitted by `onCamsFound`)
+- `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)
+- `autofocusEnabled` can be used to enable or disable the autofocus-feature of the camera (defaults to `true`)
+- `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
 - `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
 - `camerasFound` will emit an array of video-devices after view was initialized
 - `scanSuccess` will emit the result as string, after a valid QR-Code was scanned

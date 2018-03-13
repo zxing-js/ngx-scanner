@@ -1,41 +1,61 @@
-import { Component, VERSION } from '@angular/core';
+import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
+
+import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.module';
+
+import { Result } from '@zxing/library';
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-    cameraStarted = false;
-    qrResult: string;
-    selectedDevice: object;
-    availableDevices: object[] = [];
+    ngVersion = VERSION.full;
 
-    displayCameras(cameras: object[]) {
+    @ViewChild('scanner')
+    scanner: ZXingScannerComponent;
 
+    hasCameras = false;
+    qrResultString: string;
+    qrResult: Result;
+    scannerEnabled = true;
+
+    availableDevices: MediaDeviceInfo[];
+    selectedDevice: MediaDeviceInfo;
+
+    ngOnInit(): void {
+
+        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+            this.hasCameras = true;
+
+            // selects the devices's back camera by default
+            // for (const device of devices) {
+            //     if (/back|rear|environment/gi.test(device.label)) {
+            //         this.scanner.changeDevice(device);
+            //         this.selectedDevice = device;
+            //         break;
+            //     }
+            // }
+        });
+
+        this.scanner.scanComplete.subscribe((result: Result) => {
+            this.qrResult = result;
+        });
+
+    }
+
+    displayCameras(cameras: MediaDeviceInfo[]) {
         console.log('Devices: ', cameras);
-
         this.availableDevices = cameras;
-
-        if (cameras && cameras.length > 0) {
-            this.selectedDevice = cameras[0];
-            this.cameraStarted = true;
-        }
     }
 
-    handleQrCodeResult(result: string) {
-
-        console.log('Result: ', result);
-
-        this.qrResult = result;
+    handleQrCodeResult(resultString: string) {
+        console.log('Result: ', resultString);
+        this.qrResultString = resultString;
     }
 
-    onChange(selectedValue: object) {
-
+    onDeviceSelectChange(selectedValue: string) {
         console.log('Selection changed: ', selectedValue);
-
-        this.cameraStarted = false;
-        this.selectedDevice = selectedValue;
-        this.cameraStarted = true;
+        this.selectedDevice = this.scanner.getDeviceById(selectedValue);
     }
 }
