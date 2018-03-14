@@ -12,7 +12,7 @@
 ## Features & Hints
 
 - Supports continuous scanning.
-- Supports iOS 11 (only in Safari via HTTPS).
+- Supports iOS 11 (only in Safari via HTTPS --> see `Limitations` below).
 - There is a configurable delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Nice devs behind it. 🤓
 
@@ -135,7 +135,8 @@ When scanning, consider the following:
 
 ## Limitations
 
- - The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- On iOS-Devices camera access works only in native Safari and not in other Browsers (Chrome,...) or Apps that use an UIWebView or WKWebView. This is not a restriction of this component but of the limited WebRTC support by Apple. The behavior might change in iOS 11.3 (Apr 2018?, not tested) as stated [here](https://developer.apple.com/library/content/releasenotes/General/WhatsNewInSafari/Articles/Safari_11_1.html#//apple_ref/doc/uid/TP40014305-CH14-SW1)
 
 ## Generator
 
