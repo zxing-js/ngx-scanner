@@ -31,6 +31,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Says if some native API is supported.
      */
+    private isMediaDevicesSuported: boolean;
+
+    /**
+     * Says if some native API is supported.
+     */
     private isEnumerateDevicesSuported: boolean;
 
     /**
@@ -129,7 +134,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
-        this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
+        this.isMediaDevicesSuported = !!(navigator && navigator.mediaDevices);
+        this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
     }
 
     /**
@@ -249,6 +255,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Gets and registers all cammeras.
      */
     askForPermission(): EventEmitter<boolean> {
+
+        if (!this.isMediaDevicesSuported) {
+            console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
+            return;
+        }
 
         // Will try to ask for permission
         navigator
