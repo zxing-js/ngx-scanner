@@ -17,6 +17,7 @@ import {Result} from '@zxing/library';
 import {BrowserQRCodeReader} from './browser-qr-code-reader';
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'zxing-scanner',
     templateUrl: './zxing-scanner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
