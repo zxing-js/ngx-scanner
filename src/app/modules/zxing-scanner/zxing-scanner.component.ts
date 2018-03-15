@@ -17,6 +17,7 @@ import {Result} from '@zxing/library';
 import {BrowserQRCodeReader} from './browser-qr-code-reader';
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'zxing-scanner',
     templateUrl: './zxing-scanner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,6 +28,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * The ZXing code reader.
      */
     private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
+
+    /**
+     * Says if some native API is supported.
+     */
+    private isMediaDevicesSuported: boolean;
 
     /**
      * Says if some native API is supported.
@@ -129,7 +135,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
-        this.isEnumerateDevicesSuported = !!(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices);
+        this.isMediaDevicesSuported = !!(navigator && navigator.mediaDevices);
+        this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
     }
 
     /**
@@ -249,6 +256,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Gets and registers all cammeras.
      */
     askForPermission(): EventEmitter<boolean> {
+
+        if (!this.isMediaDevicesSuported) {
+            console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
+            return;
+        }
 
         // Will try to ask for permission
         navigator
