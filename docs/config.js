@@ -38,7 +38,7 @@ System.config({
     'sharp': 'npm:sharp',
     'text-encoding': 'npm:text-encoding@0.6.4/lib/encoding.js',
     'typescript': 'npm:typescript@2.2.1/lib/typescript.js',
-    '@zxing/ngx-scanner': 'npm:@zxing/ngx-scanner@latest/bundles/zxing-ngx-scanner.umd.js',
+    '@zxing/ngx-scanner': 'npm:@zxing/ngx-scanner@latest/bundles/ngx-scanner.umd.js',
     '@zxing/library': 'npm:@zxing/library@latest'
   },
   //packages defines our app package
