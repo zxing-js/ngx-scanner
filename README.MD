@@ -64,6 +64,14 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 export class AppModule { }
 ```
 
+### Installation Problems
+
+If you experience problems upon installing the component, please run
+```bash
+npm install --global --production windows-build-tools
+```
+and try again. If the problem still occurs, file an [issue](https://github.com/werthdavid/ngx-scanner/issues)
+
 ## Usage
 
 Once the package is imported, you can use it in your Angular application:
