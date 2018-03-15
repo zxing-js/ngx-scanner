@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
-    "version": "1.0.0-dev.ec70451",
+    "version": "1.0.1",
     "private": false,
     "ngPackage": {
         "lib": {
@@ -10,7 +10,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/werthdavid/ngx-zxing"
+        "url": "https://github.com/werthdavid/ngx-scanner"
     },
     "authors": [
         {
@@ -30,7 +30,7 @@
     ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/werthdavid/ngx-zxing/issues"
+        "url": "https://github.com/werthdavid/ngx-scanner/issues"
     },
     "scripts": {
         "ng": "ng",
