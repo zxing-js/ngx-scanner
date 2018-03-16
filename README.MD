@@ -1,18 +1,18 @@
-[![NPM version](https://img.shields.io/npm/v/ngx-zxing.svg?&label=npm)](https://www.npmjs.com/package/ngx-zxing)
-[![Downloads](https://img.shields.io/npm/dm/ngx-zxing.svg)](https://npmjs.org/package/ngx-zxing)
-[![Dependency Status](https://david-dm.org/werthdavid/ngx-zxing.svg)](https://david-dm.org/werthdavid/ngx-zxing)
-[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-zxing.svg)](https://travis-ci.org/werthdavid/ngx-zxing)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e108806ba914d64ac77c19fd01548c9)](https://www.codacy.com/app/werthdavid/ngx-zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-zxing&amp;utm_campaign=Badge_Grade)
+[![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
+[![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
+[![Dependency Status](https://david-dm.org/werthdavid/ngx-scanner.svg)](https://david-dm.org/werthdavid/ngx-scanner)
+[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-scanner.svg)](https://travis-ci.org/werthdavid/ngx-scanner)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9611c347a3034ec987d6fb89eea591a9)](https://www.codacy.com/app/werthdavid/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=werthdavid/ngx-scanner&amp;utm_campaign=Badge_Grade)
 <img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png"/>
 
-# ngx-scanner
+# @zxing/ngx-scanner 
 
 > Angular QR-Code scanner component.
 
 ## Features & Hints
 
 - Supports continuous scanning.
-- Supports iOS 11 (only in Safari via HTTPS).
+- Supports iOS 11 (only in Safari via HTTPS --> see `Limitations` below).
 - There is a configurable delay of 1500ms after each successful scan, before a new QR-Code can be detected.
 - Nice devs behind it. 🤓
 
@@ -20,6 +20,7 @@
 
 > Previews needs to be opened in new standalone windows.
 
+- [Demo](https://werthdavid.github.io/ngx-scanner/)
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
@@ -134,7 +135,8 @@ When scanning, consider the following:
 
 ## Limitations
 
- - The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- On iOS-Devices camera access works only in native Safari and not in other Browsers (Chrome,...) or Apps that use an UIWebView or WKWebView. This is not a restriction of this component but of the limited WebRTC support by Apple. The behavior might change in iOS 11.3 (Apr 2018?, not tested) as stated [here](https://developer.apple.com/library/content/releasenotes/General/WhatsNewInSafari/Articles/Safari_11_1.html#//apple_ref/doc/uid/TP40014305-CH14-SW1)
 
 ## Generator
 
