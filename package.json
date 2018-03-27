@@ -48,19 +48,22 @@
         "publish:dist": "cd ./dist && yarn publish --access=public"
     },
     "dependencies": {
-        "@angular/common": "^5.2.9",
-        "@angular/core": "^5.2.9",
-        "@angular/forms": "^5.2.9",
-        "@zxing/library": "^0.3.1",
-        "rxjs": "^5.5.7",
-        "zone.js": "^0.8.20"
+        "@zxing/library": "^0.3.1"
+    },
+    "peerDependencies": {
+        "@angular/common": ">= 2.0.0",
+        "@angular/core": ">= 2.0.0",
+        "@angular/forms": ">= 2.0.0"
     },
     "devDependencies": {
         "@angular-devkit/core": "^0.3.2",
         "@angular/animations": "^5.2.9",
         "@angular/cli": "^1.7.3",
+        "@angular/core": "^5.2.9",
+        "@angular/common": "^5.2.9",
         "@angular/compiler": "^5.2.9",
         "@angular/compiler-cli": "^5.2.9",
+        "@angular/forms": "^5.2.9",
         "@angular/http": "^5.2.9",
         "@angular/language-service": "^5.2.9",
         "@angular/platform-browser": "^5.2.9",
@@ -81,9 +84,11 @@
         "karma-jasmine-html-reporter": "^0.2.2",
         "ng-packagr": "^2.2.0",
         "protractor": "^5.3.0",
+        "rxjs": "^5.5.7",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "2.6.2"
+        "typescript": "^2.6.2",
+        "zone.js": "^0.8.20"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
