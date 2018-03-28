@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "private": false,
     "ngPackage": {
         "lib": {
@@ -35,7 +35,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve --host=0.0.0.0",
-        "start-ssl": "ng serve --ssl --host=0.0.0.0",
+        "start-ssl": "ng serve --ssl --host=0.0.0.0 --live-reload false",
         "build": "ng build",
         "test": "ng test --single-run",
         "lint": "ng lint",
