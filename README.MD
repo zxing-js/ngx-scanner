@@ -20,7 +20,7 @@
 
 > Previews needs to be opened in new standalone windows.
 
-- [Demo](https://werthdavid.github.io/ngx-scanner/)
+- [Demo](https://zxing-js.github.io/ngx-scanner/)
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
