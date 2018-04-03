@@ -20,7 +20,7 @@
 
 > Previews needs to be opened in new standalone windows.
 
-- [Demo](https://werthdavid.github.io/ngx-scanner/)
+- [Demo](https://zxing-js.github.io/ngx-scanner/)
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
@@ -63,6 +63,14 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 })
 export class AppModule { }
 ```
+
+### Installation Problems
+
+If you experience problems upon installing the component, please run
+```bash
+npm install --global --production windows-build-tools
+```
+and try again. If the problem still occurs, file an [issue](https://github.com/werthdavid/ngx-scanner/issues)
 
 ## Usage
 
