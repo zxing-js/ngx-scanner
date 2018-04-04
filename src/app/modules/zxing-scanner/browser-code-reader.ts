@@ -91,16 +91,18 @@ export class BrowserCodeReader {
             video
         };
 
-        if (navigator) {
-            navigator
-                .mediaDevices
-                .getUserMedia(constraints)
-                .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
-                .catch((err: any) => {
-                    /* handle the error, or not */
-                    console.error(err);
-                });
+        if (!navigator) {
+            return;
         }
+        
+        navigator
+            .mediaDevices
+            .getUserMedia(constraints)
+            .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
+            .catch((err: any) => {
+                /* handle the error, or not */
+                console.error(err);
+            });
     }
 
     /**
