@@ -7,6 +7,8 @@
 
 # @zxing/ngx-scanner 
 
+[![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Angular QR-Code scanner component.
 
 ## Features & Hints
