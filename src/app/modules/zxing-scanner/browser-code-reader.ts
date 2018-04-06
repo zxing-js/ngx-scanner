@@ -163,7 +163,7 @@ export class BrowserCodeReader {
         videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
 
-    private checkTorchCompatibility(stream: MediaStream): BehaviorSubject<boolean> {
+    private checkTorchCompatibility(stream: MediaStream): void {
 
         this.track = stream.getVideoTracks()[0];
 
@@ -173,8 +173,6 @@ export class BrowserCodeReader {
             const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
             this.torchCompatible.next(compatible);
         });
-
-        return this.torchCompatible;
     }
 
     public setTorch(on: boolean) {
