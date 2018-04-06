@@ -1,14 +1,28 @@
-<img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+<p align="center">
+    
+  <a href="https://getbootstrap.com/">
+    <img src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+  </a>
 
-# @zxing/ngx-scanner 
+  <h3 align="center">@zxing/ngx-scanner</h3>
 
-> Angular QR-Code scanner component.
+  <p align="center">
+    Angular QR-Code scanner component.
+    <br>
+    <br>
+    <a href="https://github.com/twbs/bootstrap/issues/new?template=bug.md">Report a bug</a>
+    ·
+    <a href="https://github.com/twbs/bootstrap/issues/new?template=feature.md&labels=feature">Request feature</a>
+  </p>
+</p>
+
+<br>
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
 [![Dependency Status](https://david-dm.org/werthdavid/ngx-scanner.svg)](https://david-dm.org/werthdavid/ngx-scanner)
 [![Build Status](https://secure.travis-ci.org/werthdavid/ngx-scanner.svg)](https://travis-ci.org/werthdavid/ngx-scanner)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9345e7a9bbb49c0b83629f46795ee75)](https://www.codacy.com/app/odahcam/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9345e7a9bbb49c0b83629f46795ee75)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Features & Hints
