@@ -70,6 +70,10 @@ export class BrowserCodeReader {
      * Shows if torch is available on the camera.
      */
     private torchCompatible = new BehaviorSubject<boolean>(false);
+    /**
+     * The device id of the current media device.
+     */
+    private deviceId: string;
 
     /**
      * Constructor for dependency injection.
@@ -86,15 +90,19 @@ export class BrowserCodeReader {
      * @param deviceId The device's to be used Id
      * @param videoElement A new video element
      */
-    public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+    public decodeFromInputVideoDevice(callbackFn?: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+
+        if (deviceId !== undefined) {
+            this.deviceId = deviceId;
+        }
 
         this.reset();
 
         this.prepareVideoElement(videoElement);
 
-        const video = deviceId === undefined
+        const video = this.deviceId === undefined
             ? { facingMode: { exact: 'environment' } }
-            : { deviceId: { exact: deviceId } };
+            : { deviceId: { exact: this.deviceId } };
 
         const constraints: MediaStreamConstraints = {
             audio: false,
@@ -121,7 +129,7 @@ export class BrowserCodeReader {
      * @param stream The stream to be shown in the video element.
      * @param callbackFn A callback for the decode method.
      */
-    private startDecodeFromStream(stream: MediaStream, callbackFn: (result: Result) => any): void {
+    private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
         this.bindSrc(this.videoElement, this.stream);
         this.bindEvents(this.videoElement, callbackFn);
@@ -139,10 +147,12 @@ export class BrowserCodeReader {
         }
     }
 
-    private bindEvents(videoElement: HTMLVideoElement, callbackFn: (result: Result) => any): void {
-        this.videoPlayingEventListener = () => {
-            this.decodeWithDelay(callbackFn);
-        };
+    private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
+        if (callbackFn !== undefined) {
+            this.videoPlayingEventListener = () => {
+                this.decodeWithDelay(callbackFn);
+            };
+        }
 
         videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
@@ -174,8 +184,7 @@ export class BrowserCodeReader {
                     advanced: [<any>{ torch: true }]
                 });
             } else {
-                // TODO: Restarting stream is needed as torch false is not working on chrome.
-                this.track.stop();
+                this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
             }
         }
     }
