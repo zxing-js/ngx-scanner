@@ -35,18 +35,18 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve --host=0.0.0.0",
-        "start-ssl": "ng serve --ssl --host=0.0.0.0 --live-reload false",
+        "start:ssl": "ng serve --ssl --host=0.0.0.0 --live-reload false",
         "build": "ng build",
-        "build-prod": "ng build --prod",
+        "build:prod": "ng build --prod",
+        "build:packagr": "ng-packagr -p package.json",
         "test": "ng test --single-run",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "build:packagr": "ng-packagr -p package.json",
         "docs": "npm run docs:build",
         "docs:build": "compodoc -p tsconfig.json -n zxing-scanner -d docs --hideGenerator",
         "docs:serve": "npm run docs:build -- -s",
         "docs:watch": "npm run docs:build -- -s -w",
-        "publish:dist": "cd ./dist && yarn publish --access=public"
+        "publish:dist": "cd ./dist && npm publish --access=public"
     },
     "dependencies": {
         "@zxing/library": "^0.3.1"

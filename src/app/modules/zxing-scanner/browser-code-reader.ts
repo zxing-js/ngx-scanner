@@ -6,6 +6,8 @@ import {
     Exception,
     HTMLCanvasElementLuminanceSource,
 } from '@zxing/library';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
@@ -60,6 +62,14 @@ export class BrowserCodeReader {
      * The stream output from camera.
      */
     private stream: MediaStream;
+    /**
+     * The track from camera.
+     */
+    private track: MediaStreamTrack;
+    /**
+     * Shows if torch is available on the camera.
+     */
+    private torchCompatible = new Subject<boolean>();
 
     /**
      * Constructor for dependency injection.
@@ -91,16 +101,18 @@ export class BrowserCodeReader {
             video
         };
 
-        if (navigator) {
-            navigator
-                .mediaDevices
-                .getUserMedia(constraints)
-                .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
-                .catch((err: any) => {
-                    /* handle the error, or not */
-                    console.error(err);
-                });
+        if (!navigator) {
+            return;
         }
+
+        navigator
+            .mediaDevices
+            .getUserMedia(constraints)
+            .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
+            .catch((err: any) => {
+                /* handle the error, or not */
+                console.error(err);
+            });
     }
 
     /**
@@ -110,29 +122,61 @@ export class BrowserCodeReader {
      * @param callbackFn A callback for the decode method.
      */
     private startDecodeFromStream(stream: MediaStream, callbackFn: (result: Result) => any): void {
-
         this.stream = stream;
+        this.bindSrc(this.videoElement, this.stream);
+        this.bindEvents(this.videoElement, callbackFn);
+        this.checkTorchCompatibility(this.stream);
+    }
 
+    private bindSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
         // Older browsers may not have srcObject
-        if ('srcObject' in this.videoElement) {
+        if ('srcObject' in videoElement) {
             // @NOTE Throws Exception if interrupted by a new loaded request
-            this.videoElement.srcObject = stream;
+            videoElement.srcObject = stream;
         } else {
             // @NOTE Avoid using this in new browsers, as it is going away.
-            (<HTMLVideoElement>this.videoElement).src = window.URL.createObjectURL(stream);
+            (<HTMLVideoElement>videoElement).src = window.URL.createObjectURL(stream);
         }
+    }
 
+    private bindEvents(videoElement: HTMLVideoElement, callbackFn: (result: Result) => any): void {
         this.videoPlayingEventListener = () => {
             this.decodeWithDelay(callbackFn);
         };
 
-        this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
+        videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
         this.videoLoadedMetadataEventListener = () => {
-            this.videoElement.play();
+            videoElement.play();
         };
 
-        this.videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+        videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+    }
+
+    private checkTorchCompatibility(stream: MediaStream): boolean {
+        let compatible = false;
+        this.track = stream.getVideoTracks()[0];
+
+        const imageCapture = new ImageCapture(this.track);
+        const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
+            this.torchCompatible.next(!!capabilities.torch);
+            compatible = capabilities.torch;
+        });
+        return compatible;
+    }
+
+    public setTorch(on: boolean): void {
+        this.torchCompatible.subscribe(compatible => {
+            if (compatible) {
+                this.track.applyConstraints({
+                    advanced: [<any>{ torch: on }]
+                });
+            }
+        }).unsubscribe();
+    }
+
+    public get torchAvailable(): Observable<boolean> {
+        return this.torchCompatible.asObservable();
     }
 
     /**
