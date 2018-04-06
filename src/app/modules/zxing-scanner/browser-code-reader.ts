@@ -168,9 +168,14 @@ export class BrowserCodeReader {
 
     public setTorch(on: boolean) {
         if (this.torchCompatible.value) {
-            this.track.applyConstraints({
-                advanced: [<any>{ torch: on }]
-            });
+            if (on) {
+                this.track.applyConstraints({
+                    advanced: [<any>{ torch: true }]
+                });
+            } else {
+                // TODO: Restarting stream is needed as torch false is not working on chrome.
+                this.track.stop();
+            }
         }
     }
 
