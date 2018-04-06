@@ -211,7 +211,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 this.startScan(this.videoInputDevice);
 
             } else {
-                console.warn('User has denied permission.');
+                                   
+                if (hasPermission === false) {
+                    console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
+                } else {
+                    console.warn('zxing-scanner', 'ngAfterViewInit', 'It was not possible to check for permissions.');
+                }
             }
 
         });
@@ -268,12 +273,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                                    
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t ask permission, navigator is not present.');
-            return;
+            return new EventEmitter<boolean>(undefined);
         }
 
         if (!this.isMediaDevicesSuported) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
-            return;
+            return new EventEmitter<boolean>(undefined);
         }
 
         // Will try to ask for permission
