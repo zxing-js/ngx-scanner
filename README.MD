@@ -1,8 +1,22 @@
-<img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+<p align="center">
+    
+  <a href="https://getbootstrap.com/">
+    <img src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+  </a>
 
-# @zxing/ngx-scanner 
+  <h3 align="center">@zxing/ngx-scanner</h3>
 
-> Angular QR-Code scanner component.
+  <p align="center">
+    Angular QR-Code scanner component.
+    <br>
+    <br>
+    <a href="https://github.com/twbs/bootstrap/issues/new?template=bug.md">Report a bug</a>
+    ·
+    <a href="https://github.com/twbs/bootstrap/issues/new?template=feature.md&labels=feature">Request feature</a>
+  </p>
+</p>
+
+<br>
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
