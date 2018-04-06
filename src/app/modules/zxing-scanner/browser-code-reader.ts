@@ -153,17 +153,18 @@ export class BrowserCodeReader {
         videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
 
-    private checkTorchCompatibility(stream: MediaStream): boolean {
-        let compatible = false;
+    private checkTorchCompatibility(stream: MediaStream): BehaviorSubject<boolean> {    
+        
         this.track = stream.getVideoTracks()[0];
 
         const imageCapture = new ImageCapture(this.track);
+        
         const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
-            compatible = (!!capabilities.torch) ||
-                ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+            let compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
             this.torchCompatible.next(compatible);
         });
-        return compatible;
+        
+        return this.torchCompatible;
     }
 
     public setTorch(on: boolean) {
