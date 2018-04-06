@@ -21,7 +21,7 @@
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
 [![Dependency Status](https://david-dm.org/werthdavid/ngx-scanner.svg)](https://david-dm.org/werthdavid/ngx-scanner)
-[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-scanner.svg)](https://travis-ci.org/werthdavid/ngx-scanner)
+[![Build Status](https://secure.travis-ci.org/zxing-js/ngx-scanner.svg)](https://travis-ci.org/zxing-js/ngx-scanner)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba14393a17241088f75b19edc370694)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
