@@ -7,6 +7,7 @@ import { Result } from '@zxing/library';
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
     qrResultString: string;
     qrResult: Result;
     scannerEnabled = true;
+    torch = false;
 
     availableDevices: MediaDeviceInfo[];
     selectedDevice: MediaDeviceInfo;
@@ -45,17 +47,17 @@ export class AppComponent implements OnInit {
     }
 
     displayCameras(cameras: MediaDeviceInfo[]) {
-        console.log('Devices: ', cameras);
+        console.debug('Devices: ', cameras);
         this.availableDevices = cameras;
     }
 
     handleQrCodeResult(resultString: string) {
-        console.log('Result: ', resultString);
+        console.debug('Result: ', resultString);
         this.qrResultString = resultString;
     }
 
     onDeviceSelectChange(selectedValue: string) {
-        console.log('Selection changed: ', selectedValue);
+        console.debug('Selection changed: ', selectedValue);
         this.selectedDevice = this.scanner.getDeviceById(selectedValue);
     }
 }
