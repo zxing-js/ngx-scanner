@@ -6,7 +6,7 @@ import {
     Exception,
     HTMLCanvasElementLuminanceSource,
 } from '@zxing/library';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
 /**
@@ -69,7 +69,7 @@ export class BrowserCodeReader {
     /**
      * Shows if torch is available on the camera.
      */
-    private torchCompatible = new Subject<boolean>();
+    private torchCompatible = new BehaviorSubject<boolean>(false);
 
     /**
      * Constructor for dependency injection.
@@ -159,20 +159,19 @@ export class BrowserCodeReader {
 
         const imageCapture = new ImageCapture(this.track);
         const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
-            this.torchCompatible.next(!!capabilities.torch);
-            compatible = capabilities.torch;
+            compatible = (!!capabilities.torch) ||
+                ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+            this.torchCompatible.next(compatible);
         });
         return compatible;
     }
 
-    public setTorch(on: boolean): void {
-        this.torchCompatible.subscribe(compatible => {
-            if (compatible) {
-                this.track.applyConstraints({
-                    advanced: [<any>{ torch: on }]
-                });
-            }
-        }).unsubscribe();
+    public setTorch(on: boolean) {
+        if (this.torchCompatible.value) {
+            this.track.applyConstraints({
+                advanced: [<any>{ torch: on }]
+            });
+        }
     }
 
     public get torchAvailable(): Observable<boolean> {
