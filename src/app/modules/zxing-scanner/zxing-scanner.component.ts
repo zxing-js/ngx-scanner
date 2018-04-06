@@ -143,7 +143,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
-        this.isMediaDevicesSuported = !!(navigator && navigator.mediaDevices);
+        this.hasNavigator = typeof navigator != 'undefined';
+        this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
     }
 
@@ -264,6 +265,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Gets and registers all cammeras.
      */
     askForPermission(): EventEmitter<boolean> {
+                                   
+        if (!this.hasNavigator) {
+            console.error('zxing-scanner', 'askForPermission', 'Can\'t ask permission, navigator is not present.');
+            return;
+        }
 
         if (!this.isMediaDevicesSuported) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
@@ -424,6 +430,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * @param successCallback
      */
     enumarateVideoDevices(successCallback: any): void {
+                                   
+        if (!this.hasNavigator) {
+            console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, navigator is not present.');
+            return;
+        }
 
         if (!this.isEnumerateDevicesSuported) {
             console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, method not supported.');
