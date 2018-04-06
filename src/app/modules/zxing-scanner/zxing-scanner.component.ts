@@ -273,18 +273,27 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
+     * Sets the permission value and emmits the event.
+     */
+    setPermission(hasPermission: boolean|undefined): EventEmitter<boolean> {
+        this.hasPermission = hasPermission;
+        this.permissionResponse.next(hasPermission);
+        return this.permissionResponse;
+    }
+
+    /**
      * Gets and registers all cammeras.
      */
     askForPermission(): EventEmitter<boolean> {
 
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t ask permission, navigator is not present.');
-            return new EventEmitter<boolean>(undefined);
+            return this.setPermission(undefined);
         }
 
         if (!this.isMediaDevicesSuported) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
-            return new EventEmitter<boolean>(undefined);
+            return this.setPermission(undefined);
         }
 
         // Will try to ask for permission
@@ -308,18 +317,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                     // if the scripts lives until here, that's only one mean:
 
                     // permission granted
-                    this.hasPermission = true;
-
-                    this.permissionResponse.next(this.hasPermission);
+                    this.setPermission(true);
 
                 } catch (err) {
 
                     console.error('zxing-scanner', 'askForPermission', err);
 
                     // permission aborted
-                    this.hasPermission = undefined;
-
-                    this.permissionResponse.next(undefined);
+                    this.setPermission(undefined);
                 }
 
             })
@@ -332,11 +337,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 switch (err.name) {
 
                     case 'NotAllowedError':
-
                         // permission denied
-                        this.hasPermission = false;
-
-                        this.permissionResponse.next(this.hasPermission);
+                        this.setPermission(false);
                         break;
 
                     case 'NotFoundError':
@@ -344,14 +346,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                         break;
 
                     default:
-                        this.permissionResponse.next(undefined);
+                        this.setPermission(undefined);
                         break;
 
                 }
 
             });
 
-        // Returns the event emitter, so thedev can subscribe to it
+        // Returns the event emitter, so the dev can subscribe to it
         return this.permissionResponse;
     }
 
