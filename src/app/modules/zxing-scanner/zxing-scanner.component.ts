@@ -20,6 +20,7 @@ import { BrowserQRCodeReader } from './browser-qr-code-reader';
     // tslint:disable-next-line:component-selector
     selector: 'zxing-scanner',
     templateUrl: './zxing-scanner.component.html',
+    styleUrls: ['./zxing-scanner.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
