@@ -12,9 +12,9 @@ import {
     ViewChild
 } from '@angular/core';
 
-import {Result} from '@zxing/library';
+import { Result } from '@zxing/library';
 
-import {BrowserQRCodeReader} from './browser-qr-code-reader';
+import { BrowserQRCodeReader } from './browser-qr-code-reader';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -28,6 +28,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * The ZXing code reader.
      */
     private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
+
+    /**
+     * Has `navigator` access.
+     */
+    private hasNavigator: boolean;
+
 
     /**
      * Says if some native API is supported.
@@ -143,7 +149,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
-        this.hasNavigator = typeof navigator != 'undefined';
+        this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
     }
@@ -211,7 +217,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 this.startScan(this.videoInputDevice);
 
             } else {
-                                   
+
                 if (hasPermission === false) {
                     console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
                 } else {
@@ -270,7 +276,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Gets and registers all cammeras.
      */
     askForPermission(): EventEmitter<boolean> {
-                                   
+
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t ask permission, navigator is not present.');
             return new EventEmitter<boolean>(undefined);
@@ -284,7 +290,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         // Will try to ask for permission
         navigator
             .mediaDevices
-            .getUserMedia({audio: false, video: true})
+            .getUserMedia({ audio: false, video: true })
             .then((stream: MediaStream) => {
 
                 try {
@@ -435,7 +441,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * @param successCallback
      */
     enumarateVideoDevices(successCallback: any): void {
-                                   
+
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, navigator is not present.');
             return;
