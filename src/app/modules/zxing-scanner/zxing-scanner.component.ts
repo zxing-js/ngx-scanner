@@ -90,6 +90,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     autofocusEnabled = true;
 
     /**
+     * Allow start scan or not.
+     */
+    @Input()
+    set torch(on: boolean) {
+        this.codeReader.setTorch(on);
+    }
+
+    /**
      * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
      */
     @Output()
