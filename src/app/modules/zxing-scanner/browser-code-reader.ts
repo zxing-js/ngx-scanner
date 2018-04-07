@@ -182,7 +182,7 @@ export class BrowserCodeReader {
                     advanced: [<any>{ torch: true }]
                 });
             } else {
-                this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
+                this.restart();
             }
         }
     }
@@ -376,5 +376,9 @@ export class BrowserCodeReader {
 
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
+    }
+
+    private restart(): void {
+        this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
     }
 }
