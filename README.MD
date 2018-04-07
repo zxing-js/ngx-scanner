@@ -1,6 +1,6 @@
 <p align="center">
     
-  <a href="https://getbootstrap.com/">
+  <a href="https://github.com/zxing-js/library">
     <img src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
   </a>
 
