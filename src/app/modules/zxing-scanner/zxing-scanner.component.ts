@@ -105,6 +105,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
+     * Emitts events when the torch compatibility is changed.
+     */
+    @Output()
+    torchCompatible = new EventEmitter<boolean>();
+
+    /**
      * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
      */
     @Output()
@@ -217,6 +223,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
                 this.startScan(this.videoInputDevice);
 
+                this.codeReader.torchAvailable.subscribe(value => {
+                    this.torchCompatible.emit(value);
+                });
+
             } else {
 
                 if (hasPermission === false) {
@@ -276,7 +286,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Sets the permission value and emmits the event.
      */
-    setPermission(hasPermission: boolean|undefined): EventEmitter<boolean> {
+    setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
         this.hasPermission = hasPermission;
         this.permissionResponse.next(hasPermission);
         return this.permissionResponse;

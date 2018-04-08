@@ -6,7 +6,7 @@ import {
     Exception,
     HTMLCanvasElementLuminanceSource,
 } from '@zxing/library';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
 /**
@@ -69,7 +69,11 @@ export class BrowserCodeReader {
     /**
      * Shows if torch is available on the camera.
      */
-    private torchCompatible = new Subject<boolean>();
+    private torchCompatible = new BehaviorSubject<boolean>(false);
+    /**
+     * The device id of the current media device.
+     */
+    private deviceId: string;
 
     /**
      * Constructor for dependency injection.
@@ -86,15 +90,19 @@ export class BrowserCodeReader {
      * @param deviceId The device's to be used Id
      * @param videoElement A new video element
      */
-    public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+    public decodeFromInputVideoDevice(callbackFn?: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+
+        if (deviceId !== undefined) {
+            this.deviceId = deviceId;
+        }
 
         this.reset();
 
         this.prepareVideoElement(videoElement);
 
-        const video = deviceId === undefined
+        const video = this.deviceId === undefined
             ? { facingMode: { exact: 'environment' } }
-            : { deviceId: { exact: deviceId } };
+            : { deviceId: { exact: this.deviceId } };
 
         const constraints: MediaStreamConstraints = {
             audio: false,
@@ -121,7 +129,7 @@ export class BrowserCodeReader {
      * @param stream The stream to be shown in the video element.
      * @param callbackFn A callback for the decode method.
      */
-    private startDecodeFromStream(stream: MediaStream, callbackFn: (result: Result) => any): void {
+    private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
         this.bindSrc(this.videoElement, this.stream);
         this.bindEvents(this.videoElement, callbackFn);
@@ -139,10 +147,12 @@ export class BrowserCodeReader {
         }
     }
 
-    private bindEvents(videoElement: HTMLVideoElement, callbackFn: (result: Result) => any): void {
-        this.videoPlayingEventListener = () => {
-            this.decodeWithDelay(callbackFn);
-        };
+    private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
+        if (callbackFn !== undefined) {
+            this.videoPlayingEventListener = () => {
+                this.decodeWithDelay(callbackFn);
+            };
+        }
 
         videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
@@ -153,26 +163,28 @@ export class BrowserCodeReader {
         videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
 
-    private checkTorchCompatibility(stream: MediaStream): boolean {
-        let compatible = false;
+    private checkTorchCompatibility(stream: MediaStream): void {
+
         this.track = stream.getVideoTracks()[0];
 
         const imageCapture = new ImageCapture(this.track);
+
         const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
-            this.torchCompatible.next(!!capabilities.torch);
-            compatible = capabilities.torch;
+            const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+            this.torchCompatible.next(compatible);
         });
-        return compatible;
     }
 
-    public setTorch(on: boolean): void {
-        this.torchCompatible.subscribe(compatible => {
-            if (compatible) {
+    public setTorch(on: boolean) {
+        if (this.torchCompatible.value) {
+            if (on) {
                 this.track.applyConstraints({
-                    advanced: [<any>{ torch: on }]
+                    advanced: [<any>{ torch: true }]
                 });
+            } else {
+                this.restart();
             }
-        }).unsubscribe();
+        }
     }
 
     public get torchAvailable(): Observable<boolean> {
@@ -364,5 +376,9 @@ export class BrowserCodeReader {
 
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
+    }
+
+    private restart(): void {
+        this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
     }
 }
