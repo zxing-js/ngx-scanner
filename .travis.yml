@@ -4,3 +4,10 @@ node_js:
 - '8.4.0'
 addons:
   chrome: stable
+script:
+    - npm run lint
+    - npm run test
+#   - npm run e2e
+    - npm run docs:build
+    - npm run build:prod
+    - npm run build:packagr
