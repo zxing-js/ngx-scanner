@@ -1,3 +1,4 @@
+/// <reference path="./image-capture.d.ts" />
 import {
     Reader,
     BinaryBitmap,
