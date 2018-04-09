@@ -1,3 +1,5 @@
+/// <reference path="./image-capture.d.ts" />
+
 import {
     Reader,
     BinaryBitmap,
@@ -6,6 +8,7 @@ import {
     Exception,
     HTMLCanvasElementLuminanceSource,
 } from '@zxing/library';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
