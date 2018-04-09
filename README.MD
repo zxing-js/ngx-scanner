@@ -10,9 +10,9 @@
     Angular QR-Code scanner component.
     <br>
     <br>
-    <a href="https://github.com/twbs/bootstrap/issues/new?template=bug.md">Report a bug</a>
+    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=bug.md">Report a bug</a>
     ·
-    <a href="https://github.com/twbs/bootstrap/issues/new?template=feature.md&labels=feature">Request feature</a>
+    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=feature.md&labels=feature">Request feature</a>
   </p>
 </p>
 
