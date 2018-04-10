@@ -271,6 +271,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     setCodeReaderThrottling(throttling: number): void {
         this.codeReader = new BrowserQRCodeReader(throttling);
+        this.restartScan();
     }
 
     /**
@@ -430,6 +431,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     resetScan(): void {
         this.codeReader.reset();
+    }
+
+    /**
+     * Stops and starts back the scan.
+     */
+    restartScan(): void {
+        this.restartScan();
+        this.startScan(this.device);
     }
 
     /**
