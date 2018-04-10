@@ -28,7 +28,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * The ZXing code reader.
      */
-    private codeReader: BrowserQRCodeReader = new BrowserQRCodeReader(1500);
+    private codeReader: BrowserQRCodeReader;
 
     /**
      * Has `navigator` access.
@@ -159,6 +159,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
+        this.codeReader = new BrowserQRCodeReader(1500);
     }
 
     /**
