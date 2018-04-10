@@ -241,7 +241,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
                 this.startScan(this.videoInputDevice);
 
-                this.codeReader.torchAvailable.subscribe(value => {
+                this.codeReader.torchAvailable.subscribe((value: boolean) => {
                     this.torchCompatible.emit(value);
                 });
 
