@@ -4,13 +4,17 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
     Output,
+    PLATFORM_ID,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
 
 import { Result } from '@zxing/library';
 
@@ -59,6 +63,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Says if the user allowedthe use of the camera or not.
      */
     private hasPermission: boolean;
+
+    /**
+     * Tells if the client is a browser.
+     */
+    private isBrowser: boolean;
 
     /**
      * Reference to the preview element, should be the `video` tag.
@@ -155,11 +164,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Constructor to build the object and do some DI.
      */
-    constructor() {
+    constructor(
+        @Inject(PLATFORM_ID) platformId: Object
+    ) {
+        this.isBrowser = isPlatformBrowser(platformId);
+
+        if (!this.isBrowser) {
+            return;
+        }
+
+        this.codeReader = new BrowserQRCodeReader(1500);
         this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
-        this.codeReader = new BrowserQRCodeReader(1500);
     }
 
     /**
