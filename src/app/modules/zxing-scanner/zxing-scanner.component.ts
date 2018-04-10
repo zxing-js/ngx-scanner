@@ -305,7 +305,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Sets the permission value and emmits the event.
      */
-    setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
+    private setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
         this.hasPermission = hasPermission;
         this.permissionResponse.next(hasPermission);
         return this.permissionResponse;
