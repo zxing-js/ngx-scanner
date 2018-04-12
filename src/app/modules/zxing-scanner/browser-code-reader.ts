@@ -189,7 +189,7 @@ export class BrowserCodeReader {
             callbackFn(result);
 
             if (!once && !!this.stream) {
-                setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScans);
+                this.decodeWithDelay(callbackFn);
             }
 
         } catch (re) {
