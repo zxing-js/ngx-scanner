@@ -184,7 +184,7 @@ export class BrowserCodeReader {
 
         try {
 
-            const result = this.readerDecode(binaryBitmap);
+            const result = this.reader.decode(binaryBitmap);
 
             callbackFn(result);
 
@@ -214,15 +214,6 @@ export class BrowserCodeReader {
                 this.decodeWithDelay(callbackFn);
             }
         }
-    }
-
-    /**
-     * Alias for this.reader.decode
-     *
-     * @param binaryBitmap
-     */
-    protected readerDecode(binaryBitmap: BinaryBitmap): Result {
-        return this.reader.decode(binaryBitmap);
     }
 
     /**
