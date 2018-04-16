@@ -164,7 +164,9 @@ When scanning, consider the following:
 
 ## Limitations
 
-- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only the following code formats:
+  - QR Code
+  - Code 128
 - On iOS-Devices camera access works only in native Safari and not in other Browsers (Chrome,...) or Apps that use an UIWebView or WKWebView. This is not a restriction of this component but of the limited WebRTC support by Apple. The behavior might change in iOS 11.3 (Apr 2018?, not tested) as stated [here](https://developer.apple.com/library/content/releasenotes/General/WhatsNewInSafari/Articles/Safari_11_1.html#//apple_ref/doc/uid/TP40014305-CH14-SW1)
 
 ## Generator
