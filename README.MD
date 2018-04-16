@@ -1,14 +1,28 @@
-<img align="right" src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+<p align="center">
+    
+  <a href="https://github.com/zxing-js/library">
+    <img src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+  </a>
 
-# @zxing/ngx-scanner 
+  <h3 align="center">@zxing/ngx-scanner</h3>
 
-> Angular QR-Code scanner component.
+  <p align="center">
+    Angular QR-Code scanner component.
+    <br>
+    <br>
+    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=bug.md">Report a bug</a>
+    ·
+    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=feature.md&labels=feature">Request feature</a>
+  </p>
+</p>
+
+<br>
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
 [![Dependency Status](https://david-dm.org/werthdavid/ngx-scanner.svg)](https://david-dm.org/werthdavid/ngx-scanner)
-[![Build Status](https://secure.travis-ci.org/werthdavid/ngx-scanner.svg)](https://travis-ci.org/werthdavid/ngx-scanner)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9345e7a9bbb49c0b83629f46795ee75)](https://www.codacy.com/app/odahcam/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://secure.travis-ci.org/zxing-js/ngx-scanner.svg)](https://travis-ci.org/zxing-js/ngx-scanner)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba14393a17241088f75b19edc370694)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Features & Hints
@@ -92,7 +106,7 @@ Once the package is imported, you can use it in your Angular application:
 - `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)
 - `autofocusEnabled` can be used to enable or disable the autofocus-feature of the camera (defaults to `true`)
 - `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
-- `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
+- `cssClass` !*deprecated*! this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
 - `camerasFound` will emit an array of video-devices after view was initialized
 - `scanSuccess` will emit the result as string, after a valid QR-Code was scanned
 
@@ -101,12 +115,17 @@ Once the package is imported, you can use it in your Angular application:
 In your CSS, define an extra class and pass it to the component with the `cssClass`-parameter. CSS might look like this:
 
 ```css
-.small-video {
+/deep/ .small-video {
     max-height: 70vh;
     width: 100vw;
     object-fit: contain;
 }
 ```
+
+Due to view-encapsulation it is required that the CSS-class that is to be used can be 'seen' from inside the scanner-component. 
+In the example this is achieved with the `/deep/` keyword. 
+Since this is not the best way to achieve the desired behavior and `/deep/` is deprecated by Angular, 
+the attribute will be removed in the next major version of the component (2.x) and replaced by an `ngTemplate` solution.
 
 ## API
 
@@ -145,7 +164,9 @@ When scanning, consider the following:
 
 ## Limitations
 
-- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only QR-codes and no 1D-Barcode formats
+- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports only the following code formats:
+  - QR Code
+  - Code 128
 - On iOS-Devices camera access works only in native Safari and not in other Browsers (Chrome,...) or Apps that use an UIWebView or WKWebView. This is not a restriction of this component but of the limited WebRTC support by Apple. The behavior might change in iOS 11.3 (Apr 2018?, not tested) as stated [here](https://developer.apple.com/library/content/releasenotes/General/WhatsNewInSafari/Articles/Safari_11_1.html#//apple_ref/doc/uid/TP40014305-CH14-SW1)
 
 ## Generator
