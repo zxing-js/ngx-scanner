@@ -106,7 +106,7 @@ Once the package is imported, you can use it in your Angular application:
 - `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)
 - `autofocusEnabled` can be used to enable or disable the autofocus-feature of the camera (defaults to `true`)
 - `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
-- `cssClass` this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
+- `cssClass` !*deprecated*! this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
 - `camerasFound` will emit an array of video-devices after view was initialized
 - `scanSuccess` will emit the result as string, after a valid QR-Code was scanned
 
@@ -115,12 +115,17 @@ Once the package is imported, you can use it in your Angular application:
 In your CSS, define an extra class and pass it to the component with the `cssClass`-parameter. CSS might look like this:
 
 ```css
-.small-video {
+/deep/ .small-video {
     max-height: 70vh;
     width: 100vw;
     object-fit: contain;
 }
 ```
+
+Due to view-encapsulation it is required that the CSS-class that is to be used can be 'seen' from inside the scanner-component. 
+In the example this is achieved with the `/deep/` keyword. 
+Since this is not the best way to achieve the desired behavior and `/deep/` is deprecated by Angular, 
+the attribute will be removed in the next major version of the component (2.x) and replaced by an `ngTemplate` solution.
 
 ## API
 
