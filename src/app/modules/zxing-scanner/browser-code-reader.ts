@@ -253,11 +253,11 @@ export class BrowserCodeReader {
 
         } catch (re) {
 
-            console.debug(retryIfChecksumOrFormatError, re);
+            // console.debug(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
 
-                console.debug('zxing-scanner', 'QR-code not-found, trying again...');
+                // console.debug('zxing-scanner', 'QR-code not-found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
 
