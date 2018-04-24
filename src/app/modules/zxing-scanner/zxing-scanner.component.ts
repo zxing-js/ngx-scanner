@@ -65,11 +65,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     private hasPermission: boolean;
 
     /**
-     * Tells if the client is a browser.
-     */
-    private isBrowser: boolean;
-
-    /**
      * Reference to the preview element, should be the `video` tag.
      */
     @ViewChild('preview')
@@ -164,15 +159,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Constructor to build the object and do some DI.
      */
-    constructor(
-        @Inject(PLATFORM_ID) platformId: Object
-    ) {
-        this.isBrowser = isPlatformBrowser(platformId);
-
-        if (!this.isBrowser) {
-            return;
-        }
-
+    constructor() {
         this.codeReader = new BrowserQRCodeReader(1500);
         this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
