@@ -6,7 +6,7 @@
     </select>
 </p>
 
-<div [hidden]="!hasCameras">
+<div [class.hidden]="!hasCameras">
 
     <zxing-scanner #scanner class="test-class" [scannerEnabled]="scannerEnabled" [torch]="torch" [device]="selectedDevice" (camerasFound)="displayCameras($event)"
         (scanSuccess)="handleQrCodeResult($event)" [cssClass]="{customClass:true}"></zxing-scanner>
@@ -25,7 +25,7 @@
 
 </div>
 
-<div [hidden]="hasCameras">
+<div [class.hidden]="hasCameras">
 
     <h1>Looks like your actual device does not have cameras, or I could not find'em. </h1>
 

@@ -145,12 +145,12 @@ export class BrowserCodeReader {
      */
     private bindSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
         // Older browsers may not have srcObject
-        if ('srcObject' in videoElement) {
+        try {
             // @NOTE Throws Exception if interrupted by a new loaded request
             videoElement.srcObject = stream;
-        } else {
+        } catch (err) {
             // @NOTE Avoid using this in new browsers, as it is going away.
-            (<HTMLVideoElement>videoElement).src = window.URL.createObjectURL(stream);
+            videoElement.src = window.URL.createObjectURL(stream);
         }
     }
 
@@ -182,15 +182,18 @@ export class BrowserCodeReader {
      * @param stream The media stream used to check.
      */
     private checkTorchCompatibility(stream: MediaStream): void {
+        try {
+            this.track = stream.getVideoTracks()[0];
 
-        this.track = stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(this.track);
 
-        const imageCapture = new ImageCapture(this.track);
-
-        const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
-            const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
-            this.torchCompatible.next(compatible);
-        });
+            const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
+                const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+                this.torchCompatible.next(compatible);
+            });
+        } catch (err) {
+            this.torchCompatible.next(false);
+        }
     }
 
     public setTorch(on: boolean): void {
@@ -259,12 +262,12 @@ export class BrowserCodeReader {
 
         try {
 
-            const result = this.readerDecode(binaryBitmap);
+            const result = this.reader.decode(binaryBitmap);
 
             callbackFn(result);
 
             if (!once && !!this.stream) {
-                setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScans);
+                this.decodeWithDelay(callbackFn);
             }
 
         } catch (re) {
@@ -289,15 +292,6 @@ export class BrowserCodeReader {
                 this.decodeWithDelay(callbackFn);
             }
         }
-    }
-
-    /**
-     * Alias for this.reader.decode
-     *
-     * @param binaryBitmap
-     */
-    protected readerDecode(binaryBitmap: BinaryBitmap): Result {
-        return this.reader.decode(binaryBitmap);
     }
 
     /**
@@ -377,9 +371,23 @@ export class BrowserCodeReader {
                 this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
             }
 
+            if (this.stream) {
+                try {
+                    this.stream.getVideoTracks().forEach(track => {
+                        track.stop();
+                    });
+                } catch (err) {
+
+                }
+            }
+
             // then forgets about that element 😢
 
-            this.videoElement.srcObject = undefined;
+            try {
+                this.videoElement.srcObject = null;
+            } catch (err) {
+                this.videoElement.src = '';
+            }
             this.videoElement.removeAttribute('src');
             this.videoElement = undefined;
         }
