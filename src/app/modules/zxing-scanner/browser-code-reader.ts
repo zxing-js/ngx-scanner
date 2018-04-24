@@ -132,7 +132,7 @@ export class BrowserCodeReader {
      */
     private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
-        this.bindSrc(this.videoElement, this.stream);
+        this.bindVideoSrc(this.videoElement, this.stream);
         this.bindEvents(this.videoElement, callbackFn);
         this.checkTorchCompatibility(this.stream);
     }
@@ -143,14 +143,27 @@ export class BrowserCodeReader {
      * @param videoElement
      * @param stream
      */
-    private bindSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
-        // Older browsers may not have srcObject
+    public bindVideoSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
+        // Older browsers may not have `srcObject`
         try {
             // @NOTE Throws Exception if interrupted by a new loaded request
             videoElement.srcObject = stream;
         } catch (err) {
             // @NOTE Avoid using this in new browsers, as it is going away.
             videoElement.src = window.URL.createObjectURL(stream);
+        }
+    }
+
+    /**
+     * Unbinds a HTML video src property.
+     *
+     * @param videoElement
+     */
+    public unbindVideoSrc(videoElement: HTMLVideoElement): void {
+        try {
+            this.videoElement.srcObject = null;
+        } catch (err) {
+            this.videoElement.src = '';
         }
     }
 
@@ -383,11 +396,8 @@ export class BrowserCodeReader {
 
             // then forgets about that element 😢
 
-            try {
-                this.videoElement.srcObject = null;
-            } catch (err) {
-                this.videoElement.src = '';
-            }
+            this.unbindVideoSrc(this.videoElement);
+
             this.videoElement.removeAttribute('src');
             this.videoElement = undefined;
         }

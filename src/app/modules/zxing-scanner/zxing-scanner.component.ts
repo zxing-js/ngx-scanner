@@ -320,23 +320,17 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             .then((stream: MediaStream) => {
 
                 try {
-                    // Start stream so Browser can display permission-dialog ("Website wants to access your camera, allow?")
-                    try {
-                        this.previewElemRef.nativeElement.srcObject = stream;
-                    } catch (err) {
-                        this.previewElemRef.nativeElement.src = window.URL.createObjectURL(stream);
-                    }
+
+                    // Start stream so Browser can display its permission-dialog
+                    this.codeReader.bindVideoSrc(this.previewElemRef.nativeElement, stream);
 
                     // After permission was granted, we can stop it again
                     stream.getVideoTracks().forEach(track => {
                         track.stop();
                     });
 
-                    try {
-                        this.previewElemRef.nativeElement.srcObject = null;
-                    } catch (err) {
-                        this.previewElemRef.nativeElement.src = '';
-                    }
+                    // should stop the opened stream
+                    this.codeReader.unbindVideoSrc(this.previewElemRef.nativeElement);
 
                     // if the scripts lives until here, that's only one mean:
 
