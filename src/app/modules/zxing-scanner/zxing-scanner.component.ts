@@ -4,13 +4,17 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
     Output,
+    PLATFORM_ID,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
 
 import { Result } from '@zxing/library';
 
@@ -156,10 +160,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
+        this.codeReader = new BrowserQRCodeReader(1500);
         this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
-        this.codeReader = new BrowserQRCodeReader(1500);
     }
 
     /**
@@ -224,7 +228,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
                 this.startScan(this.videoInputDevice);
 
-                this.codeReader.torchAvailable.subscribe(value => {
+                this.codeReader.torchAvailable.subscribe((value: boolean) => {
                     this.torchCompatible.emit(value);
                 });
 
@@ -254,6 +258,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     setCodeReaderThrottling(throttling: number): void {
         this.codeReader = new BrowserQRCodeReader(throttling);
+        this.restartScan();
     }
 
     /**
@@ -287,7 +292,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Sets the permission value and emmits the event.
      */
-    setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
+    private setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
         this.hasPermission = hasPermission;
         this.permissionResponse.next(hasPermission);
         return this.permissionResponse;
@@ -386,8 +391,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
             this.codeReader.decodeFromInputVideoDevice((result: any) => {
 
-                console.debug('zxing-scanner', 'scan', 'result: ', result);
-
                 if (result) {
                     this.dispatchScanSuccess(result);
                 } else {
@@ -420,6 +423,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     resetScan(): void {
         this.codeReader.reset();
+    }
+
+    /**
+     * Stops and starts back the scan.
+     */
+    restartScan(): void {
+        this.restartScan();
+        this.startScan(this.device);
     }
 
     /**

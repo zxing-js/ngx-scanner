@@ -112,18 +112,16 @@ export class BrowserCodeReader {
             video
         };
 
-        if (!navigator) {
-            return;
+        if (typeof navigator !== 'undefined') {
+            navigator
+                .mediaDevices
+                .getUserMedia(constraints)
+                .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
+                .catch((err: any) => {
+                    /* handle the error, or not */
+                    console.error(err);
+                });
         }
-
-        navigator
-            .mediaDevices
-            .getUserMedia(constraints)
-            .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
-            .catch((err: any) => {
-                /* handle the error, or not */
-                console.error(err);
-            });
     }
 
     /**
@@ -139,6 +137,12 @@ export class BrowserCodeReader {
         this.checkTorchCompatibility(this.stream);
     }
 
+    /**
+     * Defines what the videoElement src will be.
+     *
+     * @param videoElement
+     * @param stream
+     */
     private bindSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
         // Older browsers may not have srcObject
         try {
@@ -150,6 +154,12 @@ export class BrowserCodeReader {
         }
     }
 
+    /**
+     * Binds listeners and callbacks to the videoElement.
+     *
+     * @param videoElement
+     * @param callbackFn
+     */
     private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
         if (callbackFn !== undefined) {
             this.videoPlayingEventListener = () => {
@@ -166,6 +176,11 @@ export class BrowserCodeReader {
         videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
 
+    /**
+     * Checks if the stream supports torch control.
+     *
+     * @param stream The media stream used to check.
+     */
     private checkTorchCompatibility(stream: MediaStream): void {
         try {
             this.track = stream.getVideoTracks()[0];
@@ -181,7 +196,7 @@ export class BrowserCodeReader {
         }
     }
 
-    public setTorch(on: boolean) {
+    public setTorch(on: boolean): void {
         if (this.torchCompatible.value) {
             if (on) {
                 this.track.applyConstraints({
@@ -202,14 +217,15 @@ export class BrowserCodeReader {
      *
      * @param videoElement The HTMLVideoElement to be set.
      */
-    private prepareVideoElement(videoElement?: HTMLVideoElement) {
-        if (!videoElement) {
-            this.videoElement = document.createElement('video');
-            this.videoElement.width = 200;
-            this.videoElement.height = 200;
-        } else {
-            this.videoElement = videoElement;
+    private prepareVideoElement(videoElement?: HTMLVideoElement): void {
+
+        if (!videoElement && typeof document !== 'undefined') {
+            videoElement = document.createElement('video');
+            videoElement.width = 200;
+            videoElement.height = 200;
         }
+
+        this.videoElement = videoElement;
     }
 
     /**
@@ -256,11 +272,11 @@ export class BrowserCodeReader {
 
         } catch (re) {
 
-            console.debug(retryIfChecksumOrFormatError, re);
+            // console.debug(retryIfChecksumOrFormatError, re);
 
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
 
-                console.debug('zxing-scanner', 'QR-code not-found, trying again...');
+                // console.debug('zxing-scanner', 'QR-code not-found, trying again...');
 
                 this.decodeWithDelay(callbackFn);
 
@@ -281,14 +297,22 @@ export class BrowserCodeReader {
     /**
      * 🖌 Prepares the canvas for capture and scan frames.
      */
-    private prepareCaptureCanvas() {
+    private prepareCaptureCanvas(): void {
+
+        if (typeof document === 'undefined') {
+
+            this.canvasElement = undefined;
+            this.canvasElementContext = undefined;
+
+            return;
+        }
 
         const canvasElement = document.createElement('canvas');
 
         let width: number;
         let height: number;
 
-        if (undefined !== this.videoElement) {
+        if (this.videoElement !== undefined) {
             width = this.videoElement.videoWidth;
             height = this.videoElement.videoHeight;
         } else {
@@ -390,6 +414,8 @@ export class BrowserCodeReader {
     }
 
     private restart(): void {
+        // reset
+        // start
         this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
     }
 }
