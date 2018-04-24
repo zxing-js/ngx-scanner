@@ -161,9 +161,9 @@ export class BrowserCodeReader {
      */
     public unbindVideoSrc(videoElement: HTMLVideoElement): void {
         try {
-            this.videoElement.srcObject = null;
+            videoElement.srcObject = null;
         } catch (err) {
-            this.videoElement.src = '';
+            videoElement.src = '';
         }
     }
 
