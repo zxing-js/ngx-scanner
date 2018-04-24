@@ -352,27 +352,26 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
                 console.warn('zxing-scanner', 'askForPermission', err);
 
+                let permission: boolean|undefined;
+
                 switch (err.name) {
 
                     case 'NotAllowedError':
-                        // permission denied
-                        this.setPermission(false);
+                        permission = false;
                         break;
 
                     case 'NotFoundError':
                         this.camerasNotFound.next(err);
                         break;
 
-                    default:
-                        this.setPermission(undefined);
-                        break;
-
                 }
+
+                this.setPermission(permission);
 
             });
 
-        // Returns the event emitter, so the dev can subscribe to it
-        return this.permissionResponse;
+            // Returns the event emitter, so the dev can subscribe to it
+            return this.permissionResponse;
     }
 
     /**
