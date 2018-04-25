@@ -40,92 +40,16 @@
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
-## Installation
+## How To
 
-To install this package, run:
+**We've built a veeeery cool Wiki for you! [Click here to take a look!](/zxing-js/ngx-scanner/wiki)**
 
-```bash
-yarn add @zxing/ngx-scanner@latest
-```
-
-or
-
-```bash
-npm i @zxing/ngx-scanner@latest --save
-```
-
-Then import it into your Angular `AppModule`:
-
-```typescript
-// Common imports
-import { NgModule /* , ... */ } from '@angular/core';
-
-// Import the package's module
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-
-@NgModule({
-    declarations: [ /* AppComponent ... */ ],
-    imports: [
-
-        // BrowserModule,
-        // ...
-
-        // ZXing scanner module
-        ZXingScannerModule.forRoot(),
-
-        // another imports...
-    ],
-    // ...
-})
-export class AppModule { }
-```
-
-### Installation Problems
-
-If you experience problems upon installing the component, please run
-```bash
-npm install --global --production windows-build-tools
-```
-and try again. If the problem still occurs, file an [issue](https://github.com/werthdavid/ngx-scanner/issues)
-
-## Usage
-
-Once the package is imported, you can use it in your Angular application:
-
+I promise that it's **very** simple to use:
 ```html
-<zxing-scanner
-    [scannerEnabled]="scannerEnabled"
-    [autofocusEnabled]="autofocusEnabled"
-    [device]="selectedDevice"
-    [cssClass]="'small-video'"
-    (camerasFound)="displayCameras($event)"
-    (scanSuccess)="handleQrCodeResult($event)"
-></zxing-scanner>
+<!-- some.component.html -->
+<zxing-scanner></zxing-scanner>
 ```
 
-- `scannerEnabled` can be used to start and stop the scanning (defaults to `true`)
-- `autofocusEnabled` can be used to enable or disable the autofocus-feature of the camera (defaults to `true`)
-- `device` is the video-device used for scanning (use one of the devices emitted by `camerasFound`)
-- `cssClass` !*deprecated*! this CSS-class name will be appended to the video-element e.g. for resizing it (see below)
-- `camerasFound` will emit an array of video-devices after view was initialized
-- `scanSuccess` will emit the result as string, after a valid QR-Code was scanned
-
-### Change the size of the preview-element
-
-In your CSS, define an extra class and pass it to the component with the `cssClass`-parameter. CSS might look like this:
-
-```css
-/deep/ .small-video {
-    max-height: 70vh;
-    width: 100vw;
-    object-fit: contain;
-}
-```
-
-Due to view-encapsulation it is required that the CSS-class that is to be used can be 'seen' from inside the scanner-component. 
-In the example this is achieved with the `/deep/` keyword. 
-Since this is not the best way to achieve the desired behavior and `/deep/` is deprecated by Angular, 
-the attribute will be removed in the next major version of the component (2.x) and replaced by an `ngTemplate` solution.
 
 ## API
 
@@ -137,6 +61,7 @@ the attribute will be removed in the next major version of the component (2.x) a
 | **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
 | **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
 | **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
+
 
 ## Performance
 
