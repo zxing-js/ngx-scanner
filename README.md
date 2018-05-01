@@ -1,7 +1,7 @@
 <p align="center">
     
   <a href="https://github.com/zxing-js/library">
-    <img src="https://user-images.githubusercontent.com/3942006/34657626-336523d4-f40f-11e7-8160-b523183655c7.png">
+    <img src="https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png">
   </a>
 
   <h3 align="center">@zxing/ngx-scanner</h3>
