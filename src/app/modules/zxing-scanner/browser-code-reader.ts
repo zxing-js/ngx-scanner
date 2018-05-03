@@ -252,15 +252,15 @@ export class BrowserCodeReader {
     /**
      * Does the real image decoding job.
      *
-     * @param callbackFn
-     * @param retryIfNotFound
-     * @param retryIfChecksumOrFormatError
-     * @param once
+     * @param callbackFn Callback hell.
+     * @param retryIfNotFound If should retry when the QR code is just not found.
+     * @param retryIfReadError If should retry on checksum or format error.
+     * @param once If the decoding should run only once.
      */
     private decode(
         callbackFn: (result: Result) => any,
         retryIfNotFound: boolean = true,
-        retryIfChecksumOrFormatError: boolean = true,
+        retryIfReadError: boolean = true,
         once = false
     ): void {
 
@@ -279,24 +279,25 @@ export class BrowserCodeReader {
 
         } catch (re) {
 
-            // console.debug(retryIfChecksumOrFormatError, re);
+            // executes the callback on scanFailure.
+            callbackFn(undefined);
 
+            // scan Failure - found nothing, no error
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-
-                // console.debug('zxing-scanner', 'QR-code not-found, trying again...');
-
                 this.decodeWithDelay(callbackFn);
+                return;
+            }
 
-            } else if (
-                retryIfChecksumOrFormatError &&
+            // scan Error - found the QR but got error on decoding
+            if (
+                retryIfReadError &&
                 (
                     Exception.isOfType(re, Exception.ChecksumException) ||
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.warn('zxing-scanner', 'Checksum or format error, trying again...', re);
-
                 this.decodeWithDelay(callbackFn);
+                return;
             }
         }
     }
