@@ -92,6 +92,7 @@
         "karma-jasmine": "^1.1.1",
         "karma-jasmine-html-reporter": "^0.2.2",
         "ng-packagr": "^2.4.2",
+        "npm-install-peers": "^1.2.1",
         "protractor": "^5.3.1",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
