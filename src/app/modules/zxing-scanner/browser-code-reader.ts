@@ -1,12 +1,12 @@
 /// <reference path="./image-capture.d.ts" />
 
 import {
-    Reader,
     BinaryBitmap,
-    HybridBinarizer,
-    Result,
-    Exception,
     HTMLCanvasElementLuminanceSource,
+    HybridBinarizer,
+    Exception,
+    Reader,
+    Result,
 } from '@zxing/library';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
