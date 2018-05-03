@@ -264,14 +264,8 @@ export class BrowserCodeReader {
         once = false
     ): void {
 
-        if (undefined === this.canvasElementContext) {
-            this.prepareCaptureCanvas();
-        }
-
-        this.canvasElementContext.drawImage(this.videoElement || this.imageElement, 0, 0);
-
-        const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
-        const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+        // get binary bitmap for decode function
+        const binaryBitmap = this.createBinaryBitmap(this.videoElement || this.imageElement);
 
         try {
 
@@ -305,6 +299,25 @@ export class BrowserCodeReader {
                 this.decodeWithDelay(callbackFn);
             }
         }
+    }
+
+    /**
+     * Creates a binaryBitmap based in some image source.
+     *
+     * @param mediaElement HTML element containing drawable image source.
+     */
+    private createBinaryBitmap(mediaElement: HTMLVideoElement|HTMLImageElement): BinaryBitmap {
+
+        if (undefined === this.canvasElementContext) {
+            this.prepareCaptureCanvas();
+        }
+
+        this.canvasElementContext.drawImage(mediaElement, 0, 0);
+
+        const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
+        const hybridBinarizer = new HybridBinarizer(luminanceSource);
+
+        return new BinaryBitmap(hybridBinarizer);
     }
 
     /**
