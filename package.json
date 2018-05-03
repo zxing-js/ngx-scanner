@@ -1,6 +1,7 @@
 {
     "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
+    "description": "High-performance Angular 2+ barcode scanner component based on ZXing.",
     "version": "1.1.0-dev.05c0ab",
     "private": false,
     "ngPackage": {
@@ -94,7 +95,7 @@
         "protractor": "^5.3.1",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "^2.6"
+        "typescript": "^2.8.3"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
