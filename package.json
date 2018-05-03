@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/ng-packagr/package.schema.json",
     "name": "@zxing/ngx-scanner",
-    "version": "1.1.0-dev.c32019",
+    "version": "1.1.0-dev.05c0ab",
     "private": false,
     "ngPackage": {
         "lib": {
