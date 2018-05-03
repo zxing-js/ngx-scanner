@@ -9,6 +9,32 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "label": "ngserve",
+            "type":"shell",
+            "command": "ng",
+            "args": [
+                "serve"
+            ],
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": "EXEPTION|Type Error|Error ",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": false,
+                        "beginsPattern": "^.*NG Live Development Server is listening*",
+                        "endsPattern": "^.*webpack: Compiled successfully.*"
+                    }
+                }
+            ]
         }
     ]
 }

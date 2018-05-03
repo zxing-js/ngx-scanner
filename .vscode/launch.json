@@ -2,11 +2,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ng serve",
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 4200,
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:4200/",
-            "webRoot": "${workspaceRoot}"
+            "name": "ng serve",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceRoot}",
+            "preLaunchTask": "ngserve",
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
         },
         {
             "name": "ng test",
