@@ -45,3 +45,6 @@ Thumbs.db
 
 # ng-packagr
 .ng_pkg_build
+*.tgz
+*.tar
+*.tar.gz
