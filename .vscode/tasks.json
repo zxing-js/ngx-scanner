@@ -5,7 +5,7 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "build",
+            "script": "start",
             "problemMatcher": [
                 "$tsc"
             ]
@@ -22,7 +22,7 @@
                 {
                     "pattern": [
                         {
-                            "regexp": "EXEPTION|Type Error|Error ",
+                            "regexp": "\\b\\B|EXEPTION|Type Error|Error ",
                             "file": 1,
                             "location": 2,
                             "message": 3
