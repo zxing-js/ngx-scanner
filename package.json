@@ -62,7 +62,8 @@
         "@angular/common": ">= 2.0.0",
         "@angular/forms": ">= 2.0.0",
         "core-js": "^2.5.5",
-        "zone.js": "^0.8.26"
+        "zone.js": "^0.8.26",
+        "rxjs-compat": "^6.0.0"
     },
     "devDependencies": {
         "@angular-devkit/core": "^0.3.2",
