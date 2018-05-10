@@ -58,11 +58,11 @@
         "rxjs": "^5.5.10"
     },
     "peerDependencies": {
-        "@angular/core": ">= 2.0.0",
-        "@angular/common": ">= 2.0.0",
-        "@angular/forms": ">= 2.0.0",
-        "core-js": "^2.5.5",
-        "zone.js": "^0.8.26"
+        "@angular/core": ">= 2.0.0 < 6",
+        "@angular/common": ">= 2.0.0 < 6",
+        "@angular/forms": ">= 2.0.0 < 6",
+        "core-js": "~2.5.5",
+        "zone.js": "~0.8.26"
     },
     "devDependencies": {
         "@angular-devkit/core": "^0.3.2",
