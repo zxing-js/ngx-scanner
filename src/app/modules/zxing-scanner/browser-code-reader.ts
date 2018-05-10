@@ -1,11 +1,16 @@
+/// <reference path="./image-capture.d.ts" />
+
 import {
-    Reader,
     BinaryBitmap,
-    HybridBinarizer,
-    Result,
-    Exception,
     HTMLCanvasElementLuminanceSource,
+    HybridBinarizer,
+    Exception,
+    Reader,
+    Result,
 } from '@zxing/library';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
@@ -60,6 +65,18 @@ export class BrowserCodeReader {
      * The stream output from camera.
      */
     private stream: MediaStream;
+    /**
+     * The track from camera.
+     */
+    private track: MediaStreamTrack;
+    /**
+     * Shows if torch is available on the camera.
+     */
+    private torchCompatible = new BehaviorSubject<boolean>(false);
+    /**
+     * The device id of the current media device.
+     */
+    private deviceId: string;
 
     /**
      * Constructor for dependency injection.
@@ -76,22 +93,26 @@ export class BrowserCodeReader {
      * @param deviceId The device's to be used Id
      * @param videoElement A new video element
      */
-    public decodeFromInputVideoDevice(callbackFn: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+    public decodeFromInputVideoDevice(callbackFn?: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+
+        if (deviceId !== undefined) {
+            this.deviceId = deviceId;
+        }
 
         this.reset();
 
         this.prepareVideoElement(videoElement);
 
-        const video = deviceId === undefined
+        const video = this.deviceId === undefined
             ? { facingMode: { exact: 'environment' } }
-            : { deviceId: { exact: deviceId } };
+            : { deviceId: { exact: this.deviceId } };
 
         const constraints: MediaStreamConstraints = {
             audio: false,
             video
         };
 
-        if (navigator) {
+        if (typeof navigator !== 'undefined') {
             navigator
                 .mediaDevices
                 .getUserMedia(constraints)
@@ -109,30 +130,99 @@ export class BrowserCodeReader {
      * @param stream The stream to be shown in the video element.
      * @param callbackFn A callback for the decode method.
      */
-    private startDecodeFromStream(stream: MediaStream, callbackFn: (result: Result) => any): void {
-
+    private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
+        this.bindVideoSrc(this.videoElement, this.stream);
+        this.bindEvents(this.videoElement, callbackFn);
+        this.checkTorchCompatibility(this.stream);
+    }
 
-        // Older browsers may not have srcObject
-        if ('srcObject' in this.videoElement) {
+    /**
+     * Defines what the videoElement src will be.
+     *
+     * @param videoElement
+     * @param stream
+     */
+    public bindVideoSrc(videoElement: HTMLVideoElement, stream: MediaStream): void {
+        // Older browsers may not have `srcObject`
+        try {
             // @NOTE Throws Exception if interrupted by a new loaded request
-            this.videoElement.srcObject = stream;
-        } else {
+            videoElement.srcObject = stream;
+        } catch (err) {
             // @NOTE Avoid using this in new browsers, as it is going away.
-            (<HTMLVideoElement>this.videoElement).src = window.URL.createObjectURL(stream);
+            videoElement.src = window.URL.createObjectURL(stream);
+        }
+    }
+
+    /**
+     * Unbinds a HTML video src property.
+     *
+     * @param videoElement
+     */
+    public unbindVideoSrc(videoElement: HTMLVideoElement): void {
+        try {
+            videoElement.srcObject = null;
+        } catch (err) {
+            videoElement.src = '';
+        }
+    }
+
+    /**
+     * Binds listeners and callbacks to the videoElement.
+     *
+     * @param videoElement
+     * @param callbackFn
+     */
+    private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
+        if (callbackFn !== undefined) {
+            this.videoPlayingEventListener = () => {
+                this.decodeWithDelay(callbackFn);
+            };
         }
 
-        this.videoPlayingEventListener = () => {
-            this.decodeWithDelay(callbackFn);
-        };
-
-        this.videoElement.addEventListener('playing', this.videoPlayingEventListener);
+        videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
         this.videoLoadedMetadataEventListener = () => {
-            this.videoElement.play();
+            videoElement.play();
         };
 
-        this.videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+        videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+    }
+
+    /**
+     * Checks if the stream supports torch control.
+     *
+     * @param stream The media stream used to check.
+     */
+    private checkTorchCompatibility(stream: MediaStream): void {
+        try {
+            this.track = stream.getVideoTracks()[0];
+
+            const imageCapture = new ImageCapture(this.track);
+
+            const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
+                const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+                this.torchCompatible.next(compatible);
+            });
+        } catch (err) {
+            this.torchCompatible.next(false);
+        }
+    }
+
+    public setTorch(on: boolean): void {
+        if (this.torchCompatible.value) {
+            if (on) {
+                this.track.applyConstraints({
+                    advanced: [<any>{ torch: true }]
+                });
+            } else {
+                this.restart();
+            }
+        }
+    }
+
+    public get torchAvailable(): Observable<boolean> {
+        return this.torchCompatible.asObservable();
     }
 
     /**
@@ -140,14 +230,15 @@ export class BrowserCodeReader {
      *
      * @param videoElement The HTMLVideoElement to be set.
      */
-    private prepareVideoElement(videoElement?: HTMLVideoElement) {
-        if (!videoElement) {
-            this.videoElement = document.createElement('video');
-            this.videoElement.width = 200;
-            this.videoElement.height = 200;
-        } else {
-            this.videoElement = videoElement;
+    private prepareVideoElement(videoElement?: HTMLVideoElement): void {
+
+        if (!videoElement && typeof document !== 'undefined') {
+            videoElement = document.createElement('video');
+            videoElement.width = 200;
+            videoElement.height = 200;
         }
+
+        this.videoElement = videoElement;
     }
 
     /**
@@ -161,81 +252,94 @@ export class BrowserCodeReader {
     /**
      * Does the real image decoding job.
      *
-     * @param callbackFn
-     * @param retryIfNotFound
-     * @param retryIfChecksumOrFormatError
-     * @param once
+     * @param callbackFn Callback hell.
+     * @param retryIfNotFound If should retry when the QR code is just not found.
+     * @param retryIfReadError If should retry on checksum or format error.
+     * @param once If the decoding should run only once.
      */
     private decode(
         callbackFn: (result: Result) => any,
         retryIfNotFound: boolean = true,
-        retryIfChecksumOrFormatError: boolean = true,
+        retryIfReadError: boolean = true,
         once = false
     ): void {
 
-        if (undefined === this.canvasElementContext) {
-            this.prepareCaptureCanvas();
-        }
-
-        this.canvasElementContext.drawImage(this.videoElement || this.imageElement, 0, 0);
-
-        const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
-        const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+        // get binary bitmap for decode function
+        const binaryBitmap = this.createBinaryBitmap(this.videoElement || this.imageElement);
 
         try {
 
-            const result = this.readerDecode(binaryBitmap);
+            const result = this.reader.decode(binaryBitmap);
 
             callbackFn(result);
 
             if (!once && !!this.stream) {
-                setTimeout(() => this.decodeWithDelay(callbackFn), this.timeBetweenScans);
+                this.decodeWithDelay(callbackFn);
             }
 
         } catch (re) {
 
-            console.debug(retryIfChecksumOrFormatError, re);
+            // executes the callback on scanFailure.
+            callbackFn(undefined);
 
+            // scan Failure - found nothing, no error
             if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
-
-                console.debug('zxing-scanner', 'QR-code not-found, trying again...');
-
                 this.decodeWithDelay(callbackFn);
+                return;
+            }
 
-            } else if (
-                retryIfChecksumOrFormatError &&
+            // scan Error - found the QR but got error on decoding
+            if (
+                retryIfReadError &&
                 (
                     Exception.isOfType(re, Exception.ChecksumException) ||
                     Exception.isOfType(re, Exception.FormatException)
                 )
             ) {
-                console.warn('zxing-scanner', 'Checksum or format error, trying again...', re);
-
                 this.decodeWithDelay(callbackFn);
+                return;
             }
         }
     }
 
     /**
-     * Alias for this.reader.decode
+     * Creates a binaryBitmap based in some image source.
      *
-     * @param binaryBitmap
+     * @param mediaElement HTML element containing drawable image source.
      */
-    protected readerDecode(binaryBitmap: BinaryBitmap): Result {
-        return this.reader.decode(binaryBitmap);
+    private createBinaryBitmap(mediaElement: HTMLVideoElement|HTMLImageElement): BinaryBitmap {
+
+        if (undefined === this.canvasElementContext) {
+            this.prepareCaptureCanvas();
+        }
+
+        this.canvasElementContext.drawImage(mediaElement, 0, 0);
+
+        const luminanceSource = new HTMLCanvasElementLuminanceSource(this.canvasElement);
+        const hybridBinarizer = new HybridBinarizer(luminanceSource);
+
+        return new BinaryBitmap(hybridBinarizer);
     }
 
     /**
      * 🖌 Prepares the canvas for capture and scan frames.
      */
-    private prepareCaptureCanvas() {
+    private prepareCaptureCanvas(): void {
+
+        if (typeof document === 'undefined') {
+
+            this.canvasElement = undefined;
+            this.canvasElementContext = undefined;
+
+            return;
+        }
 
         const canvasElement = document.createElement('canvas');
 
         let width: number;
         let height: number;
 
-        if (undefined !== this.videoElement) {
+        if (this.videoElement !== undefined) {
             width = this.videoElement.videoWidth;
             height = this.videoElement.videoHeight;
         } else {
@@ -294,9 +398,20 @@ export class BrowserCodeReader {
                 this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
             }
 
+            if (this.stream) {
+                try {
+                    this.stream.getVideoTracks().forEach(track => {
+                        track.stop();
+                    });
+                } catch (err) {
+
+                }
+            }
+
             // then forgets about that element 😢
 
-            this.videoElement.srcObject = undefined;
+            this.unbindVideoSrc(this.videoElement);
+
             this.videoElement.removeAttribute('src');
             this.videoElement = undefined;
         }
@@ -320,5 +435,11 @@ export class BrowserCodeReader {
 
         this.canvasElementContext = undefined;
         this.canvasElement = undefined;
+    }
+
+    private restart(): void {
+        // reset
+        // start
+        this.decodeFromInputVideoDevice(undefined, undefined, this.videoElement);
     }
 }

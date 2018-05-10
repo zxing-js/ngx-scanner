@@ -1,0 +1,40 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "start",
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "ngserve",
+            "type":"shell",
+            "command": "ng",
+            "args": [
+                "serve"
+            ],
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": "\\b\\B|EXEPTION|Type Error|Error ",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": false,
+                        "beginsPattern": "^.*NG Live Development Server is listening*",
+                        "endsPattern": "^.*webpack: Compiled successfully.*"
+                    }
+                }
+            ]
+        }
+    ]
+}
