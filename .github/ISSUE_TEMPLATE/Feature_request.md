@@ -1,6 +1,7 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: "Feature request \U0001F680"
+about: "Suggest an idea for this project. This is ~sadly~ not rocket engineering.
+  \U0001F609"
 
 ---
 
