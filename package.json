@@ -96,7 +96,7 @@
         "protractor": "^5.3.1",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "~2.7.3"
+        "typescript": "~2.7.2"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
