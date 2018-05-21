@@ -54,15 +54,15 @@
         "publish:dist": "cd ./dist && npm publish --access=public"
     },
     "dependencies": {
-        "@zxing/library": "^0.3.2",
+        "@zxing/library": "^0.5.0",
         "rxjs": "^5.5.10"
     },
     "peerDependencies": {
-        "@angular/core": ">= 2.0.0 < 6",
         "@angular/common": ">= 2.0.0 < 6",
+        "@angular/core": ">= 2.0.0 < 6",
         "@angular/forms": ">= 2.0.0 < 6",
         "core-js": "~2.5.5",
-        "zone.js": "~0.8.26"
+        "zone.js": "^0.8.26"
     },
     "devDependencies": {
         "@angular-devkit/core": "^0.3.2",
@@ -96,7 +96,7 @@
         "protractor": "^5.3.1",
         "ts-node": "^4.1.0",
         "tslint": "^5.9.1",
-        "typescript": "^2.8.3"
+        "typescript": "~2.7.3"
     },
     "main": "dist/bundles/zxing-ngx-scanner.umd.js",
     "module": "dist/esm5/zxing-ngx-scanner.js",
