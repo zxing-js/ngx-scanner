@@ -9,8 +9,7 @@ import {
     Result,
 } from '@zxing/library';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
