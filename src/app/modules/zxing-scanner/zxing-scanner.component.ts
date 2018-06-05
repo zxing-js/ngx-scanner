@@ -89,12 +89,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     device: MediaDeviceInfo;
 
     /**
-     * The value of the HTML video's class attribute.
-     */
-    @Input()
-    cssClass: string;
-
-    /**
      * Enable or disable autofocus of the camera (might have an impact on performance)
      */
     @Input()
