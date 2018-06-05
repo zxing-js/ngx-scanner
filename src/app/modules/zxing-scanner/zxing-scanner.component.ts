@@ -65,10 +65,20 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     private hasPermission: boolean;
 
     /**
+     * Reference to a preview element, should be a `video` tag.
+     */
+    @Input()
+    previewElementRef: ElementRef;
+
+    /**
      * Reference to the preview element, should be the `video` tag.
      */
     @ViewChild('preview')
-    previewElemRef: ElementRef;
+    preview: ElementRef;
+
+    get previewElemRef(): ElementRef {
+        return this.previewElementRef || this.preview;
+    }
 
     /**
      * The scan throttling (time between scans) in milliseconds.
