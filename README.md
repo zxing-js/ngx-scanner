@@ -44,7 +44,7 @@
 
 ## How To
 
-**We've built a veeeery cool Wiki for you! [Click here to take a look!](/zxing-js/ngx-scanner/wiki)**
+**We've built a veeeery cool Wiki for you! [Click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
 
 I promise that it's **very** simple to use:
 ```html
