@@ -72,12 +72,16 @@ Read our performance notes on the wiki: [Performance Considerations](https://git
 
 ## Limitations
 
-- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports totally the following code formats:
-  - QR Code
-  - Code 128
+- The component relies on [ZXing typescript port](https://github.com/zxing-js/library) which currently supports most common barcode formats, **but we didn't implement them here _yet_**.
 - On iOS <= 11.2 devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 
 ## Generator
 
-Looking for a way to generate QR-Codes? Check-out [ngx-kjua](https://github.com/werthdavid/ngx-kjua)
+Looking for a way to generate ~awesome~ QR codes? Check-out [ngx-kjua](https://github.com/werthdavid/ngx-kjua).
+
+Want just to write QR codes on your own, try our [ZXing typescript port](https://github.com/zxing-js/library).
+
+---
+
+[![Bless](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/alpaca.svg)](http://lunagao.github.io/BlessYourCodeTag/)
