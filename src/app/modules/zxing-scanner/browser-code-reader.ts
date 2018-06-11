@@ -246,6 +246,7 @@ export class BrowserCodeReader {
      * @param callbackFn
      */
     private decodeWithDelay(callbackFn: (result: Result) => any): void {
+        window.clearTimeout(this.timeoutHandler);
         this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScans);
     }
 
