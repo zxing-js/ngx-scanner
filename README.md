@@ -1,8 +1,6 @@
 <div align="center">
-    
-<a href="https://github.com/zxing-js/library">
-<img src="https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png">
-</a>
+
+[![Angular ZXing Scanner](https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png)](https://github.com/zxing-js/library)
 
 ### @zxing/ngx-scanner
 
