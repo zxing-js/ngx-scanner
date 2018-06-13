@@ -1,21 +1,20 @@
-<p align="center">
+<div align="center">
     
-  <a href="https://github.com/zxing-js/library">
-    <img src="https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png">
-  </a>
+<a href="https://github.com/zxing-js/library">
+<img src="https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png">
+</a>
 
-  <h3 align="center">@zxing/ngx-scanner</h3>
+### @zxing/ngx-scanner
 
-  <p align="center">
-    Angular QR-Code scanner component.
-    <br>
-    <br>
-    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=bug.md">Report a bug</a>
-    ·
-    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=feature.md&labels=feature">Request feature</a>
-  </p>
-</p>
+Angular QR-Code scanner component.
 
+<br>
+
+[Bug Report](https://github.com/zxing-js/ngx-scanner/issues/new?template=Bug_report.md)
+·
+[Feature Request](https://github.com/zxing-js/ngx-scanner/issues/new?template=Feature_request.md&labels=feature)
+
+<br>
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
@@ -24,6 +23,9 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba14393a17241088f75b19edc370694)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+</div>
+
+<br>
 
 ## Features & Hints
 
