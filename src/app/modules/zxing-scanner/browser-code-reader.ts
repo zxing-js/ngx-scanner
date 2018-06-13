@@ -2,9 +2,11 @@
 
 import {
     BinaryBitmap,
+    ChecksumException,
+    FormatException,
     HTMLCanvasElementLuminanceSource,
     HybridBinarizer,
-    Exception,
+    NotFoundException,
     Reader,
     Result,
 } from '@zxing/library';
@@ -282,7 +284,7 @@ export class BrowserCodeReader {
             callbackFn(undefined);
 
             // scan Failure - found nothing, no error
-            if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
+            if (retryIfNotFound && re instanceof NotFoundException) {
                 this.decodeWithDelay(callbackFn);
                 return;
             }
@@ -291,8 +293,8 @@ export class BrowserCodeReader {
             if (
                 retryIfReadError &&
                 (
-                    Exception.isOfType(re, Exception.ChecksumException) ||
-                    Exception.isOfType(re, Exception.FormatException)
+                    re instanceof ChecksumException ||
+                    re instanceof FormatException
                 )
             ) {
                 this.decodeWithDelay(callbackFn);
