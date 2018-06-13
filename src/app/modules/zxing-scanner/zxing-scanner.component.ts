@@ -55,14 +55,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     private videoInputDevices: MediaDeviceInfo[];
     /**
-     * The actual device used to scan things.
+     * The current device used to scan things.
      */
     private videoInputDevice: MediaDeviceInfo;
 
     /**
-     * Says if the user allowedthe use of the camera or not.
+     * If the user-agent allowed the use of the camera or not.
      */
     private hasPermission: boolean;
+
+    /**
+     * If any media device were found.
+     */
+    private _hasDevice: boolean;
 
     /**
      * Reference to the preview element, should be the `video` tag.
@@ -191,7 +196,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Executed after the view initialization.
      */
-    ngAfterViewInit(): void {
+    async ngAfterViewInit(): Promise<void> {
 
         // Chrome 63 fix
         if (!this.previewElemRef) {
@@ -205,36 +210,40 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         this.previewElemRef.nativeElement.setAttribute('playsinline', true);
         this.previewElemRef.nativeElement.setAttribute('autofocus', this.autofocusEnabled);
 
-        this.askForPermission().subscribe((hasPermission: boolean) => {
+        const hasPermission = await this.askForPermission();
 
-            if (hasPermission) {
+        if (hasPermission === false) {
+            console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
+            return;
+        }
 
-                // gets and enumerates all video devices
-                this.enumarateVideoDevices((videoInputDevices: MediaDeviceInfo[]) => {
+        if (hasPermission === undefined) {
+            console.warn('zxing-scanner', 'ngAfterViewInit', 'Permissions not asked.');
+            return;
+        }
 
-                    if (videoInputDevices && videoInputDevices.length > 0) {
-                        this.camerasFound.next(videoInputDevices);
-                    } else {
-                        this.camerasNotFound.next();
-                    }
+        if (hasPermission === null) {
+            console.warn('zxing-scanner', 'ngAfterViewInit', 'It was not possible to check for permissions.');
+            return;
+        }
 
-                });
+        // (hasPermission) {
 
-                this.startScan(this.videoInputDevice);
+        // gets and enumerates all video devices
+        this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
 
-                this.codeReader.torchAvailable.subscribe((value: boolean) => {
-                    this.torchCompatible.emit(value);
-                });
-
+            if (videoInputDevices && videoInputDevices.length > 0) {
+                this.camerasFound.next(videoInputDevices);
             } else {
-
-                if (hasPermission === false) {
-                    console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
-                } else {
-                    console.warn('zxing-scanner', 'ngAfterViewInit', 'It was not possible to check for permissions.');
-                }
+                this.camerasNotFound.next();
             }
 
+        });
+
+        this.startScan(this.videoInputDevice);
+
+        this.codeReader.torchAvailable.subscribe((value: boolean) => {
+            this.torchCompatible.emit(value);
         });
     }
 
@@ -286,7 +295,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Sets the permission value and emmits the event.
      */
-    private setPermission(hasPermission: boolean | undefined): EventEmitter<boolean> {
+    private setPermission(hasPermission?: boolean) {
         this.hasPermission = hasPermission;
         this.permissionResponse.next(hasPermission);
         return this.permissionResponse;
@@ -294,78 +303,101 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     /**
      * Gets and registers all cammeras.
+     *
+     * @todo Return a Promise.
      */
-    askForPermission(): EventEmitter<boolean> {
+    async askForPermission(): Promise<boolean> {
 
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t ask permission, navigator is not present.');
-            return this.setPermission(undefined);
+            this.setPermission(null);
+            return this.hasPermission;
         }
 
         if (!this.isMediaDevicesSuported) {
             console.error('zxing-scanner', 'askForPermission', 'Can\'t get user media, this is not supported.');
-            return this.setPermission(undefined);
+            this.setPermission(null);
+            return this.hasPermission;
         }
 
-        // Will try to ask for permission
-        navigator
-            .mediaDevices
-            .getUserMedia({ audio: false, video: true })
-            .then((stream: MediaStream) => {
+        let stream: MediaStream;
 
-                try {
+        try {
+            // Will try to ask for permission
+            stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+        } catch (err) {
+            return this.handlePermissionException(err);
+        }
 
-                    // Start stream so Browser can display its permission-dialog
-                    this.codeReader.bindVideoSrc(this.previewElemRef.nativeElement, stream);
+        let permission: boolean;
 
-                    // After permission was granted, we can stop it again
-                    stream.getVideoTracks().forEach(track => {
-                        track.stop();
-                    });
+        try {
 
-                    // should stop the opened stream
-                    this.codeReader.unbindVideoSrc(this.previewElemRef.nativeElement);
+            // Start stream so Browser can display its permission-dialog
+            this.codeReader.bindVideoSrc(this.previewElemRef.nativeElement, stream);
 
-                    // if the scripts lives until here, that's only one mean:
-
-                    // permission granted
-                    this.setPermission(true);
-
-                } catch (err) {
-
-                    console.error('zxing-scanner', 'askForPermission', err);
-
-                    // permission aborted
-                    this.setPermission(undefined);
-                }
-
-            })
-            .catch((err: DOMException) => {
-
-                // failed to grant permission to video input
-
-                console.warn('zxing-scanner', 'askForPermission', err);
-
-                let permission: boolean|undefined;
-
-                switch (err.name) {
-
-                    case 'NotAllowedError':
-                        permission = false;
-                        break;
-
-                    case 'NotFoundError':
-                        this.camerasNotFound.next(err);
-                        break;
-
-                }
-
-                this.setPermission(permission);
-
+            // After permission was granted, we can stop it again
+            stream.getVideoTracks().forEach(track => {
+                track.stop();
             });
 
-            // Returns the event emitter, so the dev can subscribe to it
-            return this.permissionResponse;
+            // should stop the opened stream
+            this.codeReader.unbindVideoSrc(this.previewElemRef.nativeElement);
+
+            // if the scripts lives until here, that's only one mean:
+
+            // permission granted
+            permission = true;
+            this.setPermission(permission);
+
+        } catch (err) {
+
+            console.error('zxing-scanner', 'askForPermission', err);
+
+            // permission aborted
+            permission = null;
+            this.setPermission(permission);
+        }
+
+        // Returns the event emitter, so the dev can subscribe to it
+        return permission;
+    }
+
+    /**
+     * Returns the filtered permission.
+     *
+     * @param err
+     */
+    private handlePermissionException(err: DOMException): boolean {
+
+        // failed to grant permission to video input
+
+        console.warn('zxing-scanner', 'askForPermission', err);
+
+        let permission: boolean;
+
+        switch (err.name) {
+
+            case 'NotAllowedError':
+                // claimed and denied permission
+                permission = false;
+                // this means that input devices exists
+                this._hasDevice = true;
+                break;
+
+            case 'NotFoundError':
+                // no permissions claimed
+                permission = undefined;
+                // because there was no devices
+                this._hasDevice = false;
+                this.camerasNotFound.next(err);
+                break;
+
+        }
+
+        this.setPermission(permission);
+
+        return permission;
     }
 
     /**
@@ -456,10 +488,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     /**
      * Enumerates all the available devices.
-     *
-     * @param successCallback
      */
-    enumarateVideoDevices(successCallback: any): void {
+    async enumarateVideoDevices(): Promise<MediaDeviceInfo[]> {
 
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, navigator is not present.');
@@ -471,38 +501,37 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             return;
         }
 
-        navigator.mediaDevices.enumerateDevices().then((devices: MediaDeviceInfo[]) => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
 
-            this.videoInputDevices = [];
+        this.videoInputDevices = [];
 
-            for (const deviceI of devices) {
+        for (const deviceI of devices) {
 
-                // @todo type this as `MediaDeviceInfo`
-                const device: any = {};
+            // @todo type this as `MediaDeviceInfo`
+            const device: any = {};
 
-                // tslint:disable-next-line:forin
-                for (const key in deviceI) {
-                    device[key] = deviceI[key];
-                }
-
-                if (device.kind === 'video') {
-                    device.kind = 'videoinput';
-                }
-
-                if (!device.deviceId) {
-                    device.deviceId = (<any>device).id;
-                }
-
-                if (!device.label) {
-                    device.label = 'Camera (no-permission)';
-                }
-
-                if (device.kind === 'videoinput') {
-                    this.videoInputDevices.push(device);
-                }
+            // tslint:disable-next-line:forin
+            for (const key in deviceI) {
+                device[key] = deviceI[key];
             }
 
-            successCallback(this.videoInputDevices);
-        });
+            if (device.kind === 'video') {
+                device.kind = 'videoinput';
+            }
+
+            if (!device.deviceId) {
+                device.deviceId = (<any>device).id;
+            }
+
+            if (!device.label) {
+                device.label = 'Camera (no-permission)';
+            }
+
+            if (device.kind === 'videoinput') {
+                this.videoInputDevices.push(device);
+            }
+        }
+
+        return this.videoInputDevices;
     }
 }
