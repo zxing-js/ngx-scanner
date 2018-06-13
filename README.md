@@ -65,6 +65,33 @@ I promise that it's **very** simple to use:
 | **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
 
 
+### Cheat Sheet 💩
+
+```typescript
+let scanner = new ZXingScannerComponent();
+```
+
+> Below we have something I call `qubool` (quantum `bool`eans), because they're booleans with multiple values, more than 0 and 1, like a `qubit`.
+
+#### `scanner.hasPermissions`
+
+| State       | Description
+| :---------: | :--
+| `true`      | Permission Granted.
+| `false`     | Permission Denied.
+| `unedfined` | Not checked yet.
+| `null`      | Check has failed and the state couldn't be updated.
+
+#### `scanner.hasDevices`
+
+| State       | Description
+| :---------: | :--
+| `true`      | Usable devices found. 
+| `false`     | No available devices.
+| `unedfined` | Not checked yet.
+| `null`      | Check has failed and the state couldn't be updated.
+
+
 ## Performance
 
 Read our performance notes on the wiki: [Performance Considerations](https://github.com/zxing-js/ngx-scanner/wiki/Performance-Considerations).
