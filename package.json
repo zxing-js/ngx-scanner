@@ -8,10 +8,7 @@
     "lib": {
       "entryFile": "src/public_api.ts"
     },
-    "whitelistedNonPeerDependencies": [
-      "@zxing/library",
-      "rxjs"
-    ]
+    "whitelistedNonPeerDependencies": ["@zxing/library"]
   },
   "repository": {
     "type": "git",
