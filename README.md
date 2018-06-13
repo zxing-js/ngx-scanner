@@ -58,7 +58,7 @@ I promise that it's **very** simple to use:
 | Method              | Parameters                                     | Returns                          | Description                                                  |
 |---------------------|------------------------------------------------|----------------------------------|--------------------------------------------------------------|
 | **changeDevice**    | `device: MediaDeviceInfo`                      | `void`                           | Allows you to properly change the scanner device on the fly. |
-| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]`) => {} | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
+| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]) => {}` | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
 | **camerasNotFound** | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when cameras are not found.                   |
 | **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
 | **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
