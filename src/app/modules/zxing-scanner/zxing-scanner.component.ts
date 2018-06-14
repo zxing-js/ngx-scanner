@@ -67,7 +67,9 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * If any media device were found.
      */
-    private _hasDevice: boolean;
+    private set _hasDevices(hasDevice: boolean) {
+        this.hasDevices.next(hasDevice);
+    }
 
     /**
      * Reference to the preview element, should be the `video` tag.
@@ -156,6 +158,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     permissionResponse = new EventEmitter<boolean>();
 
     /**
+     * Emitts events when has devices status is update.
+     */
+    @Output()
+    hasDevices = new EventEmitter<boolean>();
+
+    /**
      * Constructor to build the object and do some DI.
      */
     constructor() {
@@ -233,8 +241,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
 
             if (videoInputDevices && videoInputDevices.length > 0) {
+                this._hasDevices = true;
                 this.camerasFound.next(videoInputDevices);
             } else {
+                this._hasDevices = false;
                 this.camerasNotFound.next();
             }
 
@@ -378,18 +388,29 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
         switch (err.name) {
 
+            // usually caused by not secure origins
+            case 'DOMException':
+            case 'NotSupportedError':
+                // could not claim
+                permission = null;
+                // can't check devices
+                this._hasDevices = null;
+                break;
+
+            // user denied permission
             case 'NotAllowedError':
                 // claimed and denied permission
                 permission = false;
                 // this means that input devices exists
-                this._hasDevice = true;
+                this._hasDevices = true;
                 break;
 
+            // the device has no attached input devices
             case 'NotFoundError':
                 // no permissions claimed
                 permission = undefined;
                 // because there was no devices
-                this._hasDevice = false;
+                this._hasDevices = false;
                 this.camerasNotFound.next(err);
                 break;
 
