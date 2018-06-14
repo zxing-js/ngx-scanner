@@ -93,8 +93,14 @@ export class BrowserCodeReader {
      * @param callbackFn The callback to be executed after every scan attempt
      * @param deviceId The device's to be used Id
      * @param videoElement A new video element
+     *
+     * @todo Return Promise<Result>
      */
-    public decodeFromInputVideoDevice(callbackFn?: (result: Result) => any, deviceId?: string, videoElement?: HTMLVideoElement): void {
+    public async decodeFromInputVideoDevice(
+        callbackFn?: (result: Result) => any,
+        deviceId?: string,
+        videoElement?: HTMLVideoElement
+    ): Promise<void> {
 
         if (deviceId !== undefined) {
             this.deviceId = deviceId;
@@ -113,15 +119,20 @@ export class BrowserCodeReader {
             video
         };
 
-        if (typeof navigator !== 'undefined') {
-            navigator
+        if (typeof navigator === 'undefined') {
+            return;
+        }
+
+        try {
+            const stream = await navigator
                 .mediaDevices
-                .getUserMedia(constraints)
-                .then((stream: MediaStream) => this.startDecodeFromStream(stream, callbackFn))
-                .catch((err: any) => {
-                    /* handle the error, or not */
-                    console.error(err);
-                });
+                .getUserMedia(constraints);
+
+            this.startDecodeFromStream(stream, callbackFn);
+
+        } catch (err) {
+            /* handle the error, or not */
+            console.error(err);
         }
     }
 
@@ -130,6 +141,8 @@ export class BrowserCodeReader {
      *
      * @param stream The stream to be shown in the video element.
      * @param callbackFn A callback for the decode method.
+     *
+     * @todo Return Promise<Result>
      */
     private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
@@ -195,30 +208,28 @@ export class BrowserCodeReader {
      *
      * @param stream The media stream used to check.
      */
-    private checkTorchCompatibility(stream: MediaStream): void {
+    private async checkTorchCompatibility(stream: MediaStream): Promise<void> {
         try {
             this.track = stream.getVideoTracks()[0];
-
             const imageCapture = new ImageCapture(this.track);
-
-            const photoCapabilities = imageCapture.getPhotoCapabilities().then((capabilities) => {
-                const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
-                this.torchCompatible.next(compatible);
-            });
+            const capabilities = await imageCapture.getPhotoCapabilities();
+            const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+            this.torchCompatible.next(compatible);
         } catch (err) {
             this.torchCompatible.next(false);
         }
     }
 
     public setTorch(on: boolean): void {
-        if (this.torchCompatible.value) {
-            if (on) {
-                this.track.applyConstraints({
-                    advanced: [<any>{ torch: true }]
-                });
-            } else {
-                this.restart();
-            }
+        if (!this.torchCompatible.value) {
+            return;
+        }
+        if (on) {
+            this.track.applyConstraints({
+                advanced: [<any>{ torch: true }]
+            });
+        } else {
+            this.restart();
         }
     }
 
@@ -254,14 +265,10 @@ export class BrowserCodeReader {
      * Does the real image decoding job.
      *
      * @param callbackFn Callback hell.
-     * @param retryIfNotFound If should retry when the QR code is just not found.
-     * @param retryIfReadError If should retry on checksum or format error.
      * @param once If the decoding should run only once.
      */
     private decode(
         callbackFn: (result: Result) => any,
-        retryIfNotFound: boolean = true,
-        retryIfReadError: boolean = true,
         once = false
     ): void {
 
@@ -284,18 +291,15 @@ export class BrowserCodeReader {
             callbackFn(undefined);
 
             // scan Failure - found nothing, no error
-            if (retryIfNotFound && re instanceof NotFoundException) {
+            if (re instanceof NotFoundException) {
                 this.decodeWithDelay(callbackFn);
                 return;
             }
 
             // scan Error - found the QR but got error on decoding
             if (
-                retryIfReadError &&
-                (
-                    re instanceof ChecksumException ||
-                    re instanceof FormatException
-                )
+                re instanceof ChecksumException ||
+                re instanceof FormatException
             ) {
                 this.decodeWithDelay(callbackFn);
                 return;
@@ -308,7 +312,7 @@ export class BrowserCodeReader {
      *
      * @param mediaElement HTML element containing drawable image source.
      */
-    private createBinaryBitmap(mediaElement: HTMLVideoElement|HTMLImageElement): BinaryBitmap {
+    private createBinaryBitmap(mediaElement: HTMLVideoElement | HTMLImageElement): BinaryBitmap {
 
         if (undefined === this.canvasElementContext) {
             this.prepareCaptureCanvas();
@@ -340,7 +344,7 @@ export class BrowserCodeReader {
         let width: number;
         let height: number;
 
-        if (this.videoElement !== undefined) {
+        if (typeof this.videoElement !== 'undefined') {
             width = this.videoElement.videoWidth;
             height = this.videoElement.videoHeight;
         } else {
