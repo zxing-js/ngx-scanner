@@ -2,7 +2,7 @@
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@zxing/ngx-scanner",
   "description": "High-performance Angular 2+ barcode scanner component based on ZXing.",
-  "version": "1.2.0-dev.8a4d01",
+  "version": "1.2.0-dev.2799c9",
   "private": false,
   "ngPackage": {
     "lib": {
