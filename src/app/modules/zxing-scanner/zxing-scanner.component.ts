@@ -159,7 +159,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Constructor to build the object and do some DI.
      */
     constructor() {
-        this.codeReader = new BrowserQRCodeReader(1500);
+        this.codeReader = new BrowserQRCodeReader();
         this.hasNavigator = typeof navigator !== 'undefined';
         this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
         this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
@@ -227,7 +227,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             return;
         }
 
-        // (hasPermission) {
+        // hasPermission === true
 
         // gets and enumerates all video devices
         this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
@@ -295,7 +295,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Sets the permission value and emmits the event.
      */
-    private setPermission(hasPermission?: boolean) {
+    private setPermission(hasPermission: boolean | null) {
         this.hasPermission = hasPermission;
         this.permissionResponse.next(hasPermission);
         return this.permissionResponse;
@@ -489,7 +489,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * Enumerates all the available devices.
      */
-    async enumarateVideoDevices(): Promise<MediaDeviceInfo[]> {
+    private async enumarateVideoDevices(): Promise<MediaDeviceInfo[]> {
 
         if (!this.hasNavigator) {
             console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, navigator is not present.');
@@ -505,30 +505,30 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
         this.videoInputDevices = [];
 
-        for (const deviceI of devices) {
+        for (const device of devices) {
 
             // @todo type this as `MediaDeviceInfo`
-            const device: any = {};
+            const videoDevice: any = {};
 
             // tslint:disable-next-line:forin
-            for (const key in deviceI) {
-                device[key] = deviceI[key];
+            for (const key in device) {
+                videoDevice[key] = device[key];
             }
 
-            if (device.kind === 'video') {
-                device.kind = 'videoinput';
+            if (videoDevice.kind === 'video') {
+                videoDevice.kind = 'videoinput';
             }
 
-            if (!device.deviceId) {
-                device.deviceId = (<any>device).id;
+            if (!videoDevice.deviceId) {
+                videoDevice.deviceId = (<any>videoDevice).id;
             }
 
-            if (!device.label) {
-                device.label = 'Camera (no-permission)';
+            if (!videoDevice.label) {
+                videoDevice.label = 'Camera (no-permission)';
             }
 
-            if (device.kind === 'videoinput') {
-                this.videoInputDevices.push(device);
+            if (videoDevice.kind === 'videoinput') {
+                this.videoInputDevices.push(videoDevice);
             }
         }
 
