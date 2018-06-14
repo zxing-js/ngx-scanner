@@ -101,8 +101,8 @@
     rxjs "^6.0.0"
 
 "@angular/animations@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-6.0.4.tgz#4e22612e8fed3193983d985c748514a03404bd96"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-6.0.5.tgz#3964bc2a60facf3c3b417925c4a395b3f44abb94"
   dependencies:
     tslib "^1.9.0"
 
@@ -124,14 +124,14 @@
     yargs-parser "^10.0.0"
 
 "@angular/common@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-6.0.4.tgz#e3d194a1bb1e143044774488d610437a982179fa"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-6.0.5.tgz#7960e1cfc180afb4a1bd56371c48840173cc5a92"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/compiler-cli@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-6.0.4.tgz#03596a2365aaed418e09999493560ba82fd45190"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-6.0.5.tgz#e3ae6a1042e4a08c43f2554685718a4402710958"
   dependencies:
     chokidar "^1.4.2"
     minimist "^1.2.0"
@@ -139,48 +139,48 @@
     tsickle "^0.29.0"
 
 "@angular/compiler@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-6.0.4.tgz#86d3adc2c915ee98aa8e00c542c2ef1c09f9c61f"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-6.0.5.tgz#cb8fdb17b0d736c9054c1c9ab382c9cd2cc7ba5d"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/core@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-6.0.4.tgz#80b19624493126b6c7e3a180a33dee92c84b4bd6"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-6.0.5.tgz#5846f1b3143f43657dc704fe4bcf9e75b94ec325"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/forms@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-6.0.4.tgz#abc5ea355b5261c49f111366f41a812aa9d3d1d3"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-6.0.5.tgz#d3ec7886d8b61a97b2c0b7501b304b449a2dcae6"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/http@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/http/-/http-6.0.4.tgz#5598c6eec895014da9242c22236af2757ae9fef1"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-6.0.5.tgz#53835564bb5c7a4eac7893a28bcaaf0e73fec2cd"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/language-service@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-6.0.4.tgz#4a19c1734d28590d987268090b16b12e71a67c30"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-6.0.5.tgz#824c8cb43ab3976ddb9442ba39562e1dd0108155"
 
 "@angular/platform-browser-dynamic@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-6.0.4.tgz#3b86f6b826d45418520da583eb8ba0526f62a4bb"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-6.0.5.tgz#21c9a702fbd4a153ae8aa35fef89ca1a6dfaa658"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/platform-browser@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-6.0.4.tgz#3a86890324fd9de37df8d7195fcedf4145eefb3b"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-6.0.5.tgz#b6b15424a7aa9342284ce7fba6a700f7aad2fd9c"
   dependencies:
     tslib "^1.9.0"
 
 "@angular/router@^6.0.3":
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/router/-/router-6.0.4.tgz#81c96dfa42a8c4a218cbd450b1e8959a76ea9595"
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-6.0.5.tgz#e9e9e5986e238588020d0531aff3362e836db2a8"
   dependencies:
     tslib "^1.9.0"
 
@@ -283,16 +283,16 @@
     "@types/jasmine" "*"
 
 "@types/node@*":
-  version "10.3.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.2.tgz#3840ec6c12556fdda6e0e6d036df853101d732a4"
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.3.tgz#8798d9e39af2fa604f715ee6a6b19796528e46c3"
 
 "@types/node@^6.0.46":
-  version "6.0.112"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.112.tgz#0f37473b1d1ecd30c8bf57215ef4fb558f99cc86"
+  version "6.0.113"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.113.tgz#4b41f38ad03e4b41f9dc259b3b58aecb22c9aebc"
 
 "@types/node@^8.10.9":
-  version "8.10.19"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.19.tgz#66b5b6325c048cbf4512b7a88b0e79c2ee99d3d2"
+  version "8.10.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.20.tgz#fe674ea52e13950ab10954433a7824438aabbcac"
 
 "@types/q@^0.0.32":
   version "0.0.32"
@@ -426,9 +426,9 @@
     "@webassemblyjs/wast-parser" "1.4.3"
     long "^3.2.0"
 
-"@zxing/library@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.5.1.tgz#cd436d305b8929004b6ca462e02d1ed64d485170"
+"@zxing/library@^0.6.0-beta.2":
+  version "0.6.0-dev.dafb83"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.6.0-dev.dafb83.tgz#f03e3e7dad752e278c7cba3cd9fb5064f2c9a0a7"
   dependencies:
     sharp "^0.20.0"
     text-encoding "^0.6.4"
@@ -1403,8 +1403,8 @@ camelcase@^4.0.0, camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000792, caniuse-lite@^1.0.30000805, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000851:
-  version "1.0.30000853"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000853.tgz#505249fc78d60e20ad47af3c13706d6f9fd209fd"
+  version "1.0.30000855"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000855.tgz#d5a26a9093b932d6266bf4ed9294b41b84945d14"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -1865,7 +1865,7 @@ copy-webpack-plugin@^4.5.1:
     p-limit "^1.0.0"
     serialize-javascript "^1.4.0"
 
-core-js@^2.2.0, core-js@^2.4.0:
+core-js@^2.2.0, core-js@^2.4.0, core-js@^2.5.5:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
@@ -3783,8 +3783,8 @@ iferr@^0.1.5:
   resolved "https://registry.yarnpkg.com/iferr/-/iferr-0.1.5.tgz#c60eed69e6d8fdb6b3104a1fcbca1c192dc5b501"
 
 iferr@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/iferr/-/iferr-1.0.0.tgz#36700e6a6d5d42e3e66b6d90fb55a018970b0aab"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/iferr/-/iferr-1.0.1.tgz#37b878f51d1e91a12d9f84ae7fca922a64c53a54"
 
 ignore-walk@^3.0.1:
   version "3.0.1"
@@ -8419,8 +8419,8 @@ typescript@2.8.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
 
 typescript@^2.4.2, typescript@~2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.1.tgz#fdb19d2c67a15d11995fd15640e373e09ab09961"
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
 
 uglify-es@^3.3.4:
   version "3.3.9"
@@ -8855,8 +8855,8 @@ webpack-log@^1.0.1, webpack-log@^1.1.2:
     uuid "^3.1.0"
 
 webpack-merge@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.2.tgz#5d372dddd3e1e5f8874f5bf5a8e929db09feb216"
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.3.tgz#8aaff2108a19c29849bc9ad2a7fd7fce68e87c4a"
   dependencies:
     lodash "^4.17.5"
 
@@ -9144,3 +9144,7 @@ yeast@0.1.2:
 yn@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/yn/-/yn-2.0.0.tgz#e5adabc8acf408f6385fc76495684c88e6af689a"
+
+zone.js@^0.8.26:
+  version "0.8.26"
+  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.26.tgz#7bdd72f7668c5a7ad6b118148b4ea39c59d08d2d"
