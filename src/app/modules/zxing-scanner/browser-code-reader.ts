@@ -74,10 +74,6 @@ export class BrowserCodeReader {
      * Shows if torch is available on the camera.
      */
     private torchCompatible = new BehaviorSubject<boolean>(false);
-    /**
-     * The device id of the current media device.
-     */
-    private deviceId: string;
 
     /**
      * Constructor for dependency injection.
@@ -102,17 +98,13 @@ export class BrowserCodeReader {
         videoElement?: HTMLVideoElement
     ): Promise<void> {
 
-        if (deviceId !== undefined) {
-            this.deviceId = deviceId;
-        }
-
         this.reset();
 
         this.prepareVideoElement(videoElement);
 
-        const video = this.deviceId === undefined
+        const video = typeof deviceId === 'undefined'
             ? { facingMode: { exact: 'environment' } }
-            : { deviceId: { exact: this.deviceId } };
+            : { deviceId: { exact: deviceId } };
 
         const constraints: MediaStreamConstraints = {
             audio: false,
@@ -146,9 +138,9 @@ export class BrowserCodeReader {
      */
     private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
         this.stream = stream;
+        this.checkTorchCompatibility(this.stream);
         this.bindVideoSrc(this.videoElement, this.stream);
         this.bindEvents(this.videoElement, callbackFn);
-        this.checkTorchCompatibility(this.stream);
     }
 
     /**
@@ -188,17 +180,14 @@ export class BrowserCodeReader {
      * @param callbackFn
      */
     private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
-        if (callbackFn !== undefined) {
-            this.videoPlayingEventListener = () => {
-                this.decodeWithDelay(callbackFn);
-            };
+
+        if (typeof callbackFn !== 'undefined') {
+            this.videoPlayingEventListener = () => this.decodeWithDelay(callbackFn);
         }
 
         videoElement.addEventListener('playing', this.videoPlayingEventListener);
 
-        this.videoLoadedMetadataEventListener = () => {
-            videoElement.play();
-        };
+        this.videoLoadedMetadataEventListener = () => videoElement.play();
 
         videoElement.addEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
     }
@@ -258,7 +247,7 @@ export class BrowserCodeReader {
      * @param callbackFn
      */
     private decodeWithDelay(callbackFn: (result: Result) => any): void {
-        this.timeoutHandler = window.setTimeout(this.decode.bind(this, callbackFn), this.timeBetweenScans);
+        this.timeoutHandler = window.setTimeout(() => this.decode(callbackFn), this.timeBetweenScans);
     }
 
     /**
@@ -391,15 +380,15 @@ export class BrowserCodeReader {
 
             // first gives freedon to the element 🕊
 
-            if (undefined !== this.videoPlayEndedEventListener) {
+            if (typeof this.videoPlayEndedEventListener !== 'undefined') {
                 this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
             }
 
-            if (undefined !== this.videoPlayingEventListener) {
+            if (typeof this.videoPlayingEventListener !== 'undefined') {
                 this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
             }
 
-            if (undefined !== this.videoLoadedMetadataEventListener) {
+            if (typeof this.videoLoadedMetadataEventListener !== 'undefined') {
                 this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
             }
 
