@@ -408,7 +408,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     scan(deviceId: string): void {
         try {
 
-            this.codeReader.decodeFromInputVideoDevice((result: any) => {
+            this.codeReader.decodeFromInputVideoDevice((result: Result) => {
 
                 if (result) {
                     this.dispatchScanSuccess(result);
