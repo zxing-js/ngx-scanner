@@ -36,7 +36,13 @@ docs/
 e2e/
 node_modules/
 
+*.tgz
 *.lock
 .*
-karma.*
-protactor.*
+/karma.*
+/protactor.*
+/*.conf.js
+/*config.*
+/*.md
+!README.md
+/*.json
