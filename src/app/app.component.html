@@ -9,10 +9,11 @@
 
     <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
 
-    <p *ngIf="qrResultString">
-        Result:
+    <footer>
+        <span>Result:</span>
         <strong>{{ qrResultString }}</strong>
-    </p>
+        <em *ngIf="!qrResultString">wating for scan...</em>
+    </footer>
 
 </div>
 
@@ -33,6 +34,12 @@
 </ng-container>
 
 <ng-container *ngIf="hasDevices === undefined">
+
+    <h2>Looking for devices.</h2>
+
+</ng-container>
+
+<ng-container *ngIf="hasDevices === null">
 
     <h2>Couldn't check for devices.</h2>
 
