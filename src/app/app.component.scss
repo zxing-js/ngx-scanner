@@ -2,6 +2,13 @@ zxing-scanner {
     max-width: 100%;
 }
 
-.hidden {
-    display: none;
+header {
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    background: #333;
+
+    select {
+        width: 100%;
+    }
 }
