@@ -218,21 +218,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         this.previewElemRef.nativeElement.setAttribute('playsinline', true);
         this.previewElemRef.nativeElement.setAttribute('autofocus', this.autofocusEnabled);
 
+        // Asks for permission before enumerating devices so it can get all the device's info
         const hasPermission = await this.askForPermission();
-
-        // @NOTE: look forward to remove these logs below, they may be not needed.
-
-        if (hasPermission === false) {
-            console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
-        }
-
-        if (hasPermission === undefined) {
-            console.warn('zxing-scanner', 'ngAfterViewInit', 'Permissions not asked.');
-        }
-
-        if (hasPermission === null) {
-            console.warn('zxing-scanner', 'ngAfterViewInit', 'It was not possible to check for permissions.');
-        }
 
         // gets and enumerates all video devices
         this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
@@ -391,8 +378,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         switch (err.name) {
 
             // usually caused by not secure origins
-            case 'DOMException':
             case 'NotSupportedError':
+                console.warn('@zxing/ngx-scanner', err.message);
                 // could not claim
                 permission = null;
                 // can't check devices
@@ -401,6 +388,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
             // user denied permission
             case 'NotAllowedError':
+                console.warn('@zxing/ngx-scanner', err.message);
                 // claimed and denied permission
                 permission = false;
                 // this means that input devices exists
@@ -409,15 +397,27 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
             // the device has no attached input devices
             case 'NotFoundError':
+                console.warn('@zxing/ngx-scanner', err.message);
                 // no permissions claimed
                 permission = null;
                 // because there was no devices
                 this._hasDevices = false;
+                // tells the listener about the error
+                this.camerasNotFound.next(err);
+                break;
+
+            case 'NotReadableError':
+                console.warn('@zxing/ngx-scanner', 'Couldn\'t read the device(s)\'s stream, it\'s probably in use by another app.');
+                // no permissions claimed
+                permission = null;
+                // there are devices, which I couldn't use
+                this._hasDevices = false;
+                // tells the listener about the error
                 this.camerasNotFound.next(err);
                 break;
 
             default:
-                console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.');
+                console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.', err);
                 // unknown
                 permission = null;
                 // this._hasDevices = undefined;
@@ -426,6 +426,9 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         }
 
         this.setPermission(permission);
+
+        // tells the listener about the error
+        this.permissionResponse.error(err);
 
         return permission;
     }
