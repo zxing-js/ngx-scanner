@@ -422,7 +422,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 permission = null;
                 // this._hasDevices = undefined;
                break;
-                       
+
         }
 
         this.setPermission(permission);
