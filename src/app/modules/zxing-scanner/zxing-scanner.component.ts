@@ -220,22 +220,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
         const hasPermission = await this.askForPermission();
 
+        // @NOTE: look forward to remove these logs below, they may be not needed.
+
         if (hasPermission === false) {
             console.warn('zxing-scanner', 'ngAfterViewInit', 'User has denied permission.');
-            return;
         }
 
         if (hasPermission === undefined) {
             console.warn('zxing-scanner', 'ngAfterViewInit', 'Permissions not asked.');
-            return;
         }
 
         if (hasPermission === null) {
             console.warn('zxing-scanner', 'ngAfterViewInit', 'It was not possible to check for permissions.');
-            return;
         }
-
-        // hasPermission === true
 
         // gets and enumerates all video devices
         this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
@@ -249,6 +246,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
 
         });
+
+        // There's nothin' to do anymore if we don't have permissions.
+        if (hasPermission !== true) {
+            return;
+        }
 
         this.startScan(this.videoInputDevice);
 
@@ -552,7 +554,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
 
             if (!videoDevice.label) {
-                videoDevice.label = 'Camera (no-permission)';
+                videoDevice.label = 'Camera (no permission 🚫)';
             }
 
             if (videoDevice.kind === 'videoinput') {
