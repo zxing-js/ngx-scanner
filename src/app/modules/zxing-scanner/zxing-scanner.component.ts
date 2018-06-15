@@ -408,12 +408,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             // the device has no attached input devices
             case 'NotFoundError':
                 // no permissions claimed
-                permission = undefined;
+                permission = null;
                 // because there was no devices
                 this._hasDevices = false;
                 this.camerasNotFound.next(err);
                 break;
 
+            default:
+                console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.');
+                // unknown
+                permission = null;
+                // this._hasDevices = undefined;
+               break;
+                       
         }
 
         this.setPermission(permission);
