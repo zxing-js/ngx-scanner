@@ -356,7 +356,9 @@ export class BrowserCodeReader {
         if (typeof this.videoElement !== 'undefined') {
             width = this.videoElement.videoWidth;
             height = this.videoElement.videoHeight;
-        } else {
+        }
+
+        if (typeof this.imageElement !== 'undefined') {
             width = this.imageElement.naturalWidth || this.imageElement.width;
             height = this.imageElement.naturalHeight || this.imageElement.height;
         }
