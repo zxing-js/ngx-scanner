@@ -16,9 +16,11 @@ import {
 
 import { isPlatformBrowser } from '@angular/common';
 
-import { Result } from '@zxing/library';
+import { Result, DecodeHintType, BarcodeFormat } from '@zxing/library';
 
+import { BrowserMultiFormatReader } from './browser-multi-format-reader';
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { BrowserCodeReader } from './browser-code-reader';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -32,7 +34,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * The ZXing code reader.
      */
-    private codeReader: BrowserQRCodeReader;
+    private codeReader: BrowserCodeReader;
 
     /**
      * Has `navigator` access.
@@ -76,6 +78,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     @ViewChild('preview')
     previewElemRef: ElementRef;
+
+    /**
+     * Barcode formats to scan
+     */
+    private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+    get formats() { return this._formats; }
+    @Input()
+    set formats(value: BarcodeFormat[]) {
+        // formats may be set from html view as string or string array
+        const fromView = <string | (string | BarcodeFormat)[]>value;
+        if (typeof fromView === 'string') {
+            this._formats = fromView.split(',').map(s => BarcodeFormat[s.trim()]);
+        } else {
+            this._formats = fromView.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
+        }
+    }
 
     /**
      * The scan throttling (time between scans) in milliseconds.
@@ -196,8 +214,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
         }
 
-        if (changes.scanThrottling) {
+        if (changes.scanThrottling && changes.formats === undefined) {
             this.setCodeReaderThrottling(this.scanThrottling);
+        }
+
+        if (changes.formats !== undefined) {
+            this.setFormats(this.formats);
         }
     }
 
@@ -259,7 +281,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * @param throttling The scan speed in milliseconds.
      */
     setCodeReaderThrottling(throttling: number): void {
+        this.scanThrottling = throttling;
         this.codeReader = new BrowserQRCodeReader(throttling);
+        this.restartScan();
+    }
+
+    /**
+     * Changes the supported code formats.
+     * @param formats The formats to support.
+     */
+    setFormats(formats: BarcodeFormat[]): void {
+        this.formats = formats;
+
+        const hints = new Map<DecodeHintType, any>();
+        hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+        this.codeReader = new BrowserMultiFormatReader(hints, this.scanThrottling);
+
         this.restartScan();
     }
 

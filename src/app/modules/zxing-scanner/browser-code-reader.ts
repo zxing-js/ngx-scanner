@@ -295,6 +295,13 @@ export class BrowserCodeReader {
         // get binary bitmap for decode function
         const binaryBitmap = this.createBinaryBitmap(this.videoElement || this.imageElement);
 
+        return this.decodeBitmap(binaryBitmap);
+    }
+
+    /**
+     * Call the encapsulated readers decode
+     */
+    protected decodeBitmap(binaryBitmap: BinaryBitmap): Result {
         return this.reader.decode(binaryBitmap);
     }
 

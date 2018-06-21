@@ -7,7 +7,7 @@
         </select>
     </header>
 
-    <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+    <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" formats="CODE_39, CODE_128, QR_CODE"></zxing-scanner>
 
     <footer>
         <span>Result:</span>
