@@ -422,7 +422,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Stops and starts back the scan.
      */
     restartScan(): void {
-        this.restartScan();
+        this.resetScan();
         this.startScan(this.device);
     }
 
