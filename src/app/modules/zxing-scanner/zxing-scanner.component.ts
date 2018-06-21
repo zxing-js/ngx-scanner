@@ -31,7 +31,7 @@ import { CodeTypes } from './code-types';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
-    
+
     /**
      * The ZXing code reader.
      */
