@@ -7,6 +7,9 @@ import {
     Exception,
     Reader,
     Result,
+    NotFoundException,
+    ChecksumException,
+    FormatException,
 } from '@zxing/library';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -283,7 +286,7 @@ export class BrowserCodeReader {
             callbackFn(undefined);
 
             // scan Failure - found nothing, no error
-            if (retryIfNotFound && Exception.isOfType(re, Exception.NotFoundException)) {
+            if (retryIfNotFound && re instanceof NotFoundException) {
                 this.decodeWithDelay(callbackFn);
                 return;
             }
@@ -292,8 +295,8 @@ export class BrowserCodeReader {
             if (
                 retryIfReadError &&
                 (
-                    Exception.isOfType(re, Exception.ChecksumException) ||
-                    Exception.isOfType(re, Exception.FormatException)
+                    re instanceof ChecksumException ||
+                    re instanceof FormatException
                 )
             ) {
                 this.decodeWithDelay(callbackFn);
