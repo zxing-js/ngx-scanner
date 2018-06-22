@@ -16,34 +16,33 @@ export class AppComponent implements OnInit {
     @ViewChild('scanner')
     scanner: ZXingScannerComponent;
 
-    hasCameras = false;
+    hasDevices: boolean;
+    hasPermission: boolean;
     qrResultString: string;
     qrResult: Result;
-    scannerEnabled = true;
-    torch = false;
 
     availableDevices: MediaDeviceInfo[];
-    selectedDevice: MediaDeviceInfo;
+    currentDevice: MediaDeviceInfo;
 
     ngOnInit(): void {
 
-        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-            this.hasCameras = true;
+        // this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+        //     this.availableDevices = devices;
 
-            // selects the devices's back camera by default
-            // for (const device of devices) {
-            //     if (/back|rear|environment/gi.test(device.label)) {
-            //         this.scanner.changeDevice(device);
-            //         this.selectedDevice = device;
-            //         break;
-            //     }
-            // }
-        });
+        //     // selects the devices's back camera by default
+        //     for (const device of devices) {
+        //         if (/back|rear|environment/gi.test(device.label)) {
+        //             this.scanner.changeDevice(device);
+        //             this.currentDevice = device;
+        //             break;
+        //         }
+        //     }
+        // });
 
-        this.scanner.scanComplete.subscribe((result: Result) => {
-            this.qrResult = result;
-        });
-
+        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => this.availableDevices = devices);
+        this.scanner.hasDevices.subscribe((has: boolean) => this.hasDevices = has);
+        this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
+        this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
     }
 
     displayCameras(cameras: MediaDeviceInfo[]) {
@@ -58,6 +57,22 @@ export class AppComponent implements OnInit {
 
     onDeviceSelectChange(selectedValue: string) {
         console.debug('Selection changed: ', selectedValue);
-        this.selectedDevice = this.scanner.getDeviceById(selectedValue);
+        this.currentDevice = this.scanner.getDeviceById(selectedValue);
+    }
+
+    stateToEmoji(state: boolean): string {
+
+        const states = {
+            // not checked
+            undefined: '❔',
+            // failed to check
+            null: '⭕',
+            // success
+            true: '✔',
+            // can't touch that
+            false: '❌'
+        };
+
+        return states['' + state];
     }
 }

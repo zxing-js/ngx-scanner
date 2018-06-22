@@ -58,11 +58,12 @@ I promise that it's **very** simple to use:
 | Method              | Parameters                                     | Returns                          | Description                                                  |
 |---------------------|------------------------------------------------|----------------------------------|--------------------------------------------------------------|
 | **changeDevice**    | `device: MediaDeviceInfo`                      | `void`                           | Allows you to properly change the scanner device on the fly. |
-| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]`) => {} | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
+| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]) => {}` | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
 | **camerasNotFound** | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when cameras are not found.                   |
 | **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
 | **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
 | **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
+| **setCodeType**     | `CodeTypes | CodeTypes[]`                      | `void`                           | Sets the code types you want to read. Default is `'qr'`      |
 
 
 ## Performance
@@ -72,7 +73,6 @@ Read our performance notes on the wiki: [Performance Considerations](https://git
 
 ## Limitations
 
-- The component relies on [ZXing typescript port](https://github.com/zxing-js/library) which currently supports most common barcode formats, **but we didn't implement them here _yet_**.
 - On iOS <= 11.2 devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 
