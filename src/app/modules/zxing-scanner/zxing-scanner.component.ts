@@ -16,9 +16,11 @@ import {
 
 import { isPlatformBrowser } from '@angular/common';
 
-import { Result } from '@zxing/library';
+import { Result, MultiFormatReader, DecodeHintType, BarcodeFormat } from '@zxing/library';
 
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { BrowserCodeReader } from './browser-code-reader';
+import { CodeTypes } from './code-types';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -32,7 +34,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * The ZXing code reader.
      */
-    private codeReader: BrowserQRCodeReader;
+    private codeReader: BrowserCodeReader;
 
     /**
      * Has `navigator` access.
@@ -76,6 +78,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     @ViewChild('preview')
     previewElemRef: ElementRef;
+
+    /**
+     * Codes types to scan
+     */
+    @Input()
+    codeTypes: CodeTypes | CodeTypes[] = "qr";
 
     /**
      * The scan throttling (time between scans) in milliseconds.
@@ -196,8 +204,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
         }
 
-        if (changes.scanThrottling) {
+        if (changes.scanThrottling && !changes.codeTypes) {
             this.setCodeReaderThrottling(this.scanThrottling);
+        }
+
+        if (changes.codeTypes) {
+            this.setCodeTypes(this.codeTypes);
         }
     }
 
@@ -259,7 +271,50 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * @param throttling The scan speed in milliseconds.
      */
     setCodeReaderThrottling(throttling: number): void {
+        this.scanThrottling = throttling;
         this.codeReader = new BrowserQRCodeReader(throttling);
+        this.restartScan();
+    }
+
+    /**
+     * Changes the supported code times.
+     * @param types The type or an arry of types to support.
+     */
+    setCodeTypes(types: CodeTypes | CodeTypes[]): void {
+        this.codeTypes = types;
+        if (typeof types === "string")
+            types = [types];
+        if (types.indexOf("any") >= 0)
+            this.codeReader = new BrowserCodeReader(new MultiFormatReader(), this.scanThrottling);
+        else {
+            const typeMap: { [index in CodeTypes]?: BarcodeFormat[] } = {
+                oned: [
+                    BarcodeFormat.UPC_A,
+                    BarcodeFormat.UPC_E,
+                    BarcodeFormat.EAN_13,
+                    BarcodeFormat.EAN_8,
+                    BarcodeFormat.CODABAR,
+                    BarcodeFormat.CODE_39,
+                    BarcodeFormat.CODE_93,
+                    BarcodeFormat.CODE_128,
+                    BarcodeFormat.ITF,
+                    BarcodeFormat.RSS_14,
+                    BarcodeFormat.RSS_EXPANDED
+                ],
+                code128: [BarcodeFormat.CODE_128],
+                ean: [BarcodeFormat.EAN_13, BarcodeFormat.EAN_8],
+                itf: [BarcodeFormat.ITF],
+                qr: [BarcodeFormat.QR_CODE],
+                datamatrix: [ BarcodeFormat.DATA_MATRIX]
+            };
+
+            let formats = types.map(t => typeMap[t]);
+            const multi = new MultiFormatReader();
+            const hints = new Map<DecodeHintType, any>();
+            hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+            multi.setHints(hints);
+            this.codeReader = new BrowserCodeReader(multi, this.scanThrottling);
+        }
         this.restartScan();
     }
 
