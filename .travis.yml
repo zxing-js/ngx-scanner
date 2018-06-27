@@ -1,14 +1,13 @@
-language: node_js
 sudo: required
-node_js:
-- '8.4.0'
+language: node_js
+node_js: stable
 addons:
   chrome: stable
 script:
     - ./node_modules/.bin/npm-install-peers
-    - npm run lint
-    - npm run test
-#   - npm run e2e
-    - npm run docs:build
-    - npm run build:prod
-    - npm run build:packagr
+    - yarn lint
+    - yarn test
+#   - yarn e2e
+    - yarn docs:build
+    - yarn build:prod
+    - yarn build:packagr
