@@ -28,10 +28,11 @@ Angular QR-Code scanner component.
 ## Features & Hints
 
 - Supports continuous scanning.
-- Supports iOS 11 (only in Safari via HTTPS --> see `Limitations` below).
-- There is a configurable delay of 1500ms after each successful scan, before a new QR-Code can be detected.
+- Supports iOS 11+.*
+- There's a configurable delay of 1500ms after each successful scan.
 - Nice devs behind it. 🤓
 
+_* Check the [Limitations](#limitations) section above._
 
 ## Demo
 
@@ -41,29 +42,20 @@ Angular QR-Code scanner component.
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
+_Some previews may not be fully updated, please check the version._ 😉
 
 ## How To
 
-**We've built a veeeery cool Wiki for you! [Click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
+I _promise_ that it's **very** easy to use:
 
-I promise that it's **very** simple to use:
 ```html
 <!-- some.component.html -->
 <zxing-scanner></zxing-scanner>
 ```
 
+### Wiki
 
-## API
-
-| Method              | Parameters                                     | Returns                          | Description                                                  |
-|---------------------|------------------------------------------------|----------------------------------|--------------------------------------------------------------|
-| **changeDevice**    | `device: MediaDeviceInfo`                      | `void`                           | Allows you to properly change the scanner device on the fly. |
-| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]`) => {} | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
-| **camerasNotFound** | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when cameras are not found.                   |
-| **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
-| **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
-| **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
-
+Check our nice wiki for more info: [click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
 
 ## Performance
 
