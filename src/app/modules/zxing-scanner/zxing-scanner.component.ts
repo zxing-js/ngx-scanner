@@ -83,23 +83,17 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Barcode formats to scan
      */
     private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-    get formats() { return this._formats; }
-    @Input()
-    set formats(value: BarcodeFormat[]) {
-        // formats may be set from html view as string or string array
-        const fromView = <string | (string | BarcodeFormat)[]>value;
-        if (typeof fromView === 'string') {
-            this._formats = fromView.split(',').map(s => BarcodeFormat[s.trim()]);
-        } else {
-            this._formats = fromView.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
-        }
+  
+    get formats() { 
+      return this._formats; 
     }
-
-    /**
-     * The scan throttling (time between scans) in milliseconds.
-     */
+  
     @Input()
-    scanThrottling = 1500;
+    set formats(formatsInput: BarcodeFormat[]) {
+        // formats may be set from html template as BarcodeFormat or string array
+        const formats = <(string | BarcodeFormat)[]>formatsInput;
+        this._formats = fromView.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
+    }
 
     /**
      * Allow start scan or not.
@@ -214,10 +208,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
         }
 
-        if (changes.scanThrottling && changes.formats === undefined) {
-            this.setCodeReaderThrottling(this.scanThrottling);
-        }
-
         if (changes.formats !== undefined) {
             this.setFormats(this.formats);
         }
@@ -273,17 +263,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     ngOnDestroy(): void {
         this.resetScan();
-    }
-
-    /**
-     * Starts a new QR-scanner to set a new scan throttling.
-     *
-     * @param throttling The scan speed in milliseconds.
-     */
-    setCodeReaderThrottling(throttling: number): void {
-        this.scanThrottling = throttling;
-        this.codeReader = new BrowserQRCodeReader(throttling);
-        this.restartScan();
     }
 
     /**
