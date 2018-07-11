@@ -71,12 +71,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     previewElemRef: ElementRef;
 
     /**
-     * The scan throttling (time between scans) in milliseconds.
-     */
-    @Input()
-    scanThrottling = 1500;
-
-    /**
      * Allow start scan or not.
      */
     @Input()
@@ -182,10 +176,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 this.resetScan();
             }
         }
-
-        if (changes.scanThrottling) {
-            this.setCodeReaderThrottling(this.scanThrottling);
-        }
     }
 
     /**
@@ -243,16 +233,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     ngOnDestroy(): void {
         this.resetScan();
-    }
-
-    /**
-     * Starts a new QR-scanner to set a new scan throttling.
-     *
-     * @param throttling The scan speed in milliseconds.
-     */
-    setCodeReaderThrottling(throttling: number): void {
-        this.codeReader = new BrowserQRCodeReader(throttling);
-        this.restartScan();
     }
 
     /**
