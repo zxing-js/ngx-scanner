@@ -1,34 +1,86 @@
-<p *ngIf="availableDevices">
-    <label for="video-input-select">Select your camera:</label>
-    <select id="video-input-select" (change)="onDeviceSelectChange($event.target.value)">
-        <option value="" [selected]="!selectedDevice">No Device</option>
-        <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="selectedDevice && device.deviceId === selectedDevice.deviceId">{{ device.label }}</option>
-    </select>
-</p>
+<div class="scanner-shell" [hidden]="!hasDevices">
 
-<div [class.hidden]="!hasCameras">
+    <header>
+        <select (change)="onDeviceSelectChange($event.target.value)">
+            <option value="" [selected]="!currentDevice">No Device Selected</option>
+            <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+        </select>
+    </header>
 
-    <zxing-scanner #scanner class="test-class" [scannerEnabled]="scannerEnabled" [torch]="torch" [device]="selectedDevice" (camerasFound)="displayCameras($event)"
-        (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+    <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
 
-    <h2 *ngIf="!this.selectedDevice">No camera selected.</h2>
-
-    <p>
-        <button (click)="scannerEnabled=!scannerEnabled">Toggle Scanner [{{ scannerEnabled ? 'On': 'Off' }}]</button>
-        <button (click)="torch=!torch">Toggle Scanner's Torch [{{ torch ? 'On': 'Off' }}]</button>
-    </p>
-
-    <p>
-        Result:
-        <strong>{{ qrResultString }}</strong>
-    </p>
+    <footer>
+        <span>Result:</span>
+        <span>
+            <em *ngIf="!qrResultString">wating for scan...</em>
+            <strong>{{ qrResultString }}</strong>
+        </span>
+    </footer>
 
 </div>
 
-<div [class.hidden]="hasCameras">
+<ng-container *ngIf="hasPermission === undefined">
 
-    <h1>Looks like your actual device does not have cameras, or I could not find'em. </h1>
+    <h2>Waiting for permissions.</h2>
 
-</div>
+    <blockquote>
+        If your device does not has cameras, no permissions will be asked.
+    </blockquote>
 
-<p>Angular version: {{ ngVersion }}</p>
+</ng-container>
+
+<ng-container *ngIf="hasPermission === false">
+
+    <h2>You denied the camera permission, we can't scan anything without it. 😪</h2>
+
+</ng-container>
+
+<ng-container *ngIf="hasDevices === undefined">
+
+    <h2>Looking for devices.</h2>
+
+</ng-container>
+
+<ng-container *ngIf="hasDevices === null">
+
+    <h2>Couldn't check for devices.</h2>
+
+    <blockquote>
+        This may be caused by some security error.
+    </blockquote>
+
+</ng-container>
+
+<ng-container *ngIf="hasDevices === false">
+
+    <h2>No devices were found.</h2>
+
+    <blockquote>
+        I believe your device has no media devices attached to.
+    </blockquote>
+
+</ng-container>
+
+<hr>
+
+<footer>
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Property</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ stateToEmoji(hasDevices) }}</td>
+                <td>Devices</td>
+            </tr>
+            <tr>
+                <td>{{ stateToEmoji(hasPermission) }}</td>
+                <td>Permissions</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Angular version: {{ ngVersion }}</p>
+</footer>

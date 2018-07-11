@@ -1,37 +1,39 @@
-<p align="center">
-    
-  <a href="https://github.com/zxing-js/library">
-    <img src="https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png">
-  </a>
+<div align="center">
 
-  <h3 align="center">@zxing/ngx-scanner</h3>
+[![Angular ZXing Scanner](https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png)](https://github.com/zxing-js/library)
 
-  <p align="center">
-    Angular QR-Code scanner component.
-    <br>
-    <br>
-    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=Bug_report.md">Bug Report</a>
-    ·
-    <a href="https://github.com/zxing-js/ngx-scanner/issues/new?template=Feature_request.md&labels=feature">Feature Request</a>
-  </p>
-</p>
+### @zxing/ngx-scanner
 
+Angular QR-Code scanner component.
+
+<br>
+
+[Bug Report](https://github.com/zxing-js/ngx-scanner/issues/new?template=Bug_report.md)
+·
+[Feature Request](https://github.com/zxing-js/ngx-scanner/issues/new?template=Feature_request.md&labels=feature)
+
+<br>
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
+[![BCH compliance](https://bettercodehub.com/edge/badge/zxing-js/ngx-scanner?branch=master)](https://bettercodehub.com/)
 [![dependencies Status](https://david-dm.org/zxing-js/ngx-scanner/status.svg)](https://david-dm.org/zxing-js/ngx-scanner)
 [![Build Status](https://travis-ci.org/zxing-js/ngx-scanner.svg?branch=master)](https://travis-ci.org/zxing-js/ngx-scanner)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba14393a17241088f75b19edc370694)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+</div>
+
+<br>
 
 ## Features & Hints
 
 - Supports continuous scanning.
-- Supports iOS 11 (only in Safari via HTTPS --> see `Limitations` below).
-- There is a configurable delay of 1500ms after each successful scan, before a new QR-Code can be detected.
+- Supports iOS 11+.*
+- There's a configurable delay of 1500ms after each successful scan.
 - Nice devs behind it. 🤓
 
+_* Check the [Limitations](#limitations) section above._
 
 ## Demo
 
@@ -41,29 +43,20 @@
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
 - [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
+_Some previews may not be fully updated, please check the version._ 😉
 
 ## How To
 
-**We've built a veeeery cool Wiki for you! [Click here to take a look!](/zxing-js/ngx-scanner/wiki)**
+I _promise_ that it's **very** easy to use:
 
-I promise that it's **very** simple to use:
 ```html
 <!-- some.component.html -->
 <zxing-scanner></zxing-scanner>
 ```
 
+### Wiki
 
-## API
-
-| Method              | Parameters                                     | Returns                          | Description                                                  |
-|---------------------|------------------------------------------------|----------------------------------|--------------------------------------------------------------|
-| **changeDevice**    | `device: MediaDeviceInfo`                      | `void`                           | Allows you to properly change the scanner device on the fly. |
-| **camerasFound**    | `callback: (devices: MediaDeviceInfo[]`) => {} | `EventEmitter<MediaDeviceInfo >` | Emits an event when cameras are found.                       |
-| **camerasNotFound** | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when cameras are not found.                   |
-| **scanSuccess**     | `callback: (result: string): void => {}`       | `EventEmitter<string>`           | Emits an event when a scan is successful performed.          |
-| **scanFailure**     | `callback: (): void => {}`                     | `EventEmitter<void>`             | Emits an event when a scan fails.                            |
-| **scanError**       | `callback: (error: any): void => {}`           | `EventEmitter<any>`              | Emits an event when a scan throws an error.                  |
-
+Check our nice wiki for more info: [click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
 
 ## Performance
 
@@ -72,12 +65,16 @@ Read our performance notes on the wiki: [Performance Considerations](https://git
 
 ## Limitations
 
-- The component relies on [zxing-typescript](https://github.com/zxing-web/library) which currently supports totally the following code formats:
-  - QR Code
-  - Code 128
+- The component relies on [ZXing typescript port](https://github.com/zxing-js/library) which currently supports most common barcode formats, **but we didn't implement them here _yet_**.
 - On iOS <= 11.2 devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 
 ## Generator
 
-Looking for a way to generate QR-Codes? Check-out [ngx-kjua](https://github.com/werthdavid/ngx-kjua)
+Looking for a way to generate ~awesome~ QR codes? Check-out [ngx-kjua](https://github.com/werthdavid/ngx-kjua).
+
+Want just to write QR codes on your own, try our [ZXing typescript port](https://github.com/zxing-js/library).
+
+---
+
+[![Bless](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/alpaca.svg)](http://lunagao.github.io/BlessYourCodeTag/)

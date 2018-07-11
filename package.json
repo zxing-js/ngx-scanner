@@ -2,15 +2,14 @@
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@zxing/ngx-scanner",
   "description": "High-performance Angular 2+ barcode scanner component based on ZXing.",
-  "version": "1.2.0-dev.9e43af",
+  "version": "1.2.0-dev.9e8fe6",
   "private": false,
   "ngPackage": {
     "lib": {
       "entryFile": "src/public_api.ts"
     },
     "whitelistedNonPeerDependencies": [
-      "@zxing/library",
-      "rxjs"
+      "@zxing/library"
     ]
   },
   "repository": {
@@ -31,7 +30,8 @@
     "angular",
     "zxing",
     "qr-code",
-    "scanner"
+    "scanner",
+    "scan"
   ],
   "license": "MIT",
   "bugs": {
@@ -54,12 +54,10 @@
     "publish:dist": "cd ./dist && npm publish --access=public"
   },
   "dependencies": {
-    "@zxing/library": "^0.5.1"
+    "@zxing/library": "^0.7.0-dev.058aea"
   },
   "peerDependencies": {
-    "core-js": "^2.5.5",
-    "rxjs": "^6.2.0",
-    "zone.js": "^0.8.26"
+    "rxjs": "^6.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.6",
@@ -81,6 +79,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^8.10.9",
     "codelyzer": "^4.3.0",
+    "core-js": "^2.5.5",
     "jasmine-core": "^2.99.1",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^2.0.2",
@@ -94,7 +93,8 @@
     "protractor": "^5.3.1",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
-    "typescript": "~2.7.2"
+    "typescript": "~2.7.2",
+    "zone.js": "^0.8.26"
   },
   "main": "dist/bundles/zxing-ngx-scanner.umd.js",
   "module": "dist/esm5/zxing-ngx-scanner.js",
