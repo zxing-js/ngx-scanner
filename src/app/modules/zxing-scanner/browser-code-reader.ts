@@ -94,7 +94,7 @@ export class BrowserCodeReader {
      * @param reader The barcode reader to be used to decode the stream.
      * @param timeBetweenScans The scan throttling in milliseconds.
      */
-    public constructor(private reader: Reader, private timeBetweenScans: number = 500) { }
+    public constructor(protected readonly reader: Reader, private timeBetweenScans: number = 500) { }
 
     /**
      * Starts the decoding from the actual or a new video element.

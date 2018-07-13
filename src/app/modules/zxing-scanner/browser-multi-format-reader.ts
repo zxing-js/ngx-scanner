@@ -3,13 +3,10 @@ import { MultiFormatReader, DecodeHintType, BinaryBitmap, Result } from '@zxing/
 
 
 export class BrowserMultiFormatReader extends BrowserCodeReader {
-    private multiReader: MultiFormatReader;
-
     public constructor(hints: Map<DecodeHintType, any> = null, timeBetweenScansMillis: number = 500) {
         const reader = new MultiFormatReader();
         reader.setHints(hints);
         super(reader, timeBetweenScansMillis);
-        this.multiReader = reader;
     }
 
     /**
@@ -17,6 +14,6 @@ export class BrowserMultiFormatReader extends BrowserCodeReader {
      * attention to the hints set in the constructor function
      */
     protected decodeBitmap(binaryBitmap: BinaryBitmap): Result {
-        return this.multiReader.decodeWithState(binaryBitmap);
+        return (<MultiFormatReader>this.reader).decodeWithState(binaryBitmap);
     }
 }
