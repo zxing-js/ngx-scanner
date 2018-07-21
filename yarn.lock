@@ -426,9 +426,9 @@
     "@webassemblyjs/wast-parser" "1.4.3"
     long "^3.2.0"
 
-"@zxing/library@^0.7.0-dev.058aea":
-  version "0.7.0-dev.058aea"
-  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.7.0-dev.058aea.tgz#34fa40ad3385d823c76c01fa4cbe58ecd0cb5873"
+"@zxing/library@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.7.0.tgz#14969fd2dde384fda06cec829bfcf560bea19a98"
   dependencies:
     ts-custom-error "^2.2.1"
   optionalDependencies:
