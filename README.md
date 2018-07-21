@@ -65,7 +65,6 @@ Read our performance notes on the wiki: [Performance Considerations](https://git
 
 ## Limitations
 
-- The component relies on [ZXing typescript port](https://github.com/zxing-js/library) which currently supports most common barcode formats, **but we didn't implement them here _yet_**.
 - On iOS <= 11.2 devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 

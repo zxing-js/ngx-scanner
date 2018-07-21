@@ -31,17 +31,17 @@ export class BrowserCodeReader {
      */
     private videoElement: HTMLVideoElement;
     /**
-     * Should contain the actual registered listener for video play-ended,
+     * Should contain the current registered listener for video play-ended,
      * used to unregister that listener when needed.
      */
     private videoPlayEndedEventListener: EventListener;
     /**
-     * Should contain the actual registered listener for video playing,
+     * Should contain the current registered listener for video playing,
      * used to unregister that listener when needed.
      */
     private videoPlayingEventListener: EventListener;
     /**
-     * Should contain the actual registered listener for video loaded-metadata,
+     * Should contain the current registered listener for video loaded-metadata,
      * used to unregister that listener when needed.
      */
     private videoLoadedMetadataEventListener: EventListener;
@@ -51,7 +51,7 @@ export class BrowserCodeReader {
      */
     private imageElement: HTMLImageElement;
     /**
-     * Should contain the actual registered listener for image loading,
+     * Should contain the current registered listener for image loading,
      * used to unregister that listener when needed.
      */
     private imageLoadedEventListener: EventListener;
@@ -94,10 +94,10 @@ export class BrowserCodeReader {
      * @param reader The barcode reader to be used to decode the stream.
      * @param timeBetweenScans The scan throttling in milliseconds.
      */
-    public constructor(private reader: Reader, private timeBetweenScans: number = 500) { }
+    public constructor(protected readonly reader: Reader, private timeBetweenScans: number = 500) { }
 
     /**
-     * Starts the decoding from the actual or a new video element.
+     * Starts the decoding from the current or a new video element.
      *
      * @param callbackFn The callback to be executed after every scan attempt
      * @param deviceId The device's to be used Id
@@ -295,6 +295,13 @@ export class BrowserCodeReader {
         // get binary bitmap for decode function
         const binaryBitmap = this.createBinaryBitmap(this.videoElement || this.imageElement);
 
+        return this.decodeBitmap(binaryBitmap);
+    }
+
+    /**
+     * Call the encapsulated readers decode
+     */
+    protected decodeBitmap(binaryBitmap: BinaryBitmap): Result {
         return this.reader.decode(binaryBitmap);
     }
 

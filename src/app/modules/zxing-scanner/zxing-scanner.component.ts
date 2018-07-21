@@ -12,9 +12,11 @@ import {
     ViewChild
 } from '@angular/core';
 
-import { Result } from '@zxing/library';
+import { Result, DecodeHintType, BarcodeFormat } from '@zxing/library';
 
+import { BrowserMultiFormatReader } from './browser-multi-format-reader';
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { BrowserCodeReader } from './browser-code-reader';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -28,7 +30,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * The ZXing code reader.
      */
-    private codeReader: BrowserQRCodeReader;
+    private codeReader: BrowserCodeReader;
 
     /**
      * Has `navigator` access.
@@ -72,6 +74,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     @ViewChild('preview')
     previewElemRef: ElementRef;
+
+    /**
+     * Barcode formats to scan
+     */
+    private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+
+    get formats() {
+        return this._formats;
+    }
+
+    @Input()
+    set formats(formatsInput: BarcodeFormat[]) {
+        // formats may be set from html template as BarcodeFormat or string array
+        const formats = <(string | BarcodeFormat)[]>formatsInput;
+        this._formats = formats.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
+    }
 
     /**
      * Allow start scan or not.
@@ -191,6 +209,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 this.resetScan();
             }
         }
+
+        if (changes.formats !== undefined) {
+            this.setFormats(this.formats);
+        }
     }
 
     /**
@@ -246,7 +268,23 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Properly changes the actual target device.
+     * Changes the supported code formats.
+     * @param formats The formats to support.
+     */
+    setFormats(formats: BarcodeFormat[]): void {
+
+        this.formats = formats;
+
+        const hints = new Map<DecodeHintType, any>();
+        hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+
+        this.codeReader = new BrowserMultiFormatReader(hints);
+
+        this.restartScan();
+    }
+
+    /**
+     * Properly changes the current target device.
      *
      * @param device
      */
@@ -256,7 +294,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Properly changes the actual target device using it's deviceId.
+     * Properly changes the current target device using it's deviceId.
      *
      * @param deviceId
      */

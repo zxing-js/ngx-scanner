@@ -12,7 +12,7 @@
         },
         {
             "label": "ngserve",
-            "type":"shell",
+            "type": "shell",
             "command": "ng",
             "args": [
                 "serve"
@@ -34,6 +34,20 @@
                         "endsPattern": "^.*webpack: Compiled successfully.*"
                     }
                 }
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "build:packagr",
+            "problemMatcher": [
+                "$tsc"
             ]
         }
     ]
