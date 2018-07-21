@@ -83,16 +83,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Barcode formats to scan
      */
     private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-  
-    get formats() { 
-      return this._formats; 
+
+    get formats() {
+        return this._formats;
     }
-  
+
     @Input()
     set formats(formatsInput: BarcodeFormat[]) {
         // formats may be set from html template as BarcodeFormat or string array
         const formats = <(string | BarcodeFormat)[]>formatsInput;
-        this._formats = fromView.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
+        this._formats = formats.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
     }
 
     /**
@@ -270,11 +270,13 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * @param formats The formats to support.
      */
     setFormats(formats: BarcodeFormat[]): void {
+
         this.formats = formats;
 
         const hints = new Map<DecodeHintType, any>();
         hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
-        this.codeReader = new BrowserMultiFormatReader(hints, this.scanThrottling);
+
+        this.codeReader = new BrowserMultiFormatReader(hints);
 
         this.restartScan();
     }
@@ -437,7 +439,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 // unknown
                 permission = null;
                 // this._hasDevices = undefined;
-               break;
+                break;
 
         }
 
