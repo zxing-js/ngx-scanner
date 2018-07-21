@@ -31,17 +31,17 @@ export class BrowserCodeReader {
      */
     private videoElement: HTMLVideoElement;
     /**
-     * Should contain the actual registered listener for video play-ended,
+     * Should contain the current registered listener for video play-ended,
      * used to unregister that listener when needed.
      */
     private videoPlayEndedEventListener: EventListener;
     /**
-     * Should contain the actual registered listener for video playing,
+     * Should contain the current registered listener for video playing,
      * used to unregister that listener when needed.
      */
     private videoPlayingEventListener: EventListener;
     /**
-     * Should contain the actual registered listener for video loaded-metadata,
+     * Should contain the current registered listener for video loaded-metadata,
      * used to unregister that listener when needed.
      */
     private videoLoadedMetadataEventListener: EventListener;
@@ -51,7 +51,7 @@ export class BrowserCodeReader {
      */
     private imageElement: HTMLImageElement;
     /**
-     * Should contain the actual registered listener for image loading,
+     * Should contain the current registered listener for image loading,
      * used to unregister that listener when needed.
      */
     private imageLoadedEventListener: EventListener;
@@ -97,7 +97,7 @@ export class BrowserCodeReader {
     public constructor(protected readonly reader: Reader, private timeBetweenScans: number = 500) { }
 
     /**
-     * Starts the decoding from the actual or a new video element.
+     * Starts the decoding from the current or a new video element.
      *
      * @param callbackFn The callback to be executed after every scan attempt
      * @param deviceId The device's to be used Id

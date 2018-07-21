@@ -284,7 +284,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Properly changes the actual target device.
+     * Properly changes the current target device.
      *
      * @param device
      */
@@ -294,7 +294,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Properly changes the actual target device using it's deviceId.
+     * Properly changes the current target device using it's deviceId.
      *
      * @param deviceId
      */
