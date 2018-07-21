@@ -54,7 +54,7 @@
     "publish:dist": "cd ./dist && npm publish --access=public"
   },
   "dependencies": {
-    "@zxing/library": "^0.7.0-dev.058aea"
+    "@zxing/library": "0.7.0"
   },
   "peerDependencies": {
     "rxjs": "^6.2.0"

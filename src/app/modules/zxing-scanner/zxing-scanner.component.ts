@@ -4,17 +4,13 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    Inject,
     Input,
     OnChanges,
     OnDestroy,
     Output,
-    PLATFORM_ID,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-
-import { isPlatformBrowser } from '@angular/common';
 
 import { Result } from '@zxing/library';
 
@@ -94,6 +90,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     @Input()
     autofocusEnabled = true;
+
+    /**
+     * How the preview element shoud be fit inside the :host container.
+     */
+    @Input()
+    previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
 
     /**
      * Allow start scan or not.
@@ -401,7 +403,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 // unknown
                 permission = null;
                 // this._hasDevices = undefined;
-               break;
+                break;
 
         }
 
