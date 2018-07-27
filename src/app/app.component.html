@@ -1,86 +1,86 @@
 <div class="scanner-shell" [hidden]="!hasDevices">
 
-    <header>
-        <select (change)="onDeviceSelectChange($event.target.value)">
-            <option value="" [selected]="!currentDevice">No Device Selected</option>
-            <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
-        </select>
-    </header>
+  <header>
+    <select (change)="onDeviceSelectChange($event.target.value)">
+      <option value="" [selected]="!currentDevice">No Device Selected</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+    </select>
+  </header>
 
-    <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" formats="['CODE_39', 'CODE_128', 'QR_CODE']"></zxing-scanner>
+  <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" formats="['CODE_39', 'CODE_128', 'QR_CODE']"></zxing-scanner>
 
-    <footer>
-        <span>Result:</span>
-        <span>
-            <em *ngIf="!qrResultString">wating for scan...</em>
-            <strong>{{ qrResultString }}</strong>
-        </span>
-    </footer>
+  <footer>
+    <span>Result:</span>
+    <span>
+      <em *ngIf="!qrResultString">wating for scan...</em>
+      <strong>{{ qrResultString }}</strong>
+    </span>
+  </footer>
 
 </div>
 
 <ng-container *ngIf="hasPermission === undefined">
 
-    <h2>Waiting for permissions.</h2>
+  <h2>Waiting for permissions.</h2>
 
-    <blockquote>
-        If your device does not has cameras, no permissions will be asked.
-    </blockquote>
+  <blockquote>
+    If your device does not has cameras, no permissions will be asked.
+  </blockquote>
 
 </ng-container>
 
 <ng-container *ngIf="hasPermission === false">
 
-    <h2>You denied the camera permission, we can't scan anything without it. 😪</h2>
+  <h2>You denied the camera permission, we can't scan anything without it. 😪</h2>
 
 </ng-container>
 
 <ng-container *ngIf="hasDevices === undefined">
 
-    <h2>Looking for devices.</h2>
+  <h2>Looking for devices.</h2>
 
 </ng-container>
 
 <ng-container *ngIf="hasDevices === null">
 
-    <h2>Couldn't check for devices.</h2>
+  <h2>Couldn't check for devices.</h2>
 
-    <blockquote>
-        This may be caused by some security error.
-    </blockquote>
+  <blockquote>
+    This may be caused by some security error.
+  </blockquote>
 
 </ng-container>
 
 <ng-container *ngIf="hasDevices === false">
 
-    <h2>No devices were found.</h2>
+  <h2>No devices were found.</h2>
 
-    <blockquote>
-        I believe your device has no media devices attached to.
-    </blockquote>
+  <blockquote>
+    I believe your device has no media devices attached to.
+  </blockquote>
 
 </ng-container>
 
 <hr>
 
 <footer>
-    <table>
-        <thead>
-            <tr>
-                <th>Status</th>
-                <th>Property</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ stateToEmoji(hasDevices) }}</td>
-                <td>Devices</td>
-            </tr>
-            <tr>
-                <td>{{ stateToEmoji(hasPermission) }}</td>
-                <td>Permissions</td>
-            </tr>
-        </tbody>
-    </table>
-    <p>Angular version: {{ ngVersion }}</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Property</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ stateToEmoji(hasDevices) }}</td>
+        <td>Devices</td>
+      </tr>
+      <tr>
+        <td>{{ stateToEmoji(hasPermission) }}</td>
+        <td>Permissions</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Angular version: {{ ngVersion }}</p>
 </footer>
