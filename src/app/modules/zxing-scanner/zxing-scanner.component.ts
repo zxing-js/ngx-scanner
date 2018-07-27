@@ -4,21 +4,19 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    Inject,
     Input,
     OnChanges,
     OnDestroy,
     Output,
-    PLATFORM_ID,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
 
-import { isPlatformBrowser } from '@angular/common';
+import { Result, DecodeHintType, BarcodeFormat } from '@zxing/library';
 
-import { Result } from '@zxing/library';
-
+import { BrowserMultiFormatReader } from './browser-multi-format-reader';
 import { BrowserQRCodeReader } from './browser-qr-code-reader';
+import { BrowserCodeReader } from './browser-code-reader';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -32,7 +30,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     /**
      * The ZXing code reader.
      */
-    private codeReader: BrowserQRCodeReader;
+    private codeReader: BrowserCodeReader;
 
     /**
      * Has `navigator` access.
@@ -78,10 +76,20 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     previewElemRef: ElementRef;
 
     /**
-     * The scan throttling (time between scans) in milliseconds.
+     * Barcode formats to scan
      */
+    private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+
+    get formats() {
+        return this._formats;
+    }
+
     @Input()
-    scanThrottling = 1500;
+    set formats(formatsInput: BarcodeFormat[]) {
+        // formats may be set from html template as BarcodeFormat or string array
+        const formats = <(string | BarcodeFormat)[]>formatsInput;
+        this._formats = formats.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
+    }
 
     /**
      * Allow start scan or not.
@@ -100,6 +108,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      */
     @Input()
     autofocusEnabled = true;
+
+    /**
+     * How the preview element shoud be fit inside the :host container.
+     */
+    @Input()
+    previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
 
     /**
      * Allow start scan or not.
@@ -196,8 +210,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
             }
         }
 
-        if (changes.scanThrottling) {
-            this.setCodeReaderThrottling(this.scanThrottling);
+        if (changes.formats !== undefined) {
+            this.setFormats(this.formats);
         }
     }
 
@@ -254,17 +268,23 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Starts a new QR-scanner to set a new scan throttling.
-     *
-     * @param throttling The scan speed in milliseconds.
+     * Changes the supported code formats.
+     * @param formats The formats to support.
      */
-    setCodeReaderThrottling(throttling: number): void {
-        this.codeReader = new BrowserQRCodeReader(throttling);
+    setFormats(formats: BarcodeFormat[]): void {
+
+        this.formats = formats;
+
+        const hints = new Map<DecodeHintType, any>();
+        hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+
+        this.codeReader = new BrowserMultiFormatReader(hints);
+
         this.restartScan();
     }
 
     /**
-     * Properly changes the actual target device.
+     * Properly changes the current target device.
      *
      * @param device
      */
@@ -274,7 +294,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     /**
-     * Properly changes the actual target device using it's deviceId.
+     * Properly changes the current target device using it's deviceId.
      *
      * @param deviceId
      */
@@ -421,7 +441,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
                 // unknown
                 permission = null;
                 // this._hasDevices = undefined;
-               break;
+                break;
 
         }
 
@@ -481,7 +501,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
      * Stops and starts back the scan.
      */
     restartScan(): void {
-        this.restartScan();
+        this.resetScan();
         this.startScan(this.device);
     }
 
