@@ -86,6 +86,9 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
   @Input()
   set formats(formatsInput: BarcodeFormat[]) {
+    if (typeof formatsInput === 'string') {
+      throw new Error('Formats shouldn\'t be a string, make sure the [formats] input is a binding.')
+    }
     // formats may be set from html template as BarcodeFormat or string array
     const formats = <(string | BarcodeFormat)[]>formatsInput;
     this._formats = formats.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
