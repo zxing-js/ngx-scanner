@@ -12,10 +12,9 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { Result, DecodeHintType, BarcodeFormat } from '@zxing/library';
+import { Result, DecodeHintType, BarcodeFormat, QRCodeReader } from '@zxing/library';
 
 import { BrowserMultiFormatReader } from './browser-multi-format-reader';
-import { BrowserQRCodeReader } from './browser-qr-code-reader';
 import { BrowserCodeReader } from './browser-code-reader';
 
 @Component({
@@ -184,7 +183,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Constructor to build the object and do some DI.
    */
   constructor() {
-    this.codeReader = new BrowserQRCodeReader();
+    this.codeReader = new BrowserCodeReader(new QRCodeReader(), 500);
     this.hasNavigator = typeof navigator !== 'undefined';
     this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
     this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
