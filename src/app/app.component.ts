@@ -2,7 +2,7 @@ import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
 
 import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.module';
 
-import { Result } from '@zxing/library';
+import { DecodeHintType, Result } from '@zxing/library';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
+  scannerHints: Map<DecodeHintType, any>;
 
   hasDevices: boolean;
   hasPermission: boolean;
@@ -23,6 +24,11 @@ export class AppComponent implements OnInit {
 
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo;
+
+  constructor() {
+    this.scannerHints = new Map<DecodeHintType, any>();
+    this.scannerHints.set(DecodeHintType.TRY_HARDER, true);
+  }
 
   ngOnInit(): void {
 
