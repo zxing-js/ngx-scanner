@@ -7,12 +7,12 @@ import { ZXingScannerModule } from './modules/zxing-scanner/zxing-scanner.module
 import { AppComponent } from './app.component';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        FormsModule,
-        ZXingScannerModule.forRoot()
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ZXingScannerModule.forRoot()
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

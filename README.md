@@ -4,7 +4,7 @@
 
 ### @zxing/ngx-scanner
 
-Angular QR-Code scanner component.
+Angular Barcode/QR-Code scanner component.
 
 <br>
 
@@ -25,15 +25,6 @@ Angular QR-Code scanner component.
 </div>
 
 <br>
-
-## Features & Hints
-
-- Supports continuous scanning.
-- Supports iOS 11+.*
-- There's a configurable delay of 1500ms after each successful scan.
-- Nice devs behind it. 🤓
-
-_* Check the [Limitations](#limitations) section above._
 
 ## Demo
 

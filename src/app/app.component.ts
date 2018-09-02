@@ -5,74 +5,74 @@ import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.mod
 import { Result } from '@zxing/library';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
-    ngVersion = VERSION.full;
+  ngVersion = VERSION.full;
 
-    @ViewChild('scanner')
-    scanner: ZXingScannerComponent;
+  @ViewChild('scanner')
+  scanner: ZXingScannerComponent;
 
-    hasDevices: boolean;
-    hasPermission: boolean;
-    qrResultString: string;
-    qrResult: Result;
+  hasDevices: boolean;
+  hasPermission: boolean;
+  qrResultString: string;
+  qrResult: Result;
 
-    availableDevices: MediaDeviceInfo[];
-    currentDevice: MediaDeviceInfo;
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo;
 
-    ngOnInit(): void {
+  ngOnInit(): void {
 
-        // this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-        //     this.availableDevices = devices;
+    // this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+    //     this.availableDevices = devices;
 
-        //     // selects the devices's back camera by default
-        //     for (const device of devices) {
-        //         if (/back|rear|environment/gi.test(device.label)) {
-        //             this.scanner.changeDevice(device);
-        //             this.currentDevice = device;
-        //             break;
-        //         }
-        //     }
-        // });
+    //     // selects the devices's back camera by default
+    //     for (const device of devices) {
+    //         if (/back|rear|environment/gi.test(device.label)) {
+    //             this.scanner.changeDevice(device);
+    //             this.currentDevice = device;
+    //             break;
+    //         }
+    //     }
+    // });
 
-        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => this.availableDevices = devices);
-        this.scanner.hasDevices.subscribe((has: boolean) => this.hasDevices = has);
-        this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
-        this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
-    }
+    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => this.availableDevices = devices);
+    this.scanner.hasDevices.subscribe((has: boolean) => this.hasDevices = has);
+    this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
+    this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
+  }
 
-    displayCameras(cameras: MediaDeviceInfo[]) {
-        console.debug('Devices: ', cameras);
-        this.availableDevices = cameras;
-    }
+  displayCameras(cameras: MediaDeviceInfo[]) {
+    console.debug('Devices: ', cameras);
+    this.availableDevices = cameras;
+  }
 
-    handleQrCodeResult(resultString: string) {
-        console.debug('Result: ', resultString);
-        this.qrResultString = resultString;
-    }
+  handleQrCodeResult(resultString: string) {
+    console.debug('Result: ', resultString);
+    this.qrResultString = resultString;
+  }
 
-    onDeviceSelectChange(selectedValue: string) {
-        console.debug('Selection changed: ', selectedValue);
-        this.currentDevice = this.scanner.getDeviceById(selectedValue);
-    }
+  onDeviceSelectChange(selectedValue: string) {
+    console.debug('Selection changed: ', selectedValue);
+    this.currentDevice = this.scanner.getDeviceById(selectedValue);
+  }
 
-    stateToEmoji(state: boolean): string {
+  stateToEmoji(state: boolean): string {
 
-        const states = {
-            // not checked
-            undefined: '❔',
-            // failed to check
-            null: '⭕',
-            // success
-            true: '✔',
-            // can't touch that
-            false: '❌'
-        };
+    const states = {
+      // not checked
+      undefined: '❔',
+      // failed to check
+      null: '⭕',
+      // success
+      true: '✔',
+      // can't touch that
+      false: '❌'
+    };
 
-        return states['' + state];
-    }
+    return states['' + state];
+  }
 }

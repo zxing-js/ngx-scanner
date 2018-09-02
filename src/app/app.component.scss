@@ -1,41 +1,41 @@
 .scanner-shell {
 
-    position: relative;
+  position: relative;
 
-    &>header,
-    &>footer {
-        position: sticky;
+  &>header,
+  &>footer {
+    position: sticky;
+  }
+
+  &>header {
+    top: 0;
+    padding: 10px;
+    background: #333;
+
+    select {
+      width: 100%;
     }
+  }
 
-    &>header {
-        top: 0;
-        padding: 10px;
-        background: #333;
+  &>footer {
+    display: flex;
+    width: 100%;
+    bottom: 0;
+    padding: 10px;
+    background: #4eafff;
 
-        select {
-            width: 100%;
-        }
+    span {
+      &:first-child {
+        padding-right: 5px;
+      }
+
+      &:last-child {
+        word-break: break-word;
+      }
     }
+  }
 
-    &>footer {
-        display: flex;
-        width: 100%;
-        bottom: 0;
-        padding: 10px;
-        background: #4eafff;
-
-        span {
-            &:first-child {
-                padding-right: 5px;
-            }
-
-            &:last-child {
-                word-break: break-word;
-            }
-        }
-    }
-
-    zxing-scanner {
-        max-width: 100%;
-    }
+  zxing-scanner {
+    max-width: 100%;
+  }
 }
