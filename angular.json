@@ -42,6 +42,9 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "develop": {
+              "aot": true
             }
           }
         },
