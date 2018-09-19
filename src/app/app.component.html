@@ -3,19 +3,16 @@
   <header>
     <select (change)="onDeviceSelectChange($event.target.value)">
       <option value="" [selected]="!currentDevice">No Device Selected</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
     </select>
   </header>
 
-  <zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [hints]="scannerHints"></zxing-scanner>
+  <zxing-scanner #scanner [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true"></zxing-scanner>
 
-  <footer>
-    <span>Result:</span>
-    <span>
-      <em *ngIf="!qrResultString">wating for scan...</em>
-      <strong>{{ qrResultString }}</strong>
-    </span>
-  </footer>
+  <section class="results" *ngIf="qrResultString">
+    <small>Result</small>
+    <strong>{{ qrResultString }}</strong>
+  </section>
 
 </div>
 
@@ -37,12 +34,6 @@
 
 <ng-container *ngIf="hasDevices === undefined">
 
-  <h2>Looking for devices.</h2>
-
-</ng-container>
-
-<ng-container *ngIf="hasDevices === null">
-
   <h2>Couldn't check for devices.</h2>
 
   <blockquote>
@@ -61,10 +52,8 @@
 
 </ng-container>
 
-<hr>
-
 <footer>
-  <table>
+  <table class="table-scanner-state">
     <thead>
       <tr>
         <th>Status</th>
@@ -82,5 +71,5 @@
       </tr>
     </tbody>
   </table>
-  <p>Angular version: {{ ngVersion }}</p>
+  <p class="ng-version">Angular version: {{ ngVersion }}</p>
 </footer>
