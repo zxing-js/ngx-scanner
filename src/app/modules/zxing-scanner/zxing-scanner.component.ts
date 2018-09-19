@@ -323,7 +323,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     this._hints = hints;
 
-    this.codeReader = new BrowserMultiFormatReader(this.hints);
+    this.codeReader = new BrowserMultiFormatReader(this._hints);
 
     this.restartScan();
   }
