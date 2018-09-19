@@ -27,6 +27,16 @@ import { BrowserCodeReader } from './browser-code-reader';
 export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   /**
+   * Barcode formats to scan
+   */
+  private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+
+  /**
+   * Supported Hints map.
+   */
+  private _hints: Map<DecodeHintType, any>;
+
+  /**
    * The ZXing code reader.
    */
   private codeReader: BrowserCodeReader;
@@ -35,7 +45,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Has `navigator` access.
    */
   private hasNavigator: boolean;
-
 
   /**
    * Says if some native API is supported.
@@ -51,6 +60,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * List of enable video-input devices.
    */
   private videoInputDevices: MediaDeviceInfo[];
+
   /**
    * The current device used to scan things.
    */
@@ -75,25 +85,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   previewElemRef: ElementRef;
 
   /**
-   * Barcode formats to scan
-   */
-  private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-
-  get formats() {
-    return this._formats;
-  }
-
-  @Input()
-  set formats(formatsInput: BarcodeFormat[]) {
-    if (typeof formatsInput === 'string') {
-      throw new Error('Formats shouldn\'t be a string, make sure the [formats] input is a binding.');
-    }
-    // formats may be set from html template as BarcodeFormat or string array
-    const formats = <(string | BarcodeFormat)[]>formatsInput;
-    this._formats = formats.map(f => (typeof f === 'string') ? BarcodeFormat[f.trim()] : f);
-  }
-
-  /**
    * Allow start scan or not.
    */
   @Input()
@@ -116,14 +107,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   @Input()
   previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
-
-  /**
-   * Allow start scan or not.
-   */
-  @Input()
-  set torch(on: boolean) {
-    this.codeReader.setTorch(on);
-  }
 
   /**
    * Emitts events when the torch compatibility is changed.
@@ -178,6 +161,52 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   @Output()
   hasDevices = new EventEmitter<boolean>();
+
+  /**
+   * Returns all the registered formats.
+   */
+  get formats() {
+    return this._formats;
+  }
+
+  /**
+   * Registers formats the scanner should support.
+   *
+   * @param formatsInput BarcodeFormat or case-insensitive string array.
+   */
+  @Input()
+  set formats(formatsInput: BarcodeFormat[]) {
+
+    if (typeof formatsInput === 'string') {
+      throw new Error('Invalid formats, make sure the [formats] input is a binding.');
+    }
+
+    // formats may be set from html template as BarcodeFormat or string array
+    this._formats = formatsInput.map(f => this.getBarcodeFormat(f));
+  }
+
+  /**
+   * Returns all the registered formats.
+   */
+  get hints() {
+    return this._hints;
+  }
+
+  /**
+   * Registers formats the scanner should support.
+   */
+  @Input()
+  set hints(input: Map<DecodeHintType, any>) {
+    this.setHints(input);
+  }
+
+  /**
+   * Allow start scan or not.
+   */
+  @Input()
+  set torch(on: boolean) {
+    this.codeReader.setTorch(on);
+  }
 
   /**
    * Constructor to build the object and do some DI.
@@ -281,6 +310,20 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
 
     this.codeReader = new BrowserMultiFormatReader(hints);
+
+    this.restartScan();
+  }
+
+  /**
+   * Changes the decoding hints w/o replacing the POSSIBLE_FORMTAS key.
+   */
+  setHints(hints: Map<DecodeHintType, any>): void {
+
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, this.formats);
+
+    this._hints = hints;
+
+    this.codeReader = new BrowserMultiFormatReader(this.hints);
 
     this.restartScan();
   }
@@ -588,5 +631,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     return this.videoInputDevices;
+  }
+
+  /**
+   * Returns a valid BarcodeFormat or fails.
+   */
+  private getBarcodeFormat(format: string | BarcodeFormat): BarcodeFormat {
+    return typeof format === 'string'
+      ? BarcodeFormat[format.trim().toUpperCase()]
+      : format;
   }
 }
