@@ -201,6 +201,13 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
+   * If is `tryHarder` enabled.
+   */
+  get tryHarder(): boolean {
+    return this.hints.get(DecodeHintType.TRY_HARDER);
+  }
+
+  /**
    * Enable/disable tryHarder hint.
    */
   @Input()
