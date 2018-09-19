@@ -12,10 +12,9 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { Result, DecodeHintType, BarcodeFormat, QRCodeReader } from '@zxing/library';
+import { Result, DecodeHintType, BarcodeFormat } from '@zxing/library';
 
 import { BrowserMultiFormatReader } from './browser-multi-format-reader';
-import { BrowserCodeReader } from './browser-code-reader';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -27,11 +26,6 @@ import { BrowserCodeReader } from './browser-code-reader';
 export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   /**
-   * Barcode formats to scan
-   */
-  private _formats: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-
-  /**
    * Supported Hints map.
    */
   private _hints: Map<DecodeHintType, any>;
@@ -39,7 +33,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * The ZXing code reader.
    */
-  private codeReader: BrowserCodeReader;
+  private codeReader: BrowserMultiFormatReader;
 
   /**
    * Has `navigator` access.
@@ -165,39 +159,37 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * Returns all the registered formats.
    */
-  get formats() {
-    return this._formats;
+  get formats(): BarcodeFormat[] {
+    return this.hints.get(DecodeHintType.POSSIBLE_FORMATS);
   }
 
   /**
    * Registers formats the scanner should support.
    *
-   * @param formatsInput BarcodeFormat or case-insensitive string array.
+   * @param input BarcodeFormat or case-insensitive string array.
    */
   @Input()
-  set formats(formatsInput: BarcodeFormat[]) {
+  set formats(input: BarcodeFormat[]) {
 
-    if (typeof formatsInput === 'string') {
+    if (typeof input === 'string') {
       throw new Error('Invalid formats, make sure the [formats] input is a binding.');
     }
 
     // formats may be set from html template as BarcodeFormat or string array
-    this._formats = formatsInput.map(f => this.getBarcodeFormat(f));
+    const formats = input.map(f => this.getBarcodeFormat(f));
+
+    // updates the hints
+    this.hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+
+    // new instance with new hints.
+    this.refreshCodeReader();
   }
 
   /**
-   * Returns all the registered formats.
+   * Returns all the registered hints.
    */
   get hints() {
     return this._hints;
-  }
-
-  /**
-   * Registers formats the scanner should support.
-   */
-  @Input()
-  set hints(input: Map<DecodeHintType, any>) {
-    this.setHints(input);
   }
 
   /**
@@ -209,13 +201,31 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
+   * Enable/disable tryHarder hint.
+   */
+  @Input()
+  set tryHarder(enable: boolean) {
+    if (enable) {
+      this.hints.set(DecodeHintType.TRY_HARDER, true);
+    } else {
+      this.hints.delete(DecodeHintType.TRY_HARDER);
+    }
+
+    // new instance with new hints.
+    this.refreshCodeReader();
+  }
+
+  /**
    * Constructor to build the object and do some DI.
    */
   constructor() {
-    this.codeReader = new BrowserCodeReader(new QRCodeReader(), 500);
+    this._hints = new Map<DecodeHintType, any>();
     this.hasNavigator = typeof navigator !== 'undefined';
     this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
     this.isEnumerateDevicesSuported = !!(this.isMediaDevicesSuported && navigator.mediaDevices.enumerateDevices);
+
+    // will start codeReader if needed.
+    this.formats = [BarcodeFormat.QR_CODE];
   }
 
   /**
@@ -226,7 +236,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     if (changes.scannerEnabled) {
       if (!this.scannerEnabled) {
-        this.resetScan();
+        this.resetCodeReader();
       } else if (this.videoInputDevice) {
         this.scan(this.videoInputDevice.deviceId);
       }
@@ -237,12 +247,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         this.changeDevice(this.device);
       } else {
         console.warn('zxing-scanner', 'device', 'Unselected device.');
-        this.resetScan();
+        this.resetCodeReader();
       }
-    }
-
-    if (changes.formats !== undefined) {
-      this.setFormats(this.formats);
     }
   }
 
@@ -295,37 +301,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.resetScan();
-  }
-
-  /**
-   * Changes the supported code formats.
-   * @param formats The formats to support.
-   */
-  setFormats(formats: BarcodeFormat[]): void {
-
-    this.formats = formats;
-
-    const hints = new Map<DecodeHintType, any>();
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
-
-    this.codeReader = new BrowserMultiFormatReader(hints);
-
-    this.restartScan();
-  }
-
-  /**
-   * Changes the decoding hints w/o replacing the POSSIBLE_FORMTAS key.
-   */
-  setHints(hints: Map<DecodeHintType, any>): void {
-
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, this.formats);
-
-    this._hints = hints;
-
-    this.codeReader = new BrowserMultiFormatReader(this._hints);
-
-    this.restartScan();
+    this.resetCodeReader();
   }
 
   /**
@@ -334,6 +310,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * @param device
    */
   changeDevice(device: MediaDeviceInfo): void {
+    this.resetCodeReader();
     this.videoInputDevice = device;
     this.startScan(device);
   }
@@ -525,7 +502,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
-   * Starts the scanning if allowed.
+   * Starts scanning if allowed.
    *
    * @param device The device to be used in the scan.
    */
@@ -538,15 +515,26 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * Stops the scan service.
    */
-  resetScan(): void {
-    this.codeReader.reset();
+  resetCodeReader(): void {
+    if (this.codeReader) {
+      this.codeReader.reset();
+    }
   }
 
   /**
    * Stops and starts back the scan.
    */
   restartScan(): void {
-    this.resetScan();
+    this.resetCodeReader();
+    this.startScan(this.device);
+  }
+
+  /**
+   * Stops old `codeReader` and starts scanning in a new one.
+   */
+  refreshCodeReader(): void {
+    this.resetCodeReader();
+    this.codeReader = new BrowserMultiFormatReader(this.hints);
     this.startScan(this.device);
   }
 
