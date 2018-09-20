@@ -1,6 +1,6 @@
 import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
 
-import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.module';
+import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.component';
 
 import { Result } from '@zxing/library';
 
