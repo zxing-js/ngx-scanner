@@ -45,7 +45,7 @@
     "build": "ng build",
     "build:prod": "ng build --prod",
     "build:packagr": "ng-packagr -p package.json",
-    "test": "ng test --single-run",
+    "test": "ng test --watch=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "docs": "npm run docs:build",

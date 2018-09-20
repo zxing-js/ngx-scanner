@@ -30,8 +30,8 @@
                     ],
                     "background": {
                         "activeOnStart": false,
-                        "beginsPattern": "^.*NG Live Development Server is listening*",
-                        "endsPattern": "^.*webpack: Compiled successfully.*"
+                        "beginsPattern": "\\*\\* Angular Live Development Server is listening on .*",
+                        "endsPattern": "^.*: Compiled successfully\\..*"
                     }
                 }
             ]
