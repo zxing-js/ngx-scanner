@@ -14,12 +14,14 @@ import {
 
 import {
   BehaviorSubject,
+  Subject,
   Observable,
   Subscriber,
-  Subscription
+  Subscription,
+  from,
 } from 'rxjs';
 
-import { catchError } from 'rxjs/operators';
+import { catchError, takeUntil } from 'rxjs/operators';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
@@ -87,6 +89,15 @@ export class BrowserCodeReader {
    * The device id of the current media device.
    */
   private deviceId: string;
+  /**
+   * Callback to be called after video source decode is complete;
+   */
+  private onDecodeComplete: (result: Result) => any;
+   /**
+   * This subject is called when the zxing-scanner component is destroyed
+   * to clean up any open subscriptions
+   */
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   /**
    * Constructor for dependency injection.
@@ -94,22 +105,25 @@ export class BrowserCodeReader {
    * @param reader The barcode reader to be used to decode the stream.
    * @param timeBetweenScans The scan throttling in milliseconds.
    */
-  public constructor(protected readonly reader: Reader, private timeBetweenScans: number = 500) { }
+  public constructor(protected readonly reader: Reader, private timeBetweenScans: number = 500) { 
+    
+  }
 
+  public setDecodeCompleteCallback(onDecodeComplete: (result: Result) => any) {
+    this.onDecodeComplete = onDecodeComplete;
+  }
+  
   /**
    * Starts the decoding from the current or a new video element.
    *
-   * @param callbackFn The callback to be executed after every scan attempt
    * @param deviceId The device's to be used Id
    * @param videoElement A new video element
    *
-   * @todo Return Promise<Result>
    */
-  public async decodeFromInputVideoDevice(
-    callbackFn?: (result: Result) => any,
+  public decodeFromInputVideoDevice(
     deviceId?: string,
     videoElement?: HTMLVideoElement
-  ): Promise<void> {
+  ): void{
 
     this.reset();
 
@@ -134,12 +148,12 @@ export class BrowserCodeReader {
     }
 
     try {
-      const stream = await navigator
+      from(
+       navigator
         .mediaDevices
-        .getUserMedia(constraints);
-
-      this.startDecodeFromStream(stream, callbackFn);
-
+        .getUserMedia(constraints)).pipe(
+          takeUntil(this.unsubscribe$),
+        ).subscribe((stream: MediaStream) => this.startDecodeFromStream(stream));
     } catch (err) {
       /* handle the error, or not */
       console.error(err);
@@ -150,15 +164,13 @@ export class BrowserCodeReader {
    * Sets the new stream and request a new decoding-with-delay.
    *
    * @param stream The stream to be shown in the video element.
-   * @param callbackFn A callback for the decode method.
    *
-   * @todo Return Promise<Result>
    */
-  private startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
+  private startDecodeFromStream(stream: MediaStream): void {
     this.stream = stream;
     this.checkTorchCompatibility(this.stream);
     this.bindVideoSrc(this.videoElement, this.stream);
-    this.bindEvents(this.videoElement, callbackFn);
+    this.bindEvents(this.videoElement);
   }
 
   /**
@@ -197,12 +209,20 @@ export class BrowserCodeReader {
    * @param videoElement
    * @param callbackFn
    */
-  private bindEvents(videoElement: HTMLVideoElement, callbackFn?: (result: Result) => any): void {
+  private bindEvents(videoElement: HTMLVideoElement): void {
 
-    if (typeof callbackFn !== 'undefined') {
-      this.videoPlayingEventListener = () => this.decodingStream = this.decodeWithDelay(this.timeBetweenScans)
-        .pipe(catchError((e, x) => this.handleDecodeStreamError(e, x)))
-        .subscribe((x: Result) => callbackFn(x));
+    if (this.onDecodeComplete) {
+      this.videoPlayingEventListener = () => this.decodeWithDelay(this.timeBetweenScans)
+        .pipe(
+          catchError((e, x) => this.handleDecodeStreamError(e, x)),
+          takeUntil(this.unsubscribe$),
+        )
+        .subscribe((x: Result) => {
+          if (this.onDecodeComplete) {
+            this.onDecodeComplete(x);
+            this.onDecodeComplete = null;
+          }
+        });
     }
 
     videoElement.addEventListener('playing', this.videoPlayingEventListener);
@@ -384,9 +404,8 @@ export class BrowserCodeReader {
    */
   private stop(): void {
 
-    if (this.decodingStream) {
-      this.decodingStream.unsubscribe();
-    }
+    // This will kill any old observable streams
+    this.unsubscribe$.next();
 
     if (this.stream) {
       this.stream.getVideoTracks().forEach(t => t.stop());
@@ -420,7 +439,7 @@ export class BrowserCodeReader {
         this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
       }
 
-      // then forgets about that element 😢
+      // then forget about that element 😢
 
       this.unbindVideoSrc(this.videoElement);
 
@@ -448,6 +467,18 @@ export class BrowserCodeReader {
     this.canvasElementContext = undefined;
     this.canvasElement = undefined;
   }
+  
+  /**
+   * Called when scanner component is being destroyed
+   */
+  public destroy(): void {
+    // reset everything
+    this.reset();
+    
+    // complete the unsubscribe subject
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   /**
    * Restarts the scanner.
@@ -455,6 +486,8 @@ export class BrowserCodeReader {
   private restart(): void {
     // reset
     // start
-    this.decodeFromInputVideoDevice(undefined, this.deviceId, this.videoElement);
+    this.decodeFromInputVideoDevice(this.deviceId, this.videoElement);
   }
+
+
 }

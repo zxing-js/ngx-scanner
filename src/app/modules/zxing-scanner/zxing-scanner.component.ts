@@ -266,7 +266,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.resetScan();
+    this.codeReader.destroy();
   }
 
   /**
@@ -462,8 +462,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   scan(deviceId: string): void {
     try {
-
-      this.codeReader.decodeFromInputVideoDevice((result: Result) => {
+      const onDecodeComplete = ((result: Result) => {
 
         if (result) {
           this.dispatchScanSuccess(result);
@@ -473,7 +472,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
         this.dispatchScanComplete(result);
 
-      }, deviceId, this.previewElemRef.nativeElement);
+      });
+      
+      this.codeReader.setDecodeCompleteCallback(onDecodeComplete);
+      this.codeReader.decodeFromInputVideoDevice(deviceId, this.previewElemRef.nativeElement);
 
     } catch (err) {
       this.dispatchScanError(err);
