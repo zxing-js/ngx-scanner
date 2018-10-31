@@ -1,6 +1,6 @@
 import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
 
-import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.module';
+import { ZXingScannerComponent } from './modules/zxing-scanner/zxing-scanner.component';
 
 import { Result } from '@zxing/library';
 
@@ -26,21 +26,21 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-    //     this.availableDevices = devices;
+    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.hasDevices = true;
+      this.availableDevices = devices;
 
-    //     // selects the devices's back camera by default
-    //     for (const device of devices) {
-    //         if (/back|rear|environment/gi.test(device.label)) {
-    //             this.scanner.changeDevice(device);
-    //             this.currentDevice = device;
-    //             break;
-    //         }
-    //     }
-    // });
+      // selects the devices's back camera by default
+      // for (const device of devices) {
+      //     if (/back|rear|environment/gi.test(device.label)) {
+      //         this.scanner.changeDevice(device);
+      //         this.currentDevice = device;
+      //         break;
+      //     }
+      // }
+    });
 
-    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => this.availableDevices = devices);
-    this.scanner.hasDevices.subscribe((has: boolean) => this.hasDevices = has);
+    this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
     this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
     this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
   }
