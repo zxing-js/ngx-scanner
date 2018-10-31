@@ -16,11 +16,15 @@ Angular Barcode/QR-Code scanner component.
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
-[![BCH compliance](https://bettercodehub.com/edge/badge/zxing-js/ngx-scanner?branch=master)](https://bettercodehub.com/)
 [![dependencies Status](https://david-dm.org/zxing-js/ngx-scanner/status.svg)](https://david-dm.org/zxing-js/ngx-scanner)
 [![Build Status](https://travis-ci.org/zxing-js/ngx-scanner.svg?branch=master)](https://travis-ci.org/zxing-js/ngx-scanner)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba14393a17241088f75b19edc370694)](https://www.codacy.com/app/zxing-js/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
+[![BCH compliance](https://bettercodehub.com/edge/badge/zxing-js/ngx-scanner?branch=master)](https://bettercodehub.com/)
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Made with Angular](https://img.shields.io/badge/Made%20with-Angular-E13137.svg)](https://angular.io)
+[![Commits to deploy](https://img.shields.io/github/commits-since/zxing-js/ngx-scanner/master.svg?label=commits%20to%20deploy)](https://github.com/zxing-js/ngx-scanner/compare/master...develop)
+[![Contributors](https://img.shields.io/github/contributors/zxing-js/ngx-scanner.svg)](https://github.com/zxing-js/ngx-scanner/graphs/contributors)
 
 </div>
 
