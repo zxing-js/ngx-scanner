@@ -71,4 +71,4 @@ Want just to write QR codes on your own, try our [ZXing typescript port](https:/
 
 ---
 
-[![Bless](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/alpaca.svg)](http://lunagao.github.io/BlessYourCodeTag/)
+[![Bless](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/alpaca.svg)](http://lunagao.github.io/BlessYourCodeTag/) [![Greenkeeper badge](https://badges.greenkeeper.io/zxing-js/ngx-scanner.svg)](https://greenkeeper.io/)
