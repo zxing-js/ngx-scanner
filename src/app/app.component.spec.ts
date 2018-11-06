@@ -31,6 +31,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.test-class')).toBeTruthy();
+    expect(compiled.querySelector('zxing-scanner')).toBeTruthy();
   }));
 });
