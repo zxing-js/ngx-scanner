@@ -55,14 +55,14 @@
     "publish:dist": "cd ./dist && npm publish --access=public"
   },
   "dependencies": {
-    "@zxing/library": "0.7.0"
+    "@zxing/library": "0.8.3"
   },
   "peerDependencies": {
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
-    "@angular-devkit/core": "^0.3.2",
+    "@angular-devkit/core": "^7.0.4",
     "@angular/animations": "^7.0.0",
     "@angular/cli": "^7.0.1",
     "@angular/common": "^7.0.0",
@@ -78,21 +78,21 @@
     "@compodoc/compodoc": "^1.1.1",
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "^8.10.9",
+    "@types/node": "^10.12.2",
     "codelyzer": "^4.3.0",
     "core-js": "^2.5.5",
-    "jasmine-core": "^2.99.1",
+    "jasmine-core": "^3.3.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^2.0.2",
+    "karma": "^3.1.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
-    "karma-coverage-istanbul-reporter": "^1.4.2",
+    "karma-coverage-istanbul-reporter": "^2.0.4",
     "karma-jasmine": "^1.1.1",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "ng-packagr": "^2.4.2",
+    "karma-jasmine-html-reporter": "^1.4.0",
+    "ng-packagr": "^4.4.0",
     "npm-install-peers": "^1.2.1",
     "protractor": "^5.3.1",
-    "ts-node": "^4.1.0",
+    "ts-node": "^7.0.1",
     "tsickle": "^0.33.1",
     "tslint": "^5.9.1",
     "typescript": "~3.1.3",
