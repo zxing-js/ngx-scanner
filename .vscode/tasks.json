@@ -30,8 +30,8 @@
                     ],
                     "background": {
                         "activeOnStart": false,
-                        "beginsPattern": "\\*\\* Angular Live Development Server is listening on .*",
-                        "endsPattern": "^.*: Compiled successfully\\..*"
+                        "beginsPattern": "^.*(Angular|NG) Live Development Server is listening *",
+                        "endsPattern": "^.*: Compiled successfully.*"
                     }
                 }
             ]
