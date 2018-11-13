@@ -69,6 +69,12 @@ Looking for a way to generate ~awesome~ QR codes? Check-out [ngx-kjua](https://g
 
 Want just to write QR codes on your own, try our [ZXing typescript port](https://github.com/zxing-js/library).
 
+## Contributors
+
+And last but not less important, here goes a special thanks all our contributors. Thank you! 🖤❤️♡
+
+[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/0)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/0)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/1)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/1)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/2)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/2)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/3)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/3)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/4)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/4)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/5)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/5)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/6)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/6)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/7)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/7)
+
 ---
 
 [![Bless](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/alpaca.svg)](http://lunagao.github.io/BlessYourCodeTag/) [![Greenkeeper badge](https://badges.greenkeeper.io/zxing-js/ngx-scanner.svg)](https://greenkeeper.io/)
