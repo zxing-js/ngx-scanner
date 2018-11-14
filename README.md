@@ -69,11 +69,46 @@ Looking for a way to generate ~awesome~ QR codes? Check-out [ngx-kjua](https://g
 
 Want just to write QR codes on your own, try our [ZXing typescript port](https://github.com/zxing-js/library).
 
-## Contributors
 
-And last but not less important, here goes a special thanks all our contributors. Thank you! 🖤❤️♡
+## Financial contributions
+
+ We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/ngx-scanner).
+ Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
+
+
+## Credits
+
+And last but not less important, the credits.
+
+
+### Contributors
+
+Here goes a special thanks all our contributors. Thank you! 🖤❤️♡
 
 [![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/0)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/0)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/1)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/1)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/2)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/2)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/3)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/3)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/4)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/4)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/5)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/5)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/6)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/6)[![](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/images/7)](https://sourcerer.io/fame/odahcam/zxing-js/ngx-scanner/links/7)
+
+
+ ### Backers
+
+ Thank you to all our backers! [[Become a backer](https://opencollective.com/ngx-scanner#backer)]
+
+ <a href="https://opencollective.com/ngx-scanner#backers" target="_blank"><img src="https://opencollective.com/ngx-scanner/backers.svg?width=890"></a>
+
+
+ ### Sponsors
+
+ Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/ngx-scanner#sponsor))
+
+ <a href="https://opencollective.com/ngx-scanner/sponsor/0/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/0/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/1/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/1/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/2/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/2/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/3/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/3/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/4/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/4/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/5/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/5/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/6/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/6/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/7/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/7/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/8/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/8/avatar.svg"></a>
+ <a href="https://opencollective.com/ngx-scanner/sponsor/9/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/9/avatar.svg"></a>
 
 ---
 
