@@ -52,7 +52,8 @@
     "docs:build": "compodoc -p tsconfig.json -n zxing-scanner -d docs --hideGenerator",
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
-    "publish:dist": "cd ./dist && npm publish --access=public"
+    "publish:dist": "cd ./dist && npm publish --access=public",
+    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\""
   },
   "dependencies": {
     "@zxing/library": "0.8.3"
