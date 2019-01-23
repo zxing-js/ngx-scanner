@@ -33,3 +33,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+<!-- Love the ZXing Angular scanner? Please consider supporting our collective:
+ 👉  https://opencollective.com/parcel/donate -->
