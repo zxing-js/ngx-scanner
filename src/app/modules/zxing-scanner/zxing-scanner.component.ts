@@ -269,44 +269,68 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   async ngAfterViewInit(): Promise<void> {
 
-    // Chrome 63 fix
-    if (!this.previewElemRef) {
-      console.warn('zxing-scanner', 'Preview element not found!');
-      return;
-    }
+    const refStatus = !this.setupPreviewRef(this.previewElemRef);
 
-    // iOS 11 Fix
-    this.previewElemRef.nativeElement.setAttribute('autoplay', false);
-    this.previewElemRef.nativeElement.setAttribute('muted', true);
-    this.previewElemRef.nativeElement.setAttribute('playsinline', true);
-    this.previewElemRef.nativeElement.setAttribute('autofocus', this.autofocusEnabled);
+    if (refStatus) {
+        console.warn('zxing-scanner', 'Preview element not found!');
+        return;
+    }
 
     // Asks for permission before enumerating devices so it can get all the device's info
     const hasPermission = await this.askForPermission();
 
-    // gets and enumerates all video devices
-    this.enumarateVideoDevices().then((videoInputDevices: MediaDeviceInfo[]) => {
+    // permissions aren't needed to get devices, but to access them and their info
+    const devices = await this.discoverVideoInputDevices();
 
-      if (videoInputDevices && videoInputDevices.length > 0) {
-        this._hasDevices = true;
-        this.camerasFound.next(videoInputDevices);
-      } else {
-        this._hasDevices = false;
-        this.camerasNotFound.next();
-      }
+    // stores discovered devices and updates information
+    this.setVideoInputDevices(devices);
 
-    });
+    // makes torch availability information available to user
+    this.codeReader.torchAvailable.subscribe(x => this.torchCompatible.emit(x));
 
-    // There's nothin' to do anymore if we don't have permissions.
+    // from this point, things gonna need permissions
     if (hasPermission !== true) {
+      // so we can return if we don't have'em
       return;
     }
 
-    this.startScan(this.videoInputDevice);
+    if (this.autostart) {
+      this.autostart(devices);
+    }
+  }
 
-    this.codeReader.torchAvailable.subscribe((value: boolean) => {
-      this.torchCompatible.emit(value);
-    });
+  /**
+   *
+   */
+  setupPreviewRef(previewElemRef: ElementRef<any>): boolean {
+
+    // Chrome 63 fix
+    if (!previewElemRef) {
+      return false;
+    }
+
+    const el = previewElemRef.nativeElement;
+
+    // iOS 11 Fix
+    el.setAttribute('autoplay', false);
+    el.setAttribute('muted', true);
+    el.setAttribute('playsinline', true);
+    el.setAttribute('autofocus', this.autofocusEnabled);
+
+    return true;
+  }
+
+  /**
+   * Starts the scanner with the first available device.
+   */
+  private autostart(devices: MediaDeviceInfo[]) {
+    const firstDevice = devices.find(device => !!device);
+
+    if (!firstDevice) {
+      throw new Error('Implossible to autostart, no device available.');
+    }
+
+    this.startScan(firstDevice);
   }
 
   /**
@@ -323,7 +347,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   changeDevice(device: MediaDeviceInfo): void {
     this.resetCodeReader();
-    this.videoInputDevice = device;
     this.startScan(device);
   }
 
@@ -333,7 +356,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * @param deviceId
    */
   changeDeviceById(deviceId: string): void {
-    this.changeDevice(this.getDeviceById(deviceId));
+    const device = this.getDeviceById(deviceId);
+    this.changeDevice(device);
   }
 
   /**
@@ -352,6 +376,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     this.hasPermission = hasPermission;
     this.permissionResponse.next(hasPermission);
     return this.permissionResponse;
+  }
+
+  /**
+   * Sets the video input devices and the observables that depends on it.
+   */
+  private setVideoInputDevices(devices: MediaDeviceInfo[]) {
+
+    if (devices && devices.length > 0) {
+      this.hasDevices.next(true);
+      this.camerasFound.next(devices);
+    } else {
+      this.hasDevices.next(false);
+      this.camerasNotFound.next();
+    }
+
+    this.videoInputDevices = devices;
   }
 
   /**
@@ -520,6 +560,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   startScan(device: MediaDeviceInfo): void {
     if (this.scannerEnabled && device) {
+      this.videoInputDevice = device;
       this.scan(device.deviceId);
     }
   }
@@ -527,7 +568,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * Stops the scan service.
    */
-  resetCodeReader(): void {
+  private resetCodeReader(): void {
     if (this.codeReader) {
       this.codeReader.reset();
     }
@@ -587,7 +628,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * Enumerates all the available devices.
    */
-  private async enumarateVideoDevices(): Promise<MediaDeviceInfo[]> {
+  private async discoverVideoInputDevices(): Promise<MediaDeviceInfo[]> {
 
     if (!this.hasNavigator) {
       console.error('zxing-scanner', 'enumarateVideoDevices', 'Can\'t enumerate devices, navigator is not present.');
@@ -601,7 +642,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     const devices = await navigator.mediaDevices.enumerateDevices();
 
-    this.videoInputDevices = [];
+    const videoInputDevices = [];
 
     for (const device of devices) {
 
@@ -626,11 +667,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
       }
 
       if (videoDevice.kind === 'videoinput') {
-        this.videoInputDevices.push(videoDevice);
+        videoInputDevices.push(videoDevice);
       }
     }
 
-    return this.videoInputDevices;
+    return videoInputDevices;
   }
 
   /**
