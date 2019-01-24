@@ -106,55 +106,55 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Emitts events when the torch compatibility is changed.
    */
   @Output()
-  torchCompatible = new EventEmitter<boolean>();
+  torchCompatible: EventEmitter<boolean>;
 
   /**
    * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
    */
   @Output()
-  scanSuccess = new EventEmitter<string>();
+  scanSuccess: EventEmitter<string>;
 
   /**
    * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
    */
   @Output()
-  scanFailure = new EventEmitter<void>();
+  scanFailure: EventEmitter<void>;
 
   /**
    * Emitts events when a scan throws some error, will inject the error to the callback.
    */
   @Output()
-  scanError = new EventEmitter<Error>();
+  scanError: EventEmitter<Error>;
 
   /**
    * Emitts events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
    */
   @Output()
-  scanComplete = new EventEmitter<Result>();
+  scanComplete: EventEmitter<Result>;
 
   /**
    * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
-  camerasFound = new EventEmitter<MediaDeviceInfo[]>();
+  camerasFound: EventEmitter<MediaDeviceInfo[]>;
 
   /**
    * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
-  camerasNotFound = new EventEmitter<any>();
+  camerasNotFound: EventEmitter<any>;
 
   /**
    * Emitts events when the users answers for permission.
    */
   @Output()
-  permissionResponse = new EventEmitter<boolean>();
+  permissionResponse: EventEmitter<boolean>;
 
   /**
    * Emitts events when has devices status is update.
    */
   @Output()
-  hasDevices = new EventEmitter<boolean>();
+  hasDevices: EventEmitter<boolean>;
 
   /**
    * Returns all the registered formats.
@@ -226,6 +226,18 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * Constructor to build the object and do some DI.
    */
   constructor() {
+    // instance based emitters
+    this.torchCompatible = new EventEmitter<boolean>();
+    this.scanSuccess = new EventEmitter<string>();
+    this.scanFailure = new EventEmitter<void>();
+    this.scanError = new EventEmitter<Error>();
+    this.scanComplete = new EventEmitter<Result>();
+    this.camerasFound = new EventEmitter<MediaDeviceInfo[]>();
+    this.camerasNotFound = new EventEmitter<any>();
+    this.permissionResponse = new EventEmitter<boolean>();
+    this.hasDevices = new EventEmitter<boolean>();
+
+    // computed data
     this._hints = new Map<DecodeHintType, any>();
     this.hasNavigator = typeof navigator !== 'undefined';
     this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
