@@ -176,7 +176,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     // formats may be set from html template as BarcodeFormat or string array
-    const formats = input.map(f => this.getBarcodeFormat(f));
+    const formats = input.map(f => this.getBarcodeFormatOrFail(f));
 
     // updates the hints
     this.hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
@@ -643,7 +643,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * Returns a valid BarcodeFormat or fails.
    */
-  private getBarcodeFormat(format: string | BarcodeFormat): BarcodeFormat {
+  private getBarcodeFormatOrFail(format: string | BarcodeFormat): BarcodeFormat {
     return typeof format === 'string'
       ? BarcodeFormat[format.trim().toUpperCase()]
       : format;
