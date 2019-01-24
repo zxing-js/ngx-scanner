@@ -241,160 +241,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
-   * Manages the bindinded property changes.
-   * @param changes
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.scannerEnabled) {
-      if (!this.scannerEnabled) {
-        this.resetCodeReader();
-      } else if (this.videoInputDevice) {
-        this.scan(this.videoInputDevice.deviceId);
-      }
-    }
-
-    if (changes.device) {
-      if (this.device) {
-        this.changeDevice(this.device);
-      } else {
-        console.warn('zxing-scanner', 'device', 'Unselected device.');
-        this.resetCodeReader();
-      }
-    }
-  }
-
-  /**
-   * Executed after the view initialization.
-   */
-  async ngAfterViewInit(): Promise<void> {
-
-    const refStatus = !this.setupPreviewRef(this.previewElemRef);
-
-    if (refStatus) {
-        console.warn('zxing-scanner', 'Preview element not found!');
-        return;
-    }
-
-    // Asks for permission before enumerating devices so it can get all the device's info
-    const hasPermission = await this.askForPermission();
-
-    // permissions aren't needed to get devices, but to access them and their info
-    const devices = await this.discoverVideoInputDevices();
-
-    // stores discovered devices and updates information
-    this.setVideoInputDevices(devices);
-
-    // makes torch availability information available to user
-    this.codeReader.torchAvailable.subscribe(x => this.torchCompatible.emit(x));
-
-    // from this point, things gonna need permissions
-    if (hasPermission !== true) {
-      // so we can return if we don't have'em
-      return;
-    }
-
-    if (this.autostart) {
-      this.autostart(devices);
-    }
-  }
-
-  /**
-   *
-   */
-  setupPreviewRef(previewElemRef: ElementRef<any>): boolean {
-
-    // Chrome 63 fix
-    if (!previewElemRef) {
-      return false;
-    }
-
-    const el = previewElemRef.nativeElement;
-
-    // iOS 11 Fix
-    el.setAttribute('autoplay', false);
-    el.setAttribute('muted', true);
-    el.setAttribute('playsinline', true);
-    el.setAttribute('autofocus', this.autofocusEnabled);
-
-    return true;
-  }
-
-  /**
-   * Starts the scanner with the first available device.
-   */
-  private autostart(devices: MediaDeviceInfo[]) {
-    const firstDevice = devices.find(device => !!device);
-
-    if (!firstDevice) {
-      throw new Error('Implossible to autostart, no device available.');
-    }
-
-    this.startScan(firstDevice);
-  }
-
-  /**
-   * Executes some actions before destroy the component.
-   */
-  ngOnDestroy(): void {
-    this.resetCodeReader();
-  }
-
-  /**
-   * Properly changes the current target device.
-   *
-   * @param device
-   */
-  changeDevice(device: MediaDeviceInfo): void {
-    this.resetCodeReader();
-    this.startScan(device);
-  }
-
-  /**
-   * Properly changes the current target device using it's deviceId.
-   *
-   * @param deviceId
-   */
-  changeDeviceById(deviceId: string): void {
-    const device = this.getDeviceById(deviceId);
-    this.changeDevice(device);
-  }
-
-  /**
-   * Properly returns the target device using it's deviceId.
-   *
-   * @param deviceId
-   */
-  getDeviceById(deviceId: string): MediaDeviceInfo {
-    return this.videoInputDevices.find(device => device.deviceId === deviceId);
-  }
-
-  /**
-   * Sets the permission value and emmits the event.
-   */
-  private setPermission(hasPermission: boolean | null) {
-    this.hasPermission = hasPermission;
-    this.permissionResponse.next(hasPermission);
-    return this.permissionResponse;
-  }
-
-  /**
-   * Sets the video input devices and the observables that depends on it.
-   */
-  private setVideoInputDevices(devices: MediaDeviceInfo[]) {
-
-    if (devices && devices.length > 0) {
-      this.hasDevices.next(true);
-      this.camerasFound.next(devices);
-    } else {
-      this.hasDevices.next(false);
-      this.camerasNotFound.next();
-    }
-
-    this.videoInputDevices = devices;
-  }
-
-  /**
    * Gets and registers all cammeras.
    *
    * @todo Return a Promise.
@@ -457,121 +303,122 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
-   * Returns the filtered permission.
+   * Properly changes the current target device.
    *
-   * @param err
+   * @param device
    */
-  private handlePermissionException(err: DOMException): boolean {
-
-    // failed to grant permission to video input
-
-    console.warn('zxing-scanner', 'askForPermission', err);
-
-    let permission: boolean;
-
-    switch (err.name) {
-
-      // usually caused by not secure origins
-      case 'NotSupportedError':
-        console.warn('@zxing/ngx-scanner', err.message);
-        // could not claim
-        permission = null;
-        // can't check devices
-        this.hasDevices.next(null);
-        break;
-
-      // user denied permission
-      case 'NotAllowedError':
-        console.warn('@zxing/ngx-scanner', err.message);
-        // claimed and denied permission
-        permission = false;
-        // this means that input devices exists
-        this.hasDevices.next(true);
-        break;
-
-      // the device has no attached input devices
-      case 'NotFoundError':
-        console.warn('@zxing/ngx-scanner', err.message);
-        // no permissions claimed
-        permission = null;
-        // because there was no devices
-        this.hasDevices.next(false);
-        // tells the listener about the error
-        this.camerasNotFound.next(err);
-        break;
-
-      case 'NotReadableError':
-        console.warn('@zxing/ngx-scanner', 'Couldn\'t read the device(s)\'s stream, it\'s probably in use by another app.');
-        // no permissions claimed
-        permission = null;
-        // there are devices, which I couldn't use
-        this.hasDevices.next(false);
-        // tells the listener about the error
-        this.camerasNotFound.next(err);
-        break;
-
-      default:
-        console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.', err);
-        // unknown
-        permission = null;
-        // this.hasDevices.next(undefined;
-        break;
-
-    }
-
-    this.setPermission(permission);
-
-    // tells the listener about the error
-    this.permissionResponse.error(err);
-
-    return permission;
+  changeDevice(device: MediaDeviceInfo): void {
+    this.resetCodeReader();
+    this.startScan(device);
   }
 
   /**
-   * Starts the continuous scanning for the given device.
+   * Properly changes the current target device using it's deviceId.
    *
-   * @param deviceId The deviceId from the device.
+   * @param deviceId
    */
-  scan(deviceId: string): void {
-    try {
+  changeDeviceById(deviceId: string): void {
+    const device = this.getDeviceById(deviceId);
+    this.changeDevice(device);
+  }
 
-      this.codeReader.decodeFromInputVideoDevice((result: Result) => {
+  /**
+   * Properly returns the target device using it's deviceId.
+   *
+   * @param deviceId
+   */
+  getDeviceById(deviceId: string): MediaDeviceInfo {
+    return this.videoInputDevices.find(device => device.deviceId === deviceId);
+  }
 
-        if (result) {
-          this.dispatchScanSuccess(result);
-        } else {
-          this.dispatchScanFailure();
-        }
+  /**
+   * Initializes the component without starting the scanner.
+   */
+  async initAutostartOff(): Promise<void> {
 
-        this.dispatchScanComplete(result);
+    // do not ask for permission when autostart is off
 
-      }, deviceId, this.previewElemRef.nativeElement);
+    // just update devices information
+    await this.updateVideoInputDevices();
+  }
 
-    } catch (err) {
-      this.dispatchScanError(err);
-      this.dispatchScanComplete(undefined);
+  /**
+   * Initializes the component and starts the scanner.
+   * Permissions are asked to accomplish that.
+   */
+  async initAutostartOn(): Promise<void> {
+
+    // Asks for permission before enumerating devices so it can get all the device's info
+    const hasPermission = await this.askForPermission();
+
+    const devices = await this.updateVideoInputDevices();
+
+    // from this point, things gonna need permissions
+    if (hasPermission !== true) {
+      // so we can return if we don't have'em
+      return;
+    }
+
+    this.autostartScan(devices);
+  }
+
+  /**
+   * Executed after the view initialization.
+   */
+  async ngAfterViewInit(): Promise<void> {
+
+    const refStatus = !this.setupPreviewRef(this.previewElemRef);
+
+    if (refStatus) {
+      console.warn('zxing-scanner', 'Preview element not found!');
+      return;
+    }
+
+    // makes torch availability information available to user
+    this.codeReader.torchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
+
+    if (!this.autostartScan) {
+      console.warn('New feature \'autostart\' disabled, be careful. Permissions and devices recovery has to be run manually.');
+
+      // does the necessary configuration without autostarting
+      this.initAutostartOff();
+
+      return;
+    }
+
+    // configurates the component and starts the scanner
+    this.initAutostartOn();
+  }
+
+  /**
+   * Manages the bindinded property changes.
+   * @param changes
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes.scannerEnabled) {
+      if (!this.scannerEnabled) {
+        this.resetCodeReader();
+      } else if (this.videoInputDevice) {
+        this.scan(this.videoInputDevice.deviceId);
+      }
+    }
+
+    if (changes.device) {
+      if (this.device) {
+        this.changeDevice(this.device);
+      } else {
+        console.warn('zxing-scanner', 'device', 'Unselected device.');
+        this.resetCodeReader();
+      }
     }
   }
 
   /**
-   * Starts scanning if allowed.
-   *
-   * @param device The device to be used in the scan.
+   * Executes some actions before destroy the component.
    */
-  startScan(device: MediaDeviceInfo): void {
-    if (this.scannerEnabled && device) {
-      this.videoInputDevice = device;
-      this.scan(device.deviceId);
-    }
-  }
-
-  /**
-   * Stops the scan service.
-   */
-  private resetCodeReader(): void {
-    if (this.codeReader) {
-      this.codeReader.reset();
-    }
+  ngOnDestroy(): void {
+    this.resetCodeReader();
   }
 
   /**
@@ -589,6 +436,66 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     this.resetCodeReader();
     this.codeReader = new BrowserMultiFormatReader(this.hints);
     this.startScan(this.device);
+  }
+
+  /**
+   * Starts scanning if allowed.
+   *
+   * @param device The device to be used in the scan.
+   */
+  startScan(device: MediaDeviceInfo): void {
+    if (this.scannerEnabled && device) {
+      this.videoInputDevice = device;
+      this.scan(device.deviceId);
+    }
+  }
+
+  /**
+   *
+   */
+  setupPreviewRef(previewElemRef: ElementRef<any>): boolean {
+
+    // Chrome 63 fix
+    if (!previewElemRef) {
+      return false;
+    }
+
+    const el = previewElemRef.nativeElement;
+
+    // iOS 11 Fix
+    el.setAttribute('autoplay', false);
+    el.setAttribute('muted', true);
+    el.setAttribute('playsinline', true);
+    el.setAttribute('autofocus', this.autofocusEnabled);
+
+    return true;
+  }
+
+  /**
+   * Discovers and updates known video input devices.
+   */
+  async updateVideoInputDevices(): Promise<MediaDeviceInfo[]> {
+
+    // permissions aren't needed to get devices, but to access them and their info
+    const devices = await this.discoverVideoInputDevices();
+
+    // stores discovered devices and updates information
+    this.setVideoInputDevices(devices);
+
+    return devices;
+  }
+
+  /**
+   * Starts the scanner with the first available device.
+   */
+  private autostartScan(devices: MediaDeviceInfo[]) {
+    const firstDevice = devices.find(device => !!device);
+
+    if (!firstDevice) {
+      throw new Error('Implossible to autostart, no device available.');
+    }
+
+    this.startScan(firstDevice);
   }
 
   /**
@@ -675,11 +582,142 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
+   * Returns the filtered permission.
+   *
+   * @param err
+   */
+  private handlePermissionException(err: DOMException): boolean {
+
+    // failed to grant permission to video input
+
+    console.warn('zxing-scanner', 'askForPermission', err);
+
+    let permission: boolean;
+
+    switch (err.name) {
+
+      // usually caused by not secure origins
+      case 'NotSupportedError':
+        console.warn('@zxing/ngx-scanner', err.message);
+        // could not claim
+        permission = null;
+        // can't check devices
+        this.hasDevices.next(null);
+        break;
+
+      // user denied permission
+      case 'NotAllowedError':
+        console.warn('@zxing/ngx-scanner', err.message);
+        // claimed and denied permission
+        permission = false;
+        // this means that input devices exists
+        this.hasDevices.next(true);
+        break;
+
+      // the device has no attached input devices
+      case 'NotFoundError':
+        console.warn('@zxing/ngx-scanner', err.message);
+        // no permissions claimed
+        permission = null;
+        // because there was no devices
+        this.hasDevices.next(false);
+        // tells the listener about the error
+        this.camerasNotFound.next(err);
+        break;
+
+      case 'NotReadableError':
+        console.warn('@zxing/ngx-scanner', 'Couldn\'t read the device(s)\'s stream, it\'s probably in use by another app.');
+        // no permissions claimed
+        permission = null;
+        // there are devices, which I couldn't use
+        this.hasDevices.next(false);
+        // tells the listener about the error
+        this.camerasNotFound.next(err);
+        break;
+
+      default:
+        console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.', err);
+        // unknown
+        permission = null;
+        // this.hasDevices.next(undefined;
+        break;
+
+    }
+
+    this.setPermission(permission);
+
+    // tells the listener about the error
+    this.permissionResponse.error(err);
+
+    return permission;
+  }
+
+  /**
    * Returns a valid BarcodeFormat or fails.
    */
   private getBarcodeFormatOrFail(format: string | BarcodeFormat): BarcodeFormat {
     return typeof format === 'string'
       ? BarcodeFormat[format.trim().toUpperCase()]
       : format;
+  }
+
+  /**
+   * Stops the scan service.
+   */
+  private resetCodeReader(): void {
+    if (this.codeReader) {
+      this.codeReader.reset();
+    }
+  }
+
+  /**
+   * Starts the continuous scanning for the given device.
+   *
+   * @param deviceId The deviceId from the device.
+   */
+  private scan(deviceId: string): void {
+    try {
+
+      this.codeReader.decodeFromInputVideoDevice((result: Result) => {
+
+        if (result) {
+          this.dispatchScanSuccess(result);
+        } else {
+          this.dispatchScanFailure();
+        }
+
+        this.dispatchScanComplete(result);
+
+      }, deviceId, this.previewElemRef.nativeElement);
+
+    } catch (err) {
+      this.dispatchScanError(err);
+      this.dispatchScanComplete(undefined);
+    }
+  }
+
+  /**
+   * Sets the permission value and emmits the event.
+   */
+  private setPermission(hasPermission: boolean | null) {
+    this.hasPermission = hasPermission;
+    this.permissionResponse.next(hasPermission);
+    return this.permissionResponse;
+  }
+
+  /**
+   * Sets the video input devices and the observables that depends on it.
+   */
+  private setVideoInputDevices(devices: MediaDeviceInfo[]) {
+
+    if (devices && devices.length > 0) {
+      this.hasDevices.next(true);
+      this.camerasFound.next(devices);
+    } else {
+      this.hasDevices.next(false);
+      this.camerasNotFound.next();
+    }
+
+    this.videoInputDevices = devices;
   }
 }
