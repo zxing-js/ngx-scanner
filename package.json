@@ -105,8 +105,7 @@
   "typings": "dist/zxing-ngx-scanner.d.ts",
   "metadata": "dist/zxing-ngx-scanner.metadata.json",
   "collective": {
-     "type": "opencollective",
-     "url": "https://opencollective.com/ngx-scanner"
-   }		   
+    "type": "opencollective",
+    "url": "https://opencollective.com/ngx-scanner"
   }
 }
