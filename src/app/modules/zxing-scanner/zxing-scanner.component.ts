@@ -66,13 +66,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   private hasPermission: boolean;
 
   /**
-   * If any media device were found.
-   */
-  private set _hasDevices(hasDevice: boolean) {
-    this.hasDevices.next(hasDevice);
-  }
-
-  /**
    * Reference to the preview element, should be the `video` tag.
    */
   @ViewChild('preview')
@@ -444,7 +437,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         // could not claim
         permission = null;
         // can't check devices
-        this._hasDevices = null;
+        this.hasDevices.next(null);
         break;
 
       // user denied permission
@@ -453,7 +446,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         // claimed and denied permission
         permission = false;
         // this means that input devices exists
-        this._hasDevices = true;
+        this.hasDevices.next(true);
         break;
 
       // the device has no attached input devices
@@ -462,7 +455,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         // no permissions claimed
         permission = null;
         // because there was no devices
-        this._hasDevices = false;
+        this.hasDevices.next(false);
         // tells the listener about the error
         this.camerasNotFound.next(err);
         break;
@@ -472,7 +465,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         // no permissions claimed
         permission = null;
         // there are devices, which I couldn't use
-        this._hasDevices = false;
+        this.hasDevices.next(false);
         // tells the listener about the error
         this.camerasNotFound.next(err);
         break;
@@ -481,7 +474,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
         console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.', err);
         // unknown
         permission = null;
-        // this._hasDevices = undefined;
+        // this.hasDevices.next(undefined;
         break;
 
     }
