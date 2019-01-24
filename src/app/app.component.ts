@@ -25,9 +25,8 @@ export class AppComponent implements OnInit {
   currentDevice: MediaDeviceInfo;
 
   ngOnInit(): void {
-
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-      this.hasDevices = true;
+      // this.hasDevices = true;
       this.availableDevices = devices;
 
       // selects the devices's back camera by default
@@ -40,9 +39,12 @@ export class AppComponent implements OnInit {
       // }
     });
 
-    this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
-    this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
-    this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
+    // you can observe if there's devices
+    this.scanner.hasDevices.subscribe((x: boolean) => this.hasDevices = x);
+    // or you can manually check if the component found them
+    // this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
+    this.scanner.scanComplete.subscribe((x: Result) => this.qrResult = x);
+    this.scanner.permissionResponse.subscribe((x: boolean) => this.hasPermission = x);
   }
 
   displayCameras(cameras: MediaDeviceInfo[]) {
@@ -55,9 +57,10 @@ export class AppComponent implements OnInit {
     this.qrResultString = resultString;
   }
 
-  onDeviceSelectChange(selectedValue: string) {
-    console.debug('Selection changed: ', selectedValue);
-    this.currentDevice = this.scanner.getDeviceById(selectedValue);
+  onDeviceSelectChange(selected: string) {
+    console.debug('Selection changed: ', selected);
+    const device = this.availableDevices.find(x => x.deviceId === selected);
+    this.currentDevice = device || null;
   }
 
   stateToEmoji(state: boolean): string {
