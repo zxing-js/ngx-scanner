@@ -56,7 +56,7 @@
     "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\""
   },
   "dependencies": {
-    "@zxing/library": "0.8.3"
+    "@zxing/library": "^0.11.0"
   },
   "peerDependencies": {
     "rxjs": "^6.3.3"
@@ -93,6 +93,7 @@
     "ng-packagr": "^4.4.0",
     "npm-install-peers": "^1.2.1",
     "protractor": "^5.3.1",
+    "rxjs": "^6.3.3",
     "ts-node": "^7.0.1",
     "tsickle": "^0.33.1",
     "tslint": "^5.9.1",
