@@ -12,6 +12,8 @@ stages:
     if: branch = master
 
 jobs:
+  addons:
+    chrome: stable
   include:
 
     - stage: compile
@@ -20,8 +22,6 @@ jobs:
         - yarn build
 
     - stage: test
-      addons:
-        chrome: stable
       script:
         - yarn lint
         - yarn test
