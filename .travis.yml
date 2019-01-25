@@ -17,8 +17,7 @@ jobs:
     - stage: compile
       script:
         - npx npm-install-peers
-        - yarn build:prod
-        - yarn build:packagr
+        - yarn build
 
     - stage: test
       script:

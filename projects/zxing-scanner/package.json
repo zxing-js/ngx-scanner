@@ -1,0 +1,11 @@
+{
+  "name": "@zxing/ngx-scanner",
+  "version": "1.5.0",
+  "description": "High-performance Angular 6 barcode scanner component based on ZXing.",
+  "private": false,
+  "peerDependencies": {
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0",
+    "@zxing/library": "^0.11.0"
+  }
+}

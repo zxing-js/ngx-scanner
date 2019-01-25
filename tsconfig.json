@@ -1,32 +1,30 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./lib/",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": true,
-    "declarationDir": "typings",
+    "declaration": false,
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
     "target": "es5",
-    "module": "commonjs",
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "dom",
-      "es2015",
-      "es2016",
-      "es2017"
-    ]
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/test"
-  ]
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "@zxing/ngx-scanner": [
+        "dist/zxing-scanner"
+      ],
+      "@zxing/ngx-scanner/*": [
+        "dist/zxing-scanner/*"
+      ]
+    }
+  }
 }
