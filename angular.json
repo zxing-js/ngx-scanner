@@ -7,7 +7,7 @@
       "root": "projects/zxing-scanner",
       "sourceRoot": "projects/zxing-scanner/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "zxing",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

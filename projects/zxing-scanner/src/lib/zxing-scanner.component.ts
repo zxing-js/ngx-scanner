@@ -17,7 +17,6 @@ import { Result, DecodeHintType, BarcodeFormat, ArgumentException } from '@zxing
 import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'zxing-scanner',
   templateUrl: './zxing-scanner.component.html',
   styleUrls: ['./zxing-scanner.component.scss'],
