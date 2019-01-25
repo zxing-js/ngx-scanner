@@ -3,5 +3,8 @@
   "dest": "../../dist/zxing-scanner",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@zxing/library"
+  ]
 }
