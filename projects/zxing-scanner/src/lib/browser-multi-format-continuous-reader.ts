@@ -91,9 +91,14 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
         .getUserMedia(constraints);
 
       this.startDecodeFromStream(stream, () => {
+
+        if (this.decodingStream) {
+          this.decodingStream.unsubscribe();
+        }
+
         this.decodingStream = this.decodeWithDelay(this.timeBetweenScansMillis)
-        .pipe(catchError((e, x) => this.handleDecodeStreamError(e, x)))
-        .subscribe((x: Result) => callbackFn(x));
+          .pipe(catchError((e, x) => this.handleDecodeStreamError(e, x)))
+          .subscribe((x: Result) => callbackFn(x));
       });
 
     } catch (err) {
