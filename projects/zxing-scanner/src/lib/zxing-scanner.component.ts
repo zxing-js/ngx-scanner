@@ -291,37 +291,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
       return this.handlePermissionException(err);
     }
 
-    let permission: boolean;
+    const permission = !!stream;
+    this.setPermission(permission);
 
-    try {
-
-      // Start stream so Browser can display its permission-dialog
-      this.codeReader.bindVideoSrc(this.previewElemRef.nativeElement, stream);
-
-      // After permission was granted, we can stop it again
-      stream.getVideoTracks().forEach(track => {
-        track.stop();
-      });
-
-      // should stop the opened stream
-      this.codeReader.unbindVideoSrc(this.previewElemRef.nativeElement);
-
-      // if the scripts lives until here, that's only one mean:
-
-      // permission granted
-      permission = true;
-      this.setPermission(permission);
-
-    } catch (err) {
-
-      console.error('zxing-scanner', 'askForPermission', err);
-
-      // permission aborted
-      permission = null;
-      this.setPermission(permission);
-    }
-
-    // Returns the event emitter, so the dev can subscribe to it
+    // Returns the permission
     return permission;
   }
 
