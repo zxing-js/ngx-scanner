@@ -29,6 +29,5 @@ jobs:
         # - yarn e2e
 
     - stage: deploy
-      if: branch = master
       script:
         - yarn deploy:demo
