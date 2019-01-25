@@ -399,7 +399,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
   /**
    * Manages the bindinded property changes.
-   * @param changes
    */
   ngOnChanges(changes: SimpleChanges): void {
 
@@ -586,8 +585,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
   /**
    * Returns the filtered permission.
-   *
-   * @param err
    */
   private handlePermissionException(err: DOMException): boolean {
 
