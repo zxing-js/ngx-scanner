@@ -32,7 +32,7 @@
     "ng": "ng",
     "start": "ng serve zxing-scanner-demo",
     "build": "ng build zxing-scanner",
-    "test": "ng test zxing-scanner --watch=false && ng test zxing-scanner --watch=false",
+    "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint zxing-scanner && ng lint zxing-scanner-demo",
     "e2e": "ng e2e",
     "docs": "npm run docs:build",
