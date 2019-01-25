@@ -5,15 +5,16 @@ sudo: required
 language: node_js
 node_js: stable
 
+addons:
+  chrome: stable
+
 stages:
   - compile
   - test
   - name: deploy
-    if: branch = master
+    if: branch = master AND type != pull_request
 
 jobs:
-  addons:
-    chrome: stable
   include:
 
     - stage: compile
@@ -28,5 +29,6 @@ jobs:
         # - yarn e2e
 
     - stage: deploy
+      if: branch = master
       script:
         - yarn deploy:demo
