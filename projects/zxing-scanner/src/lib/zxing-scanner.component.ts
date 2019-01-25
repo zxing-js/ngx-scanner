@@ -58,7 +58,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   /**
    * If the user-agent allowed the use of the camera or not.
    */
-  private hasPermission: boolean;
+  private hasPermission: boolean | null;
 
   /**
    * Reference to the preview element, should be the `video` tag.
@@ -142,7 +142,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    * User device input
    */
   @Input()
-  set device(device: MediaDeviceInfo|null) {
+  set device(device: MediaDeviceInfo | null) {
 
     if (this.isAlreadyDefinedDevice(device)) {
       return;
