@@ -5,6 +5,9 @@ sudo: required
 language: node_js
 node_js: stable
 
+addons:
+  chrome: stable
+
 stages:
   - compile
   - test
@@ -12,8 +15,6 @@ stages:
     if: branch = master
 
 jobs:
-  addons:
-    chrome: stable
   include:
 
     - stage: compile
