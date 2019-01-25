@@ -5,6 +5,9 @@ sudo: required
 language: node_js
 node_js: stable
 
+addons:
+  chrome: stable
+
 stages:
   - compile
   - test
