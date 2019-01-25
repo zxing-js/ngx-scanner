@@ -5,14 +5,27 @@ sudo: required
 language: node_js
 node_js: stable
 
-addons:
-  chrome: stable
+stages:
+  - compile
+  - test
+  - name: deploy
+    if: branch = master
 
-script:
-  - ./node_modules/.bin/npm-install-peers
-  - yarn lint
-  - yarn test
-#   - yarn e2e
-  - yarn docs:build
-  - yarn build:prod
-  - yarn build:packagr
+jobs:
+  include:
+
+    - stage: compile
+      script:
+        - npx npm-install-peers
+        - yarn build:prod
+        - yarn build:packagr
+
+    - stage: test
+      script:
+        - yarn lint
+        - yarn test
+        # - yarn e2e
+
+    - stage: deploy
+      script:
+        - yarn deploy:demo
