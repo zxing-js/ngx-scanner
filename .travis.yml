@@ -5,9 +5,6 @@ sudo: required
 language: node_js
 node_js: stable
 
-addons:
-  chrome: stable
-
 stages:
   - compile
   - test
@@ -23,6 +20,8 @@ jobs:
         - yarn build
 
     - stage: test
+      addons:
+        chrome: stable
       script:
         - yarn lint
         - yarn test
