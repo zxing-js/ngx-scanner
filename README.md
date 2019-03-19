@@ -42,7 +42,7 @@ _Some previews may not be fully updated, please check the version._ 😉
 
 ## How To
 
-I _promise_ that it's **very** easy to use:
+I promise that it's **very** easy to use:
 
 ```html
 <!-- some.component.html -->
@@ -52,6 +52,10 @@ I _promise_ that it's **very** easy to use:
 ### Wiki
 
 Check our nice wiki for more info: [click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
+
+### Requisites
+
+ - HTTPS for production environments ([more](https://stackoverflow.com/a/34198101/4367683)).
 
 ## Performance
 
