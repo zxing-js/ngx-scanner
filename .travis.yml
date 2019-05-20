@@ -20,14 +20,14 @@ jobs:
     - stage: compile
       script:
         - npx npm-install-peers
-        - yarn build
+        - npm run build
 
     - stage: test
       script:
-        - yarn lint
-        - yarn test
-        # - yarn e2e
+        - npm run lint
+        - npm run test
+        # - npm run e2e
 
     - stage: deploy
       script:
-        - yarn deploy:demo
+        - npm run deploy:demo
