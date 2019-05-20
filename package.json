@@ -43,15 +43,20 @@
     "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\"",
     "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
   "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0",
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-angular": "~0.13.0",
     "@angular-devkit/build-ng-packagr": "^0.12.3",
     "@angular-devkit/core": "^7.0.4",
     "@angular/animations": "^7.0.0",
-    "@angular/cli": "^7.0.1",
+    "@angular/cli": "^7.3.9",
     "@angular/common": "^7.0.0",
     "@angular/compiler": "^7.0.0",
     "@angular/compiler-cli": "^7.0.0",
