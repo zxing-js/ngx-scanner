@@ -1,17 +1,7 @@
 {
-  "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "name": "@zxing/ngx-scanner",
-  "description": "High-performance Angular 6 barcode scanner component based on ZXing.",
-  "version": "1.3.0",
-  "private": false,
-  "ngPackage": {
-    "lib": {
-      "entryFile": "src/public_api.ts"
-    },
-    "whitelistedNonPeerDependencies": [
-      "@zxing/library"
-    ]
-  },
+  "name": "ngx-scanner",
+  "version": "0.0.0",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/zxing-js/ngx-scanner"
@@ -40,32 +30,33 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:ssl": "ng serve --ssl --live-reload false",
-    "build": "ng build",
-    "build:prod": "ng build --prod",
-    "build:packagr": "ng-packagr -p package.json",
-    "test": "ng test --watch=false",
-    "lint": "ng lint",
+    "start": "ng serve zxing-scanner-demo",
+    "build": "ng build zxing-scanner",
+    "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner --watch=false --browsers=ChromeHeadless",
+    "lint": "ng lint zxing-scanner && ng lint zxing-scanner-demo",
     "e2e": "ng e2e",
     "docs": "npm run docs:build",
     "docs:build": "compodoc -p tsconfig.json -n zxing-scanner -d docs --hideGenerator",
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
-    "publish:dist": "cd ./dist && npm publish --access=public",
-    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\""
+    "publish:dist": "cd ./dist/zxing-scanner && npm publish --access=public",
+    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\"",
+    "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
-    "@zxing/library": "0.8.3"
+    "tslib": "^1.9.0"
   },
   "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0",
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular-devkit/build-ng-packagr": "^0.12.3",
     "@angular-devkit/core": "^7.0.4",
     "@angular/animations": "^7.0.0",
-    "@angular/cli": "^7.0.1",
+    "@angular/cli": "^7.3.9",
     "@angular/common": "^7.0.0",
     "@angular/compiler": "^7.0.0",
     "@angular/compiler-cli": "^7.0.0",
@@ -80,6 +71,8 @@
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^10.12.2",
+    "@zxing/library": "^0.11.0",
+    "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "^4.3.0",
     "core-js": "^2.5.5",
     "jasmine-core": "^3.3.0",
@@ -93,17 +86,13 @@
     "ng-packagr": "^4.4.0",
     "npm-install-peers": "^1.2.1",
     "protractor": "^5.3.1",
+    "rxjs": "^6.3.3",
     "ts-node": "^7.0.1",
     "tsickle": "^0.33.1",
     "tslint": "^5.9.1",
     "typescript": "~3.1.3",
     "zone.js": "^0.8.26"
   },
-  "main": "dist/bundles/zxing-ngx-scanner.umd.js",
-  "module": "dist/esm5/zxing-ngx-scanner.js",
-  "es2015": "dist/esm2015/zxing-ngx-scanner.js",
-  "typings": "dist/zxing-ngx-scanner.d.ts",
-  "metadata": "dist/zxing-ngx-scanner.metadata.json",
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/ngx-scanner"
