@@ -29,5 +29,6 @@ jobs:
         # - npm run e2e
 
     - stage: deploy
+      if: branch = master
       script:
         - npm run deploy:demo
