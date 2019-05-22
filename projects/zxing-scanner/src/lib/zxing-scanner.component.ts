@@ -1,20 +1,8 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-
-import { Result, DecodeHintType, BarcodeFormat, ArgumentException } from '@zxing/library';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ArgumentException, BarcodeFormat, DecodeHintType, Result } from '@zxing/library';
 import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+
+
 
 @Component({
   selector: 'zxing-scanner',
@@ -658,8 +646,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   private scannerStart(deviceId: string): void {
     try {
-
-      this.codeReader.continuousDecodeFromInputVideoDevice((result: Result) => {
+      const onDecodeComplete = ((result: Result) => {
 
         if (result) {
           this.dispatchScanSuccess(result);
@@ -669,7 +656,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
         this.dispatchScanComplete(result);
 
-      }, deviceId, this.previewElemRef.nativeElement);
+      });
+
+      this.codeReader.setDecodeCompleteCallback(onDecodeComplete);
+      this.codeReader.decodeFromInputVideoDevice(deviceId, this.previewElemRef.nativeElement);
 
     } catch (err) {
       this.dispatchScanError(err);
