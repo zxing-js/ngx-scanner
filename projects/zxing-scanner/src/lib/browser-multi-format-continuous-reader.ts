@@ -11,21 +11,13 @@ import {
 
 import {
   BehaviorSubject,
-  Observable,
-  Subscription
+  Observable
 } from 'rxjs';
-
-import { catchError } from 'rxjs/operators';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
  */
 export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader {
-
-  /**
-   * Used to control the decoding stream when it's open.
-   */
-  protected decodingStream: Subscription;
 
   /**
    * The track from camera.
@@ -54,17 +46,14 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
    *
    * @param callbackFn The callback to be executed after every scan attempt
    * @param deviceId The device's to be used Id
-   * @param videoElement A new video element
+   * @param videoSource A new video element
    */
-  public async continuousDecodeFromInputVideoDevice(
-    callbackFn?: (result: Result) => void,
+  public continuousDecodeFromInputVideoDevice(
     deviceId?: string,
-    videoElement?: HTMLVideoElement
-  ): Promise<void> {
+    videoSource?: HTMLVideoElement
+  ): Observable<Result> {
 
     this.reset();
-
-    this.prepareVideoElement(videoElement);
 
     // Keeps the deviceId between scanner resets.
     if (typeof deviceId !== 'undefined') {
@@ -76,37 +65,24 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     }
 
     const video = typeof deviceId === 'undefined'
-      ? { facingMode: { exact: 'environment' } }
+      ? { facingMode: 'environment' }
       : { deviceId: { exact: deviceId } };
 
-    const constraints: MediaStreamConstraints = {
-      audio: false,
-      video
-    };
+    const constraints: MediaStreamConstraints = { video };
 
-    try {
+    const scan$ = new BehaviorSubject<Result>(undefined);
 
-      const stream = await navigator
-        .mediaDevices
-        .getUserMedia(constraints);
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then(stream => {
+        this.checkTorchCompatibility(stream);
+        return this.attachStreamToVideo(stream, videoSource);
+      })
+      .then(videoElement =>
+        this.decodeWithDelay(this.timeBetweenScansMillis, videoElement)
+          .subscribe(scan$.next, scan$.error, scan$.complete)
+      );
 
-      this.checkTorchCompatibility(stream);
-
-      this.startDecodeFromStream(stream, () => {
-
-        if (this.decodingStream) {
-          this.decodingStream.unsubscribe();
-        }
-
-        this.decodingStream = this.decodeWithDelay(this.timeBetweenScansMillis)
-          .pipe(catchError((e, r) => this.handleDecodeStreamError(e, r)))
-          .subscribe(r => callbackFn(r));
-      });
-
-    } catch (err) {
-      /* handle the error, or not */
-      console.error(err);
-    }
+    return scan$.asObservable();
   }
 
   /**
@@ -155,11 +131,11 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * Opens a decoding stream.
    */
-  protected decodeWithDelay(delay: number = 500): Observable<Result> {
+  protected decodeWithDelay(delay: number = 500, videoElement: HTMLVideoElement): Observable<Result> {
 
     const scan$ = new BehaviorSubject<Result>(undefined);
 
-    this._decodeOnStreamWithDelay(scan$, delay);
+    this._decodeOnStreamWithDelay(scan$, videoElement, delay);
 
     return scan$.asObservable();
   }
@@ -167,19 +143,19 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * Decodes values in a stream with delays between scans.
    */
-  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result | Exception>, delay: number): void {
+  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result | Exception>, videoElement: HTMLVideoElement, delay: number): void {
 
     let result: Result;
 
     try {
-      result = this.decode();
+      result = this.decode(videoElement);
       scan$.next(result);
     } catch (e) {
       scan$.error(e);
     }
     finally {
       const timeout = !result ? 0 : delay;
-      setTimeout(() => this.decodeWithDelay(delay), timeout);
+      setTimeout(() => this._decodeOnStreamWithDelay(scan$, videoElement, delay), timeout);
     }
   }
 
@@ -204,10 +180,10 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * Restarts the scanner.
    */
-  protected restart(): void {
+  protected restart(): Observable<Result> {
     // reset
     // start
-    this.continuousDecodeFromInputVideoDevice(undefined, this.deviceId, this.videoElement);
+    return this.continuousDecodeFromInputVideoDevice(this.deviceId, this.videoElement);
   }
 
 
@@ -217,10 +193,6 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   protected stopStreams(): void {
 
     super.stopStreams();
-
-    if (this.decodingStream) {
-      this.decodingStream.unsubscribe();
-    }
 
   }
 
