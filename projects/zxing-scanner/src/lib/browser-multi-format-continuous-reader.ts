@@ -116,14 +116,20 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
    * @param stream The media stream used to check.
    */
   protected async checkTorchCompatibility(stream: MediaStream): Promise<void> {
+
+    let compatible = false;
+    let track = null;
+
     try {
-      this.track = stream.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(this.track);
+      track = stream.getVideoTracks()[0];
+      const imageCapture = new ImageCapture(track);
       const capabilities = await imageCapture.getPhotoCapabilities();
-      const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+
+      compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+    }
+    finally {
       this._isTorchAvailable.next(compatible);
-    } catch (err) {
-      this._isTorchAvailable.next(false);
+      this.track = track;
     }
   }
 
