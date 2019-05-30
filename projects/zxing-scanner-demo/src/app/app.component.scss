@@ -45,6 +45,21 @@ header {
     font-size: 60%;
     margin: -.6em 0 0 0;
   }
+
+  button {
+    background: none;
+    border: none;
+    line-height: 1;
+    font-weight: bolder;
+    font-size: 120%;
+    float: right;
+    color: #fff;
+    margin-left: 16px;
+  }
+}
+
+h2 {
+  padding: 0 16px;
 }
 
 footer {

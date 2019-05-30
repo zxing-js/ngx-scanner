@@ -7,11 +7,12 @@
     </select>
   </header>
 
-  <zxing-scanner #scanner [(device)]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true"></zxing-scanner>
+  <zxing-scanner #scanner [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true" (hasDevices)="hasDevices = $event" (permissionResponse)="hasPermission = $event"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
     <small>Result</small>
     <strong>{{ qrResultString }}</strong>
+    <button (click)="clearResult()">&times;</button>
   </section>
 
 </div>

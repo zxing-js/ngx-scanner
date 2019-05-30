@@ -19,46 +19,26 @@ export class AppComponent implements OnInit {
   hasDevices: boolean;
   hasPermission: boolean;
   qrResultString: string;
-  qrResult: Result;
 
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo;
 
+  clearResult(): void {
+    this.qrResultString = null;
+  }
+
   ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-      // this.hasDevices = true;
       this.availableDevices = devices;
-
-      // selects the devices's back camera by default
-      // for (const device of devices) {
-      //     if (/back|rear|environment/gi.test(device.label)) {
-      //         this.scanner.changeDevice(device);
-      //         this.currentDevice = device;
-      //         break;
-      //     }
-      // }
+      this._selectBackfaceCamera(devices);
     });
-
-    // you can observe if there's devices
-    this.scanner.hasDevices.subscribe((x: boolean) => this.hasDevices = x);
-    // or you can manually check if the component found them
-    // this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
-    this.scanner.scanComplete.subscribe((x: Result) => this.qrResult = x);
-    this.scanner.permissionResponse.subscribe((x: boolean) => this.hasPermission = x);
   }
 
-  displayCameras(cameras: MediaDeviceInfo[]) {
-    // console.debug('Devices: ', cameras);
-    this.availableDevices = cameras;
-  }
-
-  handleQrCodeResult(resultString: string) {
-    // console.debug('Result: ', resultString);
+  onCodeResult(resultString: string) {
     this.qrResultString = resultString;
   }
 
   onDeviceSelectChange(selected: string) {
-    // console.debug('Selection changed: ', selected);
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.currentDevice = device || null;
   }
@@ -77,5 +57,15 @@ export class AppComponent implements OnInit {
     };
 
     return states['' + state];
+  }
+
+  private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {
+    // selects the devices's back camera by default
+    for (const device of devices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.currentDevice = device;
+        break;
+      }
+    }
   }
 }
