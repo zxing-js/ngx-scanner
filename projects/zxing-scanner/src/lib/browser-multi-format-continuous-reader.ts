@@ -36,13 +36,13 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
   /**
    * Says if there's a torch available for the current device.
    */
-  protected _torchAvailable = new BehaviorSubject<boolean>(undefined);
+  protected _isTorchAvailable = new BehaviorSubject<boolean>(undefined);
 
   /**
    * Exposes _tochAvailable .
    */
-  public get torchAvailable(): Observable<boolean> {
-    return this._torchAvailable.asObservable();
+  public get isTorchAvailable(): Observable<boolean> {
+    return this._isTorchAvailable.asObservable();
   }
 
   /**
@@ -58,7 +58,7 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
    * @param videoElement A new video element
    */
   public async continuousDecodeFromInputVideoDevice(
-    callbackFn?: (result: Result) => any,
+    callbackFn?: (result: Result) => void,
     deviceId?: string,
     videoElement?: HTMLVideoElement
   ): Promise<void> {
@@ -72,6 +72,10 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
       this.deviceId = deviceId;
     }
 
+    if (typeof navigator === 'undefined') {
+      return;
+    }
+
     const video = typeof deviceId === 'undefined'
       ? { facingMode: { exact: 'environment' } }
       : { deviceId: { exact: deviceId } };
@@ -81,14 +85,13 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
       video
     };
 
-    if (typeof navigator === 'undefined') {
-      return;
-    }
-
     try {
+
       const stream = await navigator
         .mediaDevices
         .getUserMedia(constraints);
+
+      this.checkTorchCompatibility(stream);
 
       this.startDecodeFromStream(stream, () => {
 
@@ -98,26 +101,13 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
 
         this.decodingStream = this.decodeWithDelay(this.timeBetweenScansMillis)
           .pipe(catchError((e, x) => this.handleDecodeStreamError(e, x)))
-          .subscribe((x: Result) => callbackFn(x));
+          .subscribe(result => callbackFn(result));
       });
 
     } catch (err) {
       /* handle the error, or not */
       console.error(err);
     }
-  }
-
-  /**
-   * Sets the new stream and request a new decoding-with-delay.
-   *
-   * @param stream The stream to be shown in the video element.
-   * @param callbackFn A callback for the decode method.
-   *
-   * @todo Return Promise<Result>
-   */
-  protected startDecodeFromStream(stream: MediaStream, callbackFn?: (result: Result) => any): void {
-    super.startDecodeFromStream(stream, callbackFn);
-    this.checkTorchCompatibility(this.stream);
   }
 
   /**
@@ -131,9 +121,9 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
       const imageCapture = new ImageCapture(this.track);
       const capabilities = await imageCapture.getPhotoCapabilities();
       const compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
-      this._torchAvailable.next(compatible);
+      this._isTorchAvailable.next(compatible);
     } catch (err) {
-      this._torchAvailable.next(false);
+      this._isTorchAvailable.next(false);
     }
   }
 
@@ -142,7 +132,7 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
    */
   public setTorch(on: boolean): void {
 
-    if (!this._torchAvailable.value) {
+    if (!this._isTorchAvailable.value) {
       // compatibility not checked yet
       return;
     }
@@ -203,46 +193,66 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
 
     this.stopStreams();
 
-    if (this.videoElement) {
+    // clean and forget about HTML elements
 
-      // first gives freedon to the element 🕊
+    this._destroyVideoElement();
+    this._destroyImageElement();
+    this._destroyCanvasElement();
+  }
 
-      if (typeof this.videoPlayEndedEventListener !== 'undefined') {
-        this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
-      }
+  private _destroyVideoElement(): void {
 
-      if (typeof this.videoPlayingEventListener !== 'undefined') {
-        this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
-      }
-
-      if (typeof this.videoLoadedMetadataEventListener !== 'undefined') {
-        this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
-      }
-
-      // then forgets about that element 😢
-
-      this.unbindVideoSrc(this.videoElement);
-
-      this.videoElement.removeAttribute('src');
-      this.videoElement = undefined;
+    if (!this.videoElement) {
+      return;
     }
 
-    if (this.imageElement) {
+    // first gives freedon to the element 🕊
 
-      // first gives freedon to the element 🕊
-
-      if (undefined !== this.videoPlayEndedEventListener) {
-        this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
-      }
-
-      // then forget about that element 😢
-
-      this.imageElement.src = undefined;
-      this.imageElement.removeAttribute('src');
-      this.imageElement = undefined;
+    if (typeof this.videoPlayEndedEventListener !== 'undefined') {
+      this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
     }
 
-    // cleans canvas references 🖌
+    if (typeof this.videoPlayingEventListener !== 'undefined') {
+      this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
+    }
+
+    if (typeof this.videoLoadedMetadataEventListener !== 'undefined') {
+      this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
+    }
+
+    // then forgets about that element 😢
+
+    this.unbindVideoSrc(this.videoElement);
+
+    this.videoElement.removeAttribute('src');
+    this.videoElement = undefined;
+  }
+
+  private _destroyImageElement(): void {
+
+    if (!this.imageElement) {
+      return;
+    }
+
+    // first gives freedon to the element 🕊
+
+    if (undefined !== this.videoPlayEndedEventListener) {
+      this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
+    }
+
+    // then forget about that element 😢
+
+    this.imageElement.src = undefined;
+    this.imageElement.removeAttribute('src');
+    this.imageElement = undefined;
+  }
+
+  /**
+   * Cleans canvas references 🖌
+   */
+  private _destroyCanvasElement(): void {
+
+    // then forget about that element 😢
 
     this.canvasElementContext = undefined;
     this.canvasElement = undefined;
