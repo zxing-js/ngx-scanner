@@ -349,7 +349,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
 
     // makes torch availability information available to user
-    this.codeReader.torchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
+    this.codeReader.isTorchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
 
     if (!this.autostartScan) {
       console.warn('New feature \'autostart\' disabled, be careful. Permissions and devices recovery has to be run manually.');
@@ -659,22 +659,29 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   private scannerStart(deviceId: string): void {
     try {
 
-      this.codeReader.continuousDecodeFromInputVideoDevice((result: Result) => {
+      const videoElement = this.previewElemRef.nativeElement;
+      const callbackFn = (x: Result) => this._onDecodeResult(x);
 
-        if (result) {
-          this.dispatchScanSuccess(result);
-        } else {
-          this.dispatchScanFailure();
-        }
-
-        this.dispatchScanComplete(result);
-
-      }, deviceId, this.previewElemRef.nativeElement);
+      this.codeReader.continuousDecodeFromInputVideoDevice(callbackFn, deviceId, videoElement);
 
     } catch (err) {
       this.dispatchScanError(err);
       this.dispatchScanComplete(undefined);
     }
+  }
+
+  /**
+   * Handles decode results.
+   */
+  private _onDecodeResult(result: Result): void {
+
+    if (result) {
+      this.dispatchScanSuccess(result);
+    } else {
+      this.dispatchScanFailure();
+    }
+
+    this.dispatchScanComplete(result);
   }
 
   /**
