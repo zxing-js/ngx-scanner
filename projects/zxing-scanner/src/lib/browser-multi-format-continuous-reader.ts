@@ -1,7 +1,7 @@
 /// <reference path="./image-capture.d.ts" />
 
 import {
-  BrowserMultiFormatReader as ZXingBrowserMultiFormatReader,
+  BrowserMultiFormatReader,
   ChecksumException,
   Exception,
   FormatException,
@@ -12,7 +12,6 @@ import {
 import {
   BehaviorSubject,
   Observable,
-  Subscriber,
   Subscription
 } from 'rxjs';
 
@@ -21,7 +20,7 @@ import { catchError } from 'rxjs/operators';
 /**
  * Based on zxing-typescript BrowserCodeReader
  */
-export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatReader {
+export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader {
 
   /**
    * Used to control the decoding stream when it's open.
@@ -100,8 +99,8 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
         }
 
         this.decodingStream = this.decodeWithDelay(this.timeBetweenScansMillis)
-          .pipe(catchError((e, x) => this.handleDecodeStreamError(e, x)))
-          .subscribe(result => callbackFn(result));
+          .pipe(catchError((e, r) => this.handleDecodeStreamError(e, r)))
+          .subscribe(r => callbackFn(r));
       });
 
     } catch (err) {
@@ -157,19 +156,31 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
    * Opens a decoding stream.
    */
   protected decodeWithDelay(delay: number = 500): Observable<Result> {
-    // The decoding stream.
-    return Observable.create((observer: Subscriber<Result>) => {
-      // Creates on Subscribe.
-      const intervalId = setInterval(() => {
-        try {
-          observer.next(this.decode());
-        } catch (err) {
-          observer.error(err);
-        }
-      }, delay);
-      // Destroys on Unsubscribe.
-      return () => clearInterval(intervalId);
-    });
+
+    const scan$ = new BehaviorSubject<Result>(undefined);
+
+    this._decodeOnStreamWithDelay(scan$, delay);
+
+    return scan$.asObservable();
+  }
+
+  /**
+   * Decodes values in a stream with delays between scans.
+   */
+  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result | Exception>, delay: number): void {
+
+    let result: Result;
+
+    try {
+      result = this.decode();
+      scan$.next(result);
+    } catch (e) {
+      scan$.error(e);
+    }
+    finally {
+      const timeout = !result ? 0 : delay;
+      setTimeout(() => this.decodeWithDelay(delay), timeout);
+    }
   }
 
   /**
