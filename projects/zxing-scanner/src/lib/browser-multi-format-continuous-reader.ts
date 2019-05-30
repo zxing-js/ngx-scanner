@@ -63,7 +63,7 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
     videoElement?: HTMLVideoElement
   ): Promise<void> {
 
-    this.stop();
+    this.reset();
 
     this.prepareVideoElement(videoElement);
 
@@ -182,80 +182,6 @@ export class BrowserMultiFormatContinuousReader extends ZXingBrowserMultiFormatR
     }
 
     throw err;
-  }
-
-  /**
-   * Resets the scanner and it's configurations.
-   */
-  public stop(): void {
-
-    // stops the camera, preview and scan 🔴
-
-    this.stopStreams();
-
-    // clean and forget about HTML elements
-
-    this._destroyVideoElement();
-    this._destroyImageElement();
-    this._destroyCanvasElement();
-  }
-
-  private _destroyVideoElement(): void {
-
-    if (!this.videoElement) {
-      return;
-    }
-
-    // first gives freedon to the element 🕊
-
-    if (typeof this.videoPlayEndedEventListener !== 'undefined') {
-      this.videoElement.removeEventListener('ended', this.videoPlayEndedEventListener);
-    }
-
-    if (typeof this.videoPlayingEventListener !== 'undefined') {
-      this.videoElement.removeEventListener('playing', this.videoPlayingEventListener);
-    }
-
-    if (typeof this.videoLoadedMetadataEventListener !== 'undefined') {
-      this.videoElement.removeEventListener('loadedmetadata', this.videoLoadedMetadataEventListener);
-    }
-
-    // then forgets about that element 😢
-
-    this.unbindVideoSrc(this.videoElement);
-
-    this.videoElement.removeAttribute('src');
-    this.videoElement = undefined;
-  }
-
-  private _destroyImageElement(): void {
-
-    if (!this.imageElement) {
-      return;
-    }
-
-    // first gives freedon to the element 🕊
-
-    if (undefined !== this.videoPlayEndedEventListener) {
-      this.imageElement.removeEventListener('load', this.imageLoadedEventListener);
-    }
-
-    // then forget about that element 😢
-
-    this.imageElement.src = undefined;
-    this.imageElement.removeAttribute('src');
-    this.imageElement = undefined;
-  }
-
-  /**
-   * Cleans canvas references 🖌
-   */
-  private _destroyCanvasElement(): void {
-
-    // then forget about that element 😢
-
-    this.canvasElementContext = undefined;
-    this.canvasElement = undefined;
   }
 
   /**

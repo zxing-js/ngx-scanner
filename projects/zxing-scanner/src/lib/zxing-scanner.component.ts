@@ -697,7 +697,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     this.setDevice(null);
 
-    this.codeReader.stop();
+    this.codeReader.reset();
 
     return device;
   }
