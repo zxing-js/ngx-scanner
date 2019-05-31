@@ -33,7 +33,7 @@ import { BrowserMultiFormatContinuousReader } from './browser-multi-format-conti
   styleUrls: ['./zxing-scanner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
   /**
    * Supported Hints map.
@@ -50,6 +50,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   private _device: MediaDeviceInfo;
 
+  /**
+   * The device that should be used to scan things.
+   */
+  private _scannerEnabled: boolean;
 
   /**
    * Has `navigator` access.
@@ -71,12 +75,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   @ViewChild('preview')
   previewElemRef: ElementRef<HTMLVideoElement>;
-
-  /**
-   * Allow start scan or not.
-   */
-  @Input()
-  scannerEnabled = true;
 
   /**
    * Enable or disable autofocus of the camera (might have an impact on performance)
@@ -225,6 +223,28 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
   }
 
   /**
+   * Allow start scan or not.
+   */
+  @Input()
+  set scannerEnabled(enabled: boolean) {
+
+    this._scannerEnabled = Boolean(enabled);
+
+    if (!this._scannerEnabled) {
+      this.scannerStop();
+    } else if (this._device) {
+      this.scannerStart(this._device.deviceId);
+    }
+  }
+
+  /**
+   * Tells if the scanner is enabled or not.
+   */
+  get scannerEnabled(): boolean {
+    return this._scannerEnabled;
+  }
+
+  /**
    * If is `tryHarder` enabled.
    */
   get tryHarder(): boolean {
@@ -363,21 +383,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
 
     // configurates the component and starts the scanner
     this.initAutostartOn();
-  }
-
-  /**
-   * Manages the bindinded property changes.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.scannerEnabled) {
-      if (!this.scannerEnabled) {
-        this.scannerStop();
-      } else if (this._device) {
-        this.scannerStart(this._device.deviceId);
-      }
-    }
-
   }
 
   /**
