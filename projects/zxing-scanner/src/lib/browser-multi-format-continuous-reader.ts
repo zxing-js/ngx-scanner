@@ -94,7 +94,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       const imageCapture = new ImageCapture(track);
       const capabilities = await imageCapture.getPhotoCapabilities();
 
-      compatible = !!capabilities.torch || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
+      compatible = !!capabilities['torch'] || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
     }
     finally {
       this._isTorchAvailable.next(compatible);
