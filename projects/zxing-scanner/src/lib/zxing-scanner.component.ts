@@ -167,6 +167,9 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     }
   }
 
+  /**
+   * Emits when the current device is changed.
+   */
   @Output()
   deviceChange: EventEmitter<MediaDeviceInfo>;
 
@@ -346,13 +349,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
    */
   async ngAfterViewInit(): Promise<void> {
 
-    const refStatus = !this.setupPreviewRef(this.previewElemRef);
-
-    if (refStatus) {
-      console.warn('@zxing/ngx-scanner', 'Preview element not found!');
-      return;
-    }
-
     // makes torch availability information available to user
     this.codeReader.isTorchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
 
@@ -422,27 +418,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
       this.setDevice(device);
       this.scannerStart(deviceId);
     }
-  }
-
-  /**
-   *
-   */
-  setupPreviewRef(previewElemRef: ElementRef<any>): boolean {
-
-    // Chrome 63 fix
-    if (!previewElemRef) {
-      return false;
-    }
-
-    const el = previewElemRef.nativeElement;
-
-    // iOS 11 Fix
-    el.setAttribute('autoplay', false);
-    el.setAttribute('muted', true);
-    el.setAttribute('playsinline', true);
-    el.setAttribute('autofocus', this.autofocusEnabled);
-
-    return true;
   }
 
   /**
