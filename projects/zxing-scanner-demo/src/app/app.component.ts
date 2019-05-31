@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   qrResultString: string;
 
   availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo;
+  currentDevice: MediaDeviceInfo = null;
 
   clearResult(): void {
     this.qrResultString = null;
