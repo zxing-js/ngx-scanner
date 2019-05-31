@@ -5,10 +5,8 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges,
   ViewChild
 } from '@angular/core';
 
@@ -81,6 +79,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   @Input()
   autofocusEnabled = true;
+
+  /**
+   * If the scanner should autostart with the first available device.
+   */
+  @Input()
+  autostart = true;
 
   /**
    * How the preview element shoud be fit inside the :host container.
@@ -329,7 +333,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Initializes the component without starting the scanner.
    */
-  async initAutostartOff(): Promise<void> {
+  private async initAutostartOff(): Promise<void> {
 
     // do not ask for permission when autostart is off
 
@@ -341,7 +345,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Initializes the component and starts the scanner.
    * Permissions are asked to accomplish that.
    */
-  async initAutostartOn(): Promise<void> {
+  private async initAutostartOn(): Promise<void> {
 
     // Asks for permission before enumerating devices so it can get all the device's info
     const hasPermission = await this.askForPermission();
@@ -354,7 +358,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.autostartScan(devices);
+    this.autostartScanner(devices);
   }
 
   /**
@@ -372,7 +376,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     // makes torch availability information available to user
     this.codeReader.isTorchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
 
-    if (!this.autostartScan) {
+    if (!this.autostart) {
       console.warn('New feature \'autostart\' disabled, be careful. Permissions and devices recovery has to be run manually.');
 
       // does the necessary configuration without autostarting
@@ -419,7 +423,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    if (this.scannerEnabled) {
+    if (this._scannerEnabled) {
       this.setDevice(device);
       this.scannerStart(deviceId);
     }
@@ -448,11 +452,11 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Starts the scanner with the first available device.
    */
-  private autostartScan(devices: MediaDeviceInfo[]) {
+  private autostartScanner(devices: MediaDeviceInfo[]) {
     const firstDevice = devices.find(device => !!device);
 
     if (!firstDevice) {
-      throw new Error('Implossible to autostart, no device available.');
+      throw new Error('Implossible to autostart, no input devices available.');
     }
 
     this.startScan(firstDevice);
