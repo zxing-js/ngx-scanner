@@ -2,10 +2,7 @@
 
 import {
   BrowserMultiFormatReader,
-  ChecksumException,
   Exception,
-  FormatException,
-  NotFoundException,
   Result,
 } from '@zxing/library';
 
@@ -20,21 +17,21 @@ import {
 export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader {
 
   /**
-   * The track from camera.
-   */
-  protected track: MediaStreamTrack;
-
-  /**
-   * Says if there's a torch available for the current device.
-   */
-  protected _isTorchAvailable = new BehaviorSubject<boolean>(undefined);
-
-  /**
    * Exposes _tochAvailable .
    */
   public get isTorchAvailable(): Observable<boolean> {
     return this._isTorchAvailable.asObservable();
   }
+
+  /**
+   * Says if there's a torch available for the current device.
+   */
+  private _isTorchAvailable = new BehaviorSubject<boolean>(undefined);
+
+  /**
+   * The track from camera.
+   */
+  protected track: MediaStreamTrack;
 
   /**
    * The device id of the current media device.
@@ -79,7 +76,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       })
       .then(videoElement =>
         this.decodeWithDelay(this.timeBetweenScansMillis, videoElement)
-          .subscribe(scan$.next, scan$.error, scan$.complete)
+          .subscribe(v => scan$.next(v), e => scan$.error(e), () => scan$.complete())
       );
 
     return scan$.asObservable();
@@ -145,6 +142,11 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
    */
   private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result | Exception>, videoElement: HTMLVideoElement, delay: number): void {
 
+    // stops loop
+    if (scan$.isStopped) {
+      return;
+    }
+
     let result: Result;
 
     try {
@@ -152,29 +154,10 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       scan$.next(result);
     } catch (e) {
       scan$.error(e);
-    }
-    finally {
+    } finally {
       const timeout = !result ? 0 : delay;
       setTimeout(() => this._decodeOnStreamWithDelay(scan$, videoElement, delay), timeout);
     }
-  }
-
-  /**
-   * Administra um erro gerado durante o decode stream.
-   */
-  protected handleDecodeStreamError(err: Exception, caught: Observable<Result>): Observable<Result> {
-
-    if (
-      // scan Failure - found nothing, no error
-      err instanceof NotFoundException ||
-      // scan Error - found the QR but got error on decoding
-      err instanceof ChecksumException ||
-      err instanceof FormatException
-    ) {
-      return caught;
-    }
-
-    throw err;
   }
 
   /**
