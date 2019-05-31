@@ -40,7 +40,7 @@
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
     "publish:dist": "cd ./dist/zxing-scanner && npm publish --access=public",
-    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ngx-scanner? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/ngx-scanner/donate\\u001b[0m')\"",
+    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ZXing for JS? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/zxing-js/donate\\u001b[0m')\"",
     "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
@@ -71,7 +71,7 @@
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^10.12.2",
-    "@zxing/library": "^0.11.0",
+    "@zxing/library": "^0.13.0",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "^4.3.0",
     "core-js": "^2.5.5",
@@ -95,6 +95,6 @@
   },
   "collective": {
     "type": "opencollective",
-    "url": "https://opencollective.com/ngx-scanner"
+    "url": "https://opencollective.com/zxing-js"
   }
 }
