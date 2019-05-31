@@ -12,9 +12,12 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { Result, DecodeHintType, BarcodeFormat, ArgumentException } from '@zxing/library';
+import { Result, DecodeHintType, BarcodeFormat, ArgumentException, Exception, NotFoundException, ChecksumException, FormatException } from '@zxing/library';
 
 import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+
+import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'zxing-scanner',
@@ -569,6 +572,25 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
     return permission;
   }
 
+
+  /**
+   * Administra um erro gerado durante o decode stream.
+   */
+  private handleDecodeStreamError(err: Exception, caught: Observable<Result>): Observable<Result> {
+
+    if (
+      // scan Failure - found nothing, no error
+      err instanceof NotFoundException ||
+      // scan Error - found the QR but got error on decoding
+      err instanceof ChecksumException ||
+      err instanceof FormatException
+    ) {
+      return caught;
+    }
+
+    throw err;
+  }
+
   /**
    * Returns a valid BarcodeFormat or fails.
    */
@@ -611,7 +633,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy, OnChange
       const next = (result: Result) => this._onDecodeResult(result);
       const error = (err: any) => this.dispatchScanError(err);
 
-      scan$.subscribe(next, error);
+      scan$.pipe(catchError(this.handleDecodeStreamError)).subscribe(next, error);
 
     } catch (err) {
       this.dispatchScanError(err);
