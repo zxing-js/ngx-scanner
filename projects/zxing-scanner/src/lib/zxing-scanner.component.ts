@@ -12,12 +12,20 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { Result, DecodeHintType, BarcodeFormat, ArgumentException, Exception, NotFoundException, ChecksumException, FormatException } from '@zxing/library';
+import {
+  ArgumentException,
+  BarcodeFormat,
+  ChecksumException,
+  DecodeHintType,
+  Exception,
+  FormatException,
+  NotFoundException,
+  Result
+} from '@zxing/library';
 
-import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
-
-import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
 
 @Component({
   selector: 'zxing-scanner',
