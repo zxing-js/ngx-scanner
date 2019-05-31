@@ -1,15 +1,7 @@
 /// <reference path="./image-capture.d.ts" />
 
-import {
-  BrowserMultiFormatReader,
-  Exception,
-  Result,
-} from '@zxing/library';
-
-import {
-  BehaviorSubject,
-  Observable
-} from 'rxjs';
+import { BrowserMultiFormatReader, Result } from '@zxing/library';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * Based on zxing-typescript BrowserCodeReader
@@ -37,6 +29,11 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
    * The device id of the current media device.
    */
   protected deviceId: string;
+
+  /**
+   * If there's some scan stream open, it shal be here.
+   */
+  private scanStream: BehaviorSubject<Result>;
 
   /**
    * Starts the decoding from the current or a new video element.
@@ -134,13 +131,37 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     this._decodeOnStreamWithDelay(scan$, videoElement, delay);
 
+    this._setScanStream(scan$);
+
     return scan$.asObservable();
+  }
+
+  /**
+   * Correctly sets a new scanStream value.
+   */
+  private _setScanStream(scan$: BehaviorSubject<Result>): void {
+    // cleans old stream
+    this._cleanScanStream();
+    // sets new stream
+    this.scanStream = scan$;
+  }
+
+  /**
+   * Cleans any old scan stream value.
+   */
+  private _cleanScanStream(): void {
+
+    if (this.scanStream && !this.scanStream.isStopped) {
+      this.scanStream.complete();
+    }
+
+    this.scanStream = null;
   }
 
   /**
    * Decodes values in a stream with delays between scans.
    */
-  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result | Exception>, videoElement: HTMLVideoElement, delay: number): void {
+  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result>, videoElement: HTMLVideoElement, delay: number): void {
 
     // stops loop
     if (scan$.isStopped) {
@@ -169,14 +190,12 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     return this.continuousDecodeFromInputVideoDevice(this.deviceId, this.videoElement);
   }
 
-
   /**
    * Stops the continuous scan and cleans the stream.
    */
   protected stopStreams(): void {
-
     super.stopStreams();
-
+    this._cleanScanStream();
   }
 
 }
