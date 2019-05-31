@@ -51,7 +51,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * The device that should be used to scan things.
    */
-  private _scannerEnabled: boolean;
+  private _scannerEnabled = true;
 
   /**
    * Has `navigator` access.
