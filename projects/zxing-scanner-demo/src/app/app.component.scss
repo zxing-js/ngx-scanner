@@ -8,19 +8,24 @@ header {
   top: 0;
   padding: 10px;
   background: #333;
+  display: flex;
 
-  select {
+  button, select {
 
     --color: #aaa;
 
-    width: 100%;
-    padding: 15px;
     border-radius: 5px;
     background: none;
     border: 2px solid var(--color);
     color: var(--color);
-    font-weight: bold;
     cursor: pointer;
+  }
+
+  select {
+
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
 
     option {
       padding: 10px;

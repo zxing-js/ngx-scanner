@@ -374,7 +374,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   async ngAfterViewInit(): Promise<void> {
 
     // makes torch availability information available to user
-    this.codeReader.isTorchAvailable.subscribe((x: boolean) => this.torchCompatible.emit(x));
+    this.codeReader.isTorchAvailable.subscribe(x => this.torchCompatible.emit(x));
 
     if (!this.autostart) {
       console.warn('New feature \'autostart\' disabled, be careful. Permissions and devices recovery has to be run manually.');

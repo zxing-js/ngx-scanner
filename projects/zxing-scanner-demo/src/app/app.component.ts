@@ -1,15 +1,13 @@
-import { Component, VERSION, OnInit, ViewChild } from '@angular/core';
-
+import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-
-import { Result } from '@zxing/library';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
 
   ngVersion = VERSION.full;
 
@@ -20,6 +18,9 @@ export class AppComponent implements OnInit {
   hasPermission: boolean;
   qrResultString: string;
 
+  torchEnabled = false;
+  torchAvailable$: Observable<boolean>;
+
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
 
@@ -27,11 +28,12 @@ export class AppComponent implements OnInit {
     this.qrResultString = null;
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
       this.availableDevices = devices;
       this._selectBackfaceCamera(devices);
     });
+    this.torchAvailable$ = this.scanner.torchCompatible;
   }
 
   onCodeResult(resultString: string) {
@@ -57,6 +59,10 @@ export class AppComponent implements OnInit {
     };
 
     return states['' + state];
+  }
+
+  toggleTorch(): void {
+    this.torchEnabled = !this.torchEnabled;
   }
 
   private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {
