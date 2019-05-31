@@ -49,6 +49,7 @@
   "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0",
+    "@zxing/library": "^0.13.0",
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
@@ -71,7 +72,6 @@
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^10.12.2",
-    "@zxing/library": "^0.13.0",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "^4.3.0",
     "core-js": "^2.5.5",
