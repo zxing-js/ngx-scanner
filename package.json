@@ -44,6 +44,7 @@
     "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
+    "@zxing/library": "^0.13.0",
     "tslib": "^1.9.0"
   },
   "peerDependencies": {

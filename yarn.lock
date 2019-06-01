@@ -642,7 +642,7 @@
 
 "@zxing/library@^0.13.0":
   version "0.13.0"
-  resolved "https://registry.npmjs.org/@zxing/library/-/library-0.13.0.tgz#69ad9faa21ab925e20c421359c54f562617bf894"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.13.0.tgz#69ad9faa21ab925e20c421359c54f562617bf894"
   integrity sha512-NizB8P2Vc/gcXjnFvMrCv5eBYa+PAeHnRv5DoczPcFZKw0H3iL4SvFdrVrmdXDzaws6SsT+a1SmN6w2MQ9f3cA==
   dependencies:
     ts-custom-error "^3.0.0"
@@ -8783,7 +8783,7 @@ terser@^4.0.0:
 
 text-encoding@^0.7.0:
   version "0.7.0"
-  resolved "https://registry.npmjs.org/text-encoding/-/text-encoding-0.7.0.tgz#f895e836e45990624086601798ea98e8f36ee643"
+  resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.7.0.tgz#f895e836e45990624086601798ea98e8f36ee643"
   integrity sha512-oJQ3f1hrOnbRLOcwKz0Liq2IcrvDeZRHXhd9RgLrsT+DjWY/nty1Hi7v3dtkaEYbPYe0mUoOfzRrMwfXXwgPUA==
 
 text-table@~0.2.0:
@@ -8927,7 +8927,7 @@ trim-right@^1.0.1:
 
 ts-custom-error@^3.0.0:
   version "3.1.0"
-  resolved "https://registry.npmjs.org/ts-custom-error/-/ts-custom-error-3.1.0.tgz#2abcd25b253ca209036a51870318da9b1de93107"
+  resolved "https://registry.yarnpkg.com/ts-custom-error/-/ts-custom-error-3.1.0.tgz#2abcd25b253ca209036a51870318da9b1de93107"
   integrity sha512-EIL1r8RKfa006lLhSSVsAlvu6/BgRdSLSxibP27zq66ydh6Kbsjv1pV7VAD7TxQfdQ9begiQW0QVjsnr9KvVrw==
 
 ts-node@^7.0.1:
@@ -9034,11 +9034,6 @@ typescript@2.9.1:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.1.tgz#fdb19d2c67a15d11995fd15640e373e09ab09961"
   integrity sha512-h6pM2f/GDchCFlldnriOhs1QHuwbnmj6/v7499eMHqPeW4V2G0elua2eIc2nu8v2NdHV0Gm+tzX83Hr6nUFjQA==
 
-typescript@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-3.1.3.tgz#01b70247a6d3c2467f70c45795ef5ea18ce191d5"
-  integrity sha512-+81MUSyX+BaSo+u2RbozuQk/UWx6hfG0a5gHu4ANEM4sU96XbuIyAB+rWBW1u70c6a5QuZfuYICn3s2UjuHUpA==
-
 typescript@3.2.4:
   version "3.2.4"
   resolved "https://registry.npmjs.org/typescript/-/typescript-3.2.4.tgz#c585cb952912263d915b462726ce244ba510ef3d"
@@ -9048,6 +9043,11 @@ typescript@^2.4.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
   integrity sha512-Gr4p6nFNaoufRIY4NMdpQRNmgxVIGMs4Fcu/ujdYk3nAZqk7supzBE9idmvfZIlH/Cuj//dvi+019qEue9lV0w==
+
+typescript@~3.1.3:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
+  integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
 
 uglify-js@^2.6:
   version "2.8.29"
