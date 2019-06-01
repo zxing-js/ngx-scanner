@@ -23,8 +23,8 @@ Angular Barcode/QR-Code scanner component.
 [![Made with Angular](https://img.shields.io/badge/Made%20with-Angular-E13137.svg)](https://angular.io)
 
 [![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Backers on Open Collective](https://opencollective.com/ngx-scanner/backers/badge.svg)](#backers) 
-[![Sponsors on Open Collective](https://opencollective.com/ngx-scanner/sponsors/badge.svg)](#sponsors)
+[![Backers on Open Collective](https://opencollective.com/zxing-js/backers/badge.svg)](#backers) 
+[![Sponsors on Open Collective](https://opencollective.com/zxing-js/sponsors/badge.svg)](#sponsors)
 
 </div>
 
@@ -76,7 +76,7 @@ Want just to write QR codes on your own, try our [ZXing typescript port](https:/
 
 ## Financial contributions
 
- We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/ngx-scanner).
+ We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/zxing-js).
  Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
 
 
@@ -94,25 +94,25 @@ Here goes a special thanks all our contributors. Thank you! 🖤❤️♡
 
  ### Backers
 
- Thank you to all our backers! [[Become a backer](https://opencollective.com/ngx-scanner#backer)]
+ Thank you to all our backers! [[Become a backer](https://opencollective.com/zxing-js#backer)]
 
- <a href="https://opencollective.com/ngx-scanner#backers" target="_blank"><img src="https://opencollective.com/ngx-scanner/backers.svg?width=890"></a>
+ <a href="https://opencollective.com/zxing-js#backers" target="_blank"><img src="https://opencollective.com/zxing-js/backers.svg?width=890"></a>
 
 
  ### Sponsors
 
- Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/ngx-scanner#sponsor))
+ Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/zxing-js#sponsor))
 
- <a href="https://opencollective.com/ngx-scanner/sponsor/0/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/0/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/1/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/1/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/2/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/2/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/3/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/3/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/4/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/4/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/5/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/5/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/6/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/6/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/7/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/7/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/8/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/8/avatar.svg"></a>
- <a href="https://opencollective.com/ngx-scanner/sponsor/9/website" target="_blank"><img src="https://opencollective.com/ngx-scanner/sponsor/9/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/0/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/0/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/1/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/1/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/2/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/2/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/3/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/3/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/4/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/4/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/5/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/5/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/6/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/6/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/7/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/7/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/8/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/8/avatar.svg"></a>
+ <a href="https://opencollective.com/zxing-js/sponsor/9/website" target="_blank"><img src="https://opencollective.com/zxing-js/sponsor/9/avatar.svg"></a>
 
 ---
 

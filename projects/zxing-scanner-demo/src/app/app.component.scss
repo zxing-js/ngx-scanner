@@ -8,19 +8,24 @@ header {
   top: 0;
   padding: 10px;
   background: #333;
+  display: flex;
 
-  select {
+  button, select {
 
     --color: #aaa;
 
-    width: 100%;
-    padding: 15px;
     border-radius: 5px;
     background: none;
     border: 2px solid var(--color);
     color: var(--color);
-    font-weight: bold;
     cursor: pointer;
+  }
+
+  select {
+
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
 
     option {
       padding: 10px;
@@ -45,6 +50,21 @@ header {
     font-size: 60%;
     margin: -.6em 0 0 0;
   }
+
+  button {
+    background: none;
+    border: none;
+    line-height: 1;
+    font-weight: bolder;
+    font-size: 120%;
+    float: right;
+    color: #fff;
+    margin-left: 16px;
+  }
+}
+
+h2 {
+  padding: 0 16px;
 }
 
 footer {
