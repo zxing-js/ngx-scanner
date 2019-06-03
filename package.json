@@ -1,5 +1,5 @@
 {
-  "name": "ngx-scanner",
+  "name": "@zxing/ngx-scanner",
   "version": "0.0.0",
   "private": true,
   "repository": {
@@ -44,13 +44,10 @@
     "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
-    "@zxing/library": "^0.13.0"
-  },
-  "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0",
     "@zxing/library": "^0.13.0",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.5.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",
@@ -86,7 +83,6 @@
     "ng-packagr": "^4.4.0",
     "npm-install-peers": "^1.2.1",
     "protractor": "^5.3.1",
-    "rxjs": "^6.3.3",
     "ts-node": "^7.0.1",
     "tsickle": "^0.33.1",
     "tslint": "^5.9.1",
