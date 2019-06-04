@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { Observable } from 'rxjs';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +10,39 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements AfterViewInit {
 
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo = null;
+
+  formats: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.EAN_8,
+    BarcodeFormat.ITF,
+    BarcodeFormat.QR_CODE,
+    BarcodeFormat.RSS_14,
+  ];
+
+  disabledFormats: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
+
+  hasDevices: boolean;
+  hasPermission: boolean;
+
   ngVersion = VERSION.full;
+
+  qrResultString: string;
 
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
 
-  hasDevices: boolean;
-  hasPermission: boolean;
-  qrResultString: string;
-
   torchEnabled = false;
   torchAvailable$: Observable<boolean>;
-
-  availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo = null;
+  tryHarder = false;
 
   clearResult(): void {
     this.qrResultString = null;
@@ -63,6 +83,10 @@ export class AppComponent implements AfterViewInit {
 
   toggleTorch(): void {
     this.torchEnabled = !this.torchEnabled;
+  }
+
+  toggleTryHarder(): void {
+    this.tryHarder = !this.tryHarder;
   }
 
   private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {
