@@ -44,9 +44,13 @@
     "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
+    "@angular/animations": "^7.0.0",
+    "@angular/cdk": "~7.3.7",
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0",
+    "@angular/material": "7.3.7",
     "@zxing/library": "^0.13.0",
+    "hammerjs": "^2.0.8",
     "rxjs": "^6.5.2"
   },
   "devDependencies": {
