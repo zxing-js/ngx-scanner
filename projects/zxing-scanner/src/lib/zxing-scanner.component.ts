@@ -230,7 +230,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   @Input()
   set torch(on: boolean) {
-    this._codeReader.setTorch(on);
+    this.getCodeReader().setTorch(on);
   }
 
   /**
@@ -381,7 +381,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   async ngAfterViewInit(): Promise<void> {
 
     // makes torch availability information available to user
-    this._codeReader.isTorchAvailable.subscribe(x => this.torchCompatible.emit(x));
+    this.getCodeReader().isTorchAvailable.subscribe(x => this.torchCompatible.emit(x));
 
     if (!this.autostart) {
       console.warn('New feature \'autostart\' disabled, be careful. Permissions and devices recovery has to be run manually.');
@@ -415,8 +415,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     // @note apenas necessario por enquanto causa da Torch
-    this._codeReader = new BrowserMultiFormatContinuousReader(this.hints);
-
+    this._codeReader = undefined;
     this.device = prevDevice;
   }
 
@@ -426,7 +425,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   async updateVideoInputDevices(): Promise<MediaDeviceInfo[]> {
 
     // permissions aren't needed to get devices, but to access them and their info
-    const devices = await this._codeReader.listVideoInputDevices();
+    const devices = await this.getCodeReader().listVideoInputDevices();
 
     // stores discovered devices and updates information
     if (devices && devices.length > 0) {
@@ -584,6 +583,18 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
+   * Retorna um code reader, cria um se nenhume existe.
+   */
+  private getCodeReader(): BrowserMultiFormatContinuousReader {
+
+    if (!this._codeReader) {
+      this._codeReader = new BrowserMultiFormatContinuousReader(this.hints);
+    }
+
+    return this._codeReader;
+  }
+
+  /**
    * Starts the continuous scanning for the given device.
    *
    * @param deviceId The deviceId from the device.
@@ -593,7 +604,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     const videoElement = this.previewElemRef.nativeElement;
 
     try {
-      const scan$ = this._codeReader.continuousDecodeFromInputVideoDevice(deviceId, videoElement);
+      const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
 
       const next = (result: Result) => this._onDecodeResult(result);
       const error = (err: any) => this.dispatchScanError(err);
