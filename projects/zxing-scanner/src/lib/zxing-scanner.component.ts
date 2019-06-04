@@ -13,17 +13,12 @@ import {
 import {
   ArgumentException,
   BarcodeFormat,
-  ChecksumException,
   DecodeHintType,
   Exception,
-  FormatException,
-  NotFoundException,
   Result
 } from '@zxing/library';
 
-import { Observable } from 'rxjs';
-import { catchError, first } from 'rxjs/operators';
-import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+import { BrowserMultiFormatContinuousReader, ResultAndError } from './browser-multi-format-continuous-reader';
 
 @Component({
   selector: 'zxing-scanner',
@@ -108,7 +103,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
    */
   @Output()
-  scanFailure: EventEmitter<void>;
+  scanFailure: EventEmitter<Exception | undefined>;
 
   /**
    * Emitts events when a scan throws some error, will inject the error to the callback.
@@ -284,16 +279,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   constructor() {
     // instance based emitters
-    this.torchCompatible = new EventEmitter<boolean>();
-    this.scanSuccess = new EventEmitter<string>();
-    this.scanFailure = new EventEmitter<void>();
-    this.scanError = new EventEmitter<Error>();
-    this.scanComplete = new EventEmitter<Result>();
-    this.camerasFound = new EventEmitter<MediaDeviceInfo[]>();
-    this.camerasNotFound = new EventEmitter<any>();
-    this.permissionResponse = new EventEmitter<boolean>();
-    this.hasDevices = new EventEmitter<boolean>();
-    this.deviceChange = new EventEmitter<MediaDeviceInfo>();
+    this.torchCompatible = new EventEmitter();
+    this.scanSuccess = new EventEmitter();
+    this.scanFailure = new EventEmitter();
+    this.scanError = new EventEmitter();
+    this.scanComplete = new EventEmitter();
+    this.camerasFound = new EventEmitter();
+    this.camerasNotFound = new EventEmitter();
+    this.permissionResponse = new EventEmitter();
+    this.hasDevices = new EventEmitter();
+    this.deviceChange = new EventEmitter();
 
     // computed data
     this._hints = new Map<DecodeHintType, any>();
@@ -467,8 +462,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Dispatches the scan failure event.
    */
-  private dispatchScanFailure(): void {
-    this.scanFailure.next();
+  private dispatchScanFailure(reason?: Exception): void {
+    this.scanFailure.next(reason);
   }
 
   /**
@@ -557,25 +552,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     return permission;
   }
 
-
-  /**
-   * Administra um erro gerado durante o decode stream.
-   */
-  private handleDecodeStreamError(err: Exception, caught: Observable<Result>): Observable<Result> {
-
-    if (
-      // scan Failure - found nothing, no error
-      err instanceof NotFoundException ||
-      // scan Error - found the QR but got error on decoding
-      err instanceof ChecksumException ||
-      err instanceof FormatException
-    ) {
-      return caught;
-    }
-
-    throw err;
-  }
-
   /**
    * Returns a valid BarcodeFormat or fails.
    */
@@ -606,29 +582,23 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const videoElement = this.previewElemRef.nativeElement;
 
-    try {
-      const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
+    const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
 
-      const next = (result: Result) => this._onDecodeResult(result);
-      const error = (err: any) => this.dispatchScanError(err);
+    const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
+    const error = (err: any) => { this.dispatchScanError(err); this.resetAndEmit(); };
 
-      scan$.pipe(catchError(this.handleDecodeStreamError)).subscribe(next, error);
-
-    } catch (err) {
-      this.dispatchScanError(err);
-      this.dispatchScanComplete(undefined);
-    }
+    scan$.subscribe(next, error);
   }
 
   /**
    * Handles decode results.
    */
-  private _onDecodeResult(result: Result): void {
+  private _onDecodeResult(result: Result, error: Exception): void {
 
     if (result) {
       this.dispatchScanSuccess(result);
     } else {
-      this.dispatchScanFailure();
+      this.dispatchScanFailure(error);
     }
 
     this.dispatchScanComplete(result);

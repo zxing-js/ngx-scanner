@@ -1,7 +1,12 @@
 /// <reference path="./image-capture.d.ts" />
 
-import { BrowserMultiFormatReader, Result } from '@zxing/library';
+import { BrowserMultiFormatReader, Result, Exception, NotFoundException, ChecksumException, FormatException } from '@zxing/library';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+export interface ResultAndError {
+  result?: Result;
+  error?: Exception;
+}
 
 /**
  * Based on zxing-typescript BrowserCodeReader
@@ -33,7 +38,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * If there's some scan stream open, it shal be here.
    */
-  private scanStream: BehaviorSubject<Result>;
+  private scanStream: BehaviorSubject<ResultAndError>;
 
   /**
    * Starts the decoding from the current or a new video element.
@@ -45,7 +50,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   public continuousDecodeFromInputVideoDevice(
     deviceId?: string,
     videoSource?: HTMLVideoElement
-  ): Observable<Result> {
+  ): Observable<ResultAndError> {
 
     this.reset();
 
@@ -64,17 +69,18 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     const constraints: MediaStreamConstraints = { video };
 
-    const scan$ = new BehaviorSubject<Result>(undefined);
+    const scan$ = new BehaviorSubject<ResultAndError>({ result: undefined });
 
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then(stream => {
-        this.checkTorchCompatibility(stream);
-        return this.attachStreamToVideo(stream, videoSource);
-      })
-      .then(videoElement =>
-        this.decodeWithDelay(this.timeBetweenScansMillis, videoElement)
-          .subscribe(v => scan$.next(v), e => scan$.error(e), () => scan$.complete())
-      );
+    try {
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          this.checkTorchCompatibility(stream);
+          return this.attachStreamToVideo(stream, videoSource);
+        })
+        .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
+    } catch (e) {
+      scan$.error(e);
+    }
 
     return scan$.asObservable();
   }
@@ -125,21 +131,15 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * Opens a decoding stream.
    */
-  protected decodeWithDelay(delay: number = 500, videoElement: HTMLVideoElement): Observable<Result> {
-
-    const scan$ = new BehaviorSubject<Result>(undefined);
-
+  protected decodeOnSubject(scan$: BehaviorSubject<ResultAndError>, videoElement: HTMLVideoElement, delay: number = 500): void {
     this._decodeOnStreamWithDelay(scan$, videoElement, delay);
-
     this._setScanStream(scan$);
-
-    return scan$.asObservable();
   }
 
   /**
    * Correctly sets a new scanStream value.
    */
-  private _setScanStream(scan$: BehaviorSubject<Result>): void {
+  private _setScanStream(scan$: BehaviorSubject<ResultAndError>): void {
     // cleans old stream
     this._cleanScanStream();
     // sets new stream
@@ -160,8 +160,12 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
   /**
    * Decodes values in a stream with delays between scans.
+   *
+   * @param scan$ The subject to receive the values.
+   * @param videoElement The video element the decode will be applied.
+   * @param delay The delay between decode results.
    */
-  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<Result>, videoElement: HTMLVideoElement, delay: number): void {
+  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<ResultAndError>, videoElement: HTMLVideoElement, delay: number): void {
 
     // stops loop
     if (scan$.isStopped) {
@@ -172,9 +176,21 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     try {
       result = this.decode(videoElement);
-      scan$.next(result);
-    } catch (e) {
-      scan$.error(e);
+      scan$.next({ result });
+    } catch (error) {
+      // stream cannot stop on fails.
+      if (
+        !error ||
+        // scan Failure - found nothing, no error
+        error instanceof NotFoundException ||
+        // scan Error - found the QR but got error on decoding
+        error instanceof ChecksumException ||
+        error instanceof FormatException
+      ) {
+        scan$.next({ error });
+      } else {
+        scan$.error(error);
+      }
     } finally {
       const timeout = !result ? 0 : delay;
       setTimeout(() => this._decodeOnStreamWithDelay(scan$, videoElement, delay), timeout);
@@ -184,7 +200,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   /**
    * Restarts the scanner.
    */
-  protected restart(): Observable<Result> {
+  protected restart(): Observable<ResultAndError> {
     // reset
     // start
     return this.continuousDecodeFromInputVideoDevice(this.deviceId, this.videoElement);
