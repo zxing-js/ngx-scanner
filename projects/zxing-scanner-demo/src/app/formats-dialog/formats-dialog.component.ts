@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSelectionListChange } from '@angular/material';
+import { formatNames, formatsAvailable } from '../barcode-formats';
 
 @Component({
   selector: 'app-formats-dialog',
@@ -9,14 +10,28 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 })
 export class FormatsDialogComponent {
 
-  formats: BarcodeFormat[];
-  disabledFormats: BarcodeFormat[];
+  formatsAvailable = formatsAvailable;
+
+  formatsEnabled: BarcodeFormat[];
+
+  readonly formatNames = formatNames;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly data: any,
+    private readonly _dialogRef: MatDialogRef<FormatsDialogComponent>,
   ) {
-    this.formats = data.formats;
-    this.disabledFormats = data.disabledFormats;
+    this.formatsEnabled = data.formatsEnabled;
   }
 
+  close() {
+    this._dialogRef.close(this.formatsEnabled);
+  }
+
+  isEnabled(format: BarcodeFormat) {
+    return this.formatsEnabled.find(x => x === format);
+  }
+
+  onSelectionChange(event: MatSelectionListChange) {
+    this.formatsEnabled = event.source.selectedOptions.selected.map(selected => selected.value);
+  }
 }

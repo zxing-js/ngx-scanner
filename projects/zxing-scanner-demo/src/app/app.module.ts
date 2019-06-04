@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatTooltipModule,  MatButtonModule } from '@angular/material';
+import { MatListModule } from '@angular/material/list';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
@@ -11,9 +12,12 @@ import { FormatsDialogComponent } from './formats-dialog/formats-dialog.componen
   imports: [
     BrowserModule,
     FormsModule,
-    ZXingScannerModule.forRoot(),
+    ZXingScannerModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatListModule,
+    MatTooltipModule,
+    MatButtonModule,
   ],
   declarations: [AppComponent, FormatsDialogComponent],
   bootstrap: [AppComponent],

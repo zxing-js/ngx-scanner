@@ -16,9 +16,7 @@ export class AppComponent implements AfterViewInit {
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
 
-  formats: BarcodeFormat[] = formatsAvailable;
-
-  disabledFormats: BarcodeFormat[] = [
+  formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
     BarcodeFormat.DATA_MATRIX,
     BarcodeFormat.EAN_13,
@@ -63,12 +61,14 @@ export class AppComponent implements AfterViewInit {
   }
 
   openFormatsDialog() {
-    this._dialog.open(FormatsDialogComponent, {
-      data: {
-        formats: this.formats,
-        disabledFormats: this.disabledFormats,
-      }
-    })
+    const data = {
+      formatsEnabled: this.formatsEnabled,
+    };
+
+    this._dialog
+      .open(FormatsDialogComponent, { data })
+      .afterClosed()
+      .subscribe(x => { if (x) { this.formatsEnabled = x; } });
   }
 
   stateToEmoji(state: boolean): string {
