@@ -3,7 +3,8 @@
   <header>
     <select (change)="onDeviceSelectChange($event.target.value)">
       <option value="" [selected]="!currentDevice">No Device Selected</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
     </select>
     <button (click)="toggleTryHarder()">
       <span *ngIf="!tryHarder" title="Enaable TryHarder">🏋</span>
@@ -15,7 +16,13 @@
     </button>
   </header>
 
-  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)" [formats]="['QR_CODE', 'CODE_128']" [tryHarder]="tryHarder" (hasDevices)="hasDevices = $event" (permissionResponse)="hasPermission = $event"></zxing-scanner>
+  <div class="btn-formats-container">
+    <button class="btn-formats" (click)="openFormatsDialog()">🏉🏈</button>
+  </div>
+
+  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+    [formats]="formats" [tryHarder]="tryHarder" (hasDevices)="hasDevices = $event"
+    (permissionResponse)="hasPermission = $event"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
     <small>Result</small>

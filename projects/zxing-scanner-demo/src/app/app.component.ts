@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { Observable } from 'rxjs';
-import { BarcodeFormat } from '@zxing/library';
+import { formatsAvailable } from './barcode-formats';
+import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +16,7 @@ export class AppComponent implements AfterViewInit {
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
 
-  formats: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.EAN_8,
-    BarcodeFormat.ITF,
-    BarcodeFormat.QR_CODE,
-    BarcodeFormat.RSS_14,
-  ];
+  formats: BarcodeFormat[] = formatsAvailable;
 
   disabledFormats: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -44,6 +39,8 @@ export class AppComponent implements AfterViewInit {
   torchAvailable$: Observable<boolean>;
   tryHarder = false;
 
+  constructor(private readonly _dialog: MatDialog) { }
+
   clearResult(): void {
     this.qrResultString = null;
   }
@@ -63,6 +60,15 @@ export class AppComponent implements AfterViewInit {
   onDeviceSelectChange(selected: string) {
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.currentDevice = device || null;
+  }
+
+  openFormatsDialog() {
+    this._dialog.open(FormatsDialogComponent, {
+      data: {
+        formats: this.formats,
+        disabledFormats: this.disabledFormats,
+      }
+    })
   }
 
   stateToEmoji(state: boolean): string {
