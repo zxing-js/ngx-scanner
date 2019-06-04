@@ -22,7 +22,7 @@ import {
 } from '@zxing/library';
 
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
 
 @Component({
@@ -170,8 +170,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       throw new ArgumentException('The `device` must be a valid MediaDeviceInfo or null.');
     }
 
-    if (!!device) {
-      // starts if enabled and set the current device
+    this._device = device;
+
+    // if enabled, starts scanning
+    if (this._enabled && device !== null) {
       this.scanFromDevice(device.deviceId);
     }
   }
@@ -242,16 +244,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this._enabled = Boolean(enabled);
 
     if (!this._enabled) {
-      this.reset();
-    } else if (this._device) {
-      this.scanFromDevice(this._device.deviceId);
+      this.resetAndEmit();
+    } else if (this.device) {
+      this.scanFromDevice(this.device.deviceId);
     }
   }
 
   /**
    * Tells if the scanner is enabled or not.
    */
-  get enable(): boolean {
+  get enabled(): boolean {
     return this._enabled;
   }
 
@@ -372,7 +374,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Checks if the given device is the current defined one.
    */
   isCurrentDevice(device: MediaDeviceInfo) {
-    return this._device && device && device.deviceId === this._device.deviceId;
+    return this.device && device && device.deviceId === this.device.deviceId;
   }
 
   /**
@@ -400,7 +402,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.reset();
+    this.resetAndEmit();
   }
 
   /**
@@ -450,6 +452,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     this.device = firstDevice;
+    this.deviceChange.emit(firstDevice);
   }
 
   /**
@@ -640,13 +643,21 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const device = this._device;
+    const device = this.device;
+    // do not set this.device inside this method, it would create a recursive loop
     this._device = null;
-    this.deviceChange.emit(null);
 
     this._codeReader.reset();
 
     return device;
+  }
+
+  /**
+   * Resets the scanner and emits a null device change.
+   */
+  private resetAndEmit() {
+    this.reset();
+    this.deviceChange.emit(null);
   }
 
   /**
