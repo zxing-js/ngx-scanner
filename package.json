@@ -31,7 +31,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve zxing-scanner-demo",
-    "build": "ng build zxing-scanner",
+    "build": "ng build zxing-scanner && cp README.md ./dist/zxing-scanner",
     "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint zxing-scanner && ng lint zxing-scanner-demo",
     "e2e": "ng e2e",
