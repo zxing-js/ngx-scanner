@@ -31,7 +31,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Supported Hints map.
    */
-  private _hints: Map<DecodeHintType, any>;
+  private _hints: Map<DecodeHintType, any> | null;
 
   /**
    * The ZXing code reader.
@@ -208,11 +208,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     // formats may be set from html template as BarcodeFormat or string array
     const formats = input.map(f => this.getBarcodeFormatOrFail(f));
 
-    // updates the hints
-    this.hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+    const hints = this.hints;
 
-    // new instance with new hints.
-    this.restart();
+    // updates the hints
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+
+    this.hints = hints;
   }
 
   /**
@@ -220,6 +221,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   get hints() {
     return this._hints;
+  }
+
+  /**
+   * Does what it takes to set the hints.
+   */
+  set hints(hints: Map<DecodeHintType, any>) {
+
+    this._hints = hints;
+
+    // @note avoid restarting the code reader when possible
+
+    // new instance with new hints.
+    this.restart();
   }
 
   /**
@@ -264,14 +278,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   @Input()
   set tryHarder(enable: boolean) {
+
+    const hints = this.hints;
+
     if (enable) {
-      this.hints.set(DecodeHintType.TRY_HARDER, true);
+      hints.set(DecodeHintType.TRY_HARDER, true);
     } else {
-      this.hints.delete(DecodeHintType.TRY_HARDER);
+      hints.delete(DecodeHintType.TRY_HARDER);
     }
 
-    // new instance with new hints.
-    this.restart();
+    this.hints = hints;
   }
 
   /**
