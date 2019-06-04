@@ -13,17 +13,12 @@ import {
 import {
   ArgumentException,
   BarcodeFormat,
-  ChecksumException,
   DecodeHintType,
   Exception,
-  FormatException,
-  NotFoundException,
   Result
 } from '@zxing/library';
 
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+import { BrowserMultiFormatContinuousReader, ResultAndError } from './browser-multi-format-continuous-reader';
 
 @Component({
   selector: 'zxing-scanner',
@@ -36,7 +31,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Supported Hints map.
    */
-  private _hints: Map<DecodeHintType, any>;
+  private _hints: Map<DecodeHintType, any> | null;
 
   /**
    * The ZXing code reader.
@@ -108,7 +103,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
    */
   @Output()
-  scanFailure: EventEmitter<void>;
+  scanFailure: EventEmitter<Exception | undefined>;
 
   /**
    * Emitts events when a scan throws some error, will inject the error to the callback.
@@ -170,8 +165,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       throw new ArgumentException('The `device` must be a valid MediaDeviceInfo or null.');
     }
 
-    if (!!device) {
-      // starts if enabled and set the current device
+    this._device = device;
+
+    // if enabled, starts scanning
+    if (this._enabled && device !== null) {
       this.scanFromDevice(device.deviceId);
     }
   }
@@ -211,11 +208,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     // formats may be set from html template as BarcodeFormat or string array
     const formats = input.map(f => this.getBarcodeFormatOrFail(f));
 
-    // updates the hints
-    this.hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+    const hints = this.hints;
 
-    // new instance with new hints.
-    this.restart();
+    // updates the hints
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+
+    this.hints = hints;
   }
 
   /**
@@ -223,6 +221,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   get hints() {
     return this._hints;
+  }
+
+  /**
+   * Does what it takes to set the hints.
+   */
+  set hints(hints: Map<DecodeHintType, any>) {
+
+    this._hints = hints;
+
+    // @note avoid restarting the code reader when possible
+
+    // new instance with new hints.
+    this.restart();
   }
 
   /**
@@ -242,16 +253,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this._enabled = Boolean(enabled);
 
     if (!this._enabled) {
-      this.reset();
-    } else if (this._device) {
-      this.scanFromDevice(this._device.deviceId);
+      this.resetAndEmit();
+    } else if (this.device) {
+      this.scanFromDevice(this.device.deviceId);
     }
   }
 
   /**
    * Tells if the scanner is enabled or not.
    */
-  get enable(): boolean {
+  get enabled(): boolean {
     return this._enabled;
   }
 
@@ -267,14 +278,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   @Input()
   set tryHarder(enable: boolean) {
+
+    const hints = this.hints;
+
     if (enable) {
-      this.hints.set(DecodeHintType.TRY_HARDER, true);
+      hints.set(DecodeHintType.TRY_HARDER, true);
     } else {
-      this.hints.delete(DecodeHintType.TRY_HARDER);
+      hints.delete(DecodeHintType.TRY_HARDER);
     }
 
-    // new instance with new hints.
-    this.restart();
+    this.hints = hints;
   }
 
   /**
@@ -282,16 +295,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   constructor() {
     // instance based emitters
-    this.torchCompatible = new EventEmitter<boolean>();
-    this.scanSuccess = new EventEmitter<string>();
-    this.scanFailure = new EventEmitter<void>();
-    this.scanError = new EventEmitter<Error>();
-    this.scanComplete = new EventEmitter<Result>();
-    this.camerasFound = new EventEmitter<MediaDeviceInfo[]>();
-    this.camerasNotFound = new EventEmitter<any>();
-    this.permissionResponse = new EventEmitter<boolean>();
-    this.hasDevices = new EventEmitter<boolean>();
-    this.deviceChange = new EventEmitter<MediaDeviceInfo>();
+    this.torchCompatible = new EventEmitter();
+    this.scanSuccess = new EventEmitter();
+    this.scanFailure = new EventEmitter();
+    this.scanError = new EventEmitter();
+    this.scanComplete = new EventEmitter();
+    this.camerasFound = new EventEmitter();
+    this.camerasNotFound = new EventEmitter();
+    this.permissionResponse = new EventEmitter();
+    this.hasDevices = new EventEmitter();
+    this.deviceChange = new EventEmitter();
 
     // computed data
     this._hints = new Map<DecodeHintType, any>();
@@ -372,7 +385,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Checks if the given device is the current defined one.
    */
   isCurrentDevice(device: MediaDeviceInfo) {
-    return this._device && device && device.deviceId === this._device.deviceId;
+    return this.device && device && device.deviceId === this.device.deviceId;
   }
 
   /**
@@ -400,7 +413,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.reset();
+    this.resetAndEmit();
   }
 
   /**
@@ -450,6 +463,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     this.device = firstDevice;
+    this.deviceChange.emit(firstDevice);
   }
 
   /**
@@ -464,8 +478,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Dispatches the scan failure event.
    */
-  private dispatchScanFailure(): void {
-    this.scanFailure.next();
+  private dispatchScanFailure(reason?: Exception): void {
+    this.scanFailure.next(reason);
   }
 
   /**
@@ -554,25 +568,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     return permission;
   }
 
-
-  /**
-   * Administra um erro gerado durante o decode stream.
-   */
-  private handleDecodeStreamError(err: Exception, caught: Observable<Result>): Observable<Result> {
-
-    if (
-      // scan Failure - found nothing, no error
-      err instanceof NotFoundException ||
-      // scan Error - found the QR but got error on decoding
-      err instanceof ChecksumException ||
-      err instanceof FormatException
-    ) {
-      return caught;
-    }
-
-    throw err;
-  }
-
   /**
    * Returns a valid BarcodeFormat or fails.
    */
@@ -603,29 +598,23 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const videoElement = this.previewElemRef.nativeElement;
 
-    try {
-      const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
+    const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
 
-      const next = (result: Result) => this._onDecodeResult(result);
-      const error = (err: any) => this.dispatchScanError(err);
+    const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
+    const error = (err: any) => { this.dispatchScanError(err); this.resetAndEmit(); };
 
-      scan$.pipe(catchError(this.handleDecodeStreamError)).subscribe(next, error);
-
-    } catch (err) {
-      this.dispatchScanError(err);
-      this.dispatchScanComplete(undefined);
-    }
+    scan$.subscribe(next, error);
   }
 
   /**
    * Handles decode results.
    */
-  private _onDecodeResult(result: Result): void {
+  private _onDecodeResult(result: Result, error: Exception): void {
 
     if (result) {
       this.dispatchScanSuccess(result);
     } else {
-      this.dispatchScanFailure();
+      this.dispatchScanFailure(error);
     }
 
     this.dispatchScanComplete(result);
@@ -640,13 +629,21 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const device = this._device;
+    const device = this.device;
+    // do not set this.device inside this method, it would create a recursive loop
     this._device = null;
-    this.deviceChange.emit(null);
 
     this._codeReader.reset();
 
     return device;
+  }
+
+  /**
+   * Resets the scanner and emits a null device change.
+   */
+  private resetAndEmit() {
+    this.reset();
+    this.deviceChange.emit(null);
   }
 
   /**

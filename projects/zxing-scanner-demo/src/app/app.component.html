@@ -3,20 +3,33 @@
   <header>
     <select (change)="onDeviceSelectChange($event.target.value)">
       <option value="" [selected]="!currentDevice">No Device Selected</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
     </select>
+    <button mat-stroked-button (click)="toggleTryHarder()">
+      <span *ngIf="!tryHarder" matTooltip="Enable Try-harder">🏋</span>
+      <span *ngIf="tryHarder" matTooltip="Disable Try-harder">🚶</span>
+    </button>
     <button (click)="toggleTorch()" *ngIf="torchAvailable$ | async">
-      <span *ngIf="!torchEnabled">📸</span>
-      <span *ngIf="torchEnabled">📷</span>
+      <span *ngIf="!torchEnabled" matTooltip="Enable Torch">📸</span>
+      <span *ngIf="torchEnabled" matTooltip="Disable Torch">📷</span>
     </button>
   </header>
 
-  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true" (hasDevices)="hasDevices = $event" (permissionResponse)="hasPermission = $event"></zxing-scanner>
+  <div class="btn-formats-container">
+    <button mat-button class="btn-formats" (click)="openFormatsDialog()" matTooltip="Barcode formats">🏉🏈</button>
+  </div>
+
+  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+    [formats]="formatsEnabled" [tryHarder]="tryHarder" (hasDevices)="hasDevices = $event"
+    (permissionResponse)="hasPermission = $event"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
-    <small>Result</small>
-    <strong>{{ qrResultString }}</strong>
-    <button (click)="clearResult()">&times;</button>
+    <div>
+      <small>Result</small>
+      <strong>{{ qrResultString }}</strong>
+    </div>
+    <button mat-icon-button (click)="clearResult()">&times;</button>
   </section>
 
 </div>

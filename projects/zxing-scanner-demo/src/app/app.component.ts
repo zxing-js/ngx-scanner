@@ -1,6 +1,10 @@
 import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { Observable } from 'rxjs';
+import { formatsAvailable } from './barcode-formats';
+import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +13,31 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements AfterViewInit {
 
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo = null;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
+
+  hasDevices: boolean;
+  hasPermission: boolean;
+
   ngVersion = VERSION.full;
+
+  qrResultString: string;
 
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
 
-  hasDevices: boolean;
-  hasPermission: boolean;
-  qrResultString: string;
-
   torchEnabled = false;
   torchAvailable$: Observable<boolean>;
+  tryHarder = false;
 
-  availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo = null;
+  constructor(private readonly _dialog: MatDialog) { }
 
   clearResult(): void {
     this.qrResultString = null;
@@ -45,6 +60,17 @@ export class AppComponent implements AfterViewInit {
     this.currentDevice = device || null;
   }
 
+  openFormatsDialog() {
+    const data = {
+      formatsEnabled: this.formatsEnabled,
+    };
+
+    this._dialog
+      .open(FormatsDialogComponent, { data })
+      .afterClosed()
+      .subscribe(x => { if (x) { this.formatsEnabled = x; } });
+  }
+
   stateToEmoji(state: boolean): string {
 
     const states = {
@@ -63,6 +89,10 @@ export class AppComponent implements AfterViewInit {
 
   toggleTorch(): void {
     this.torchEnabled = !this.torchEnabled;
+  }
+
+  toggleTryHarder(): void {
+    this.tryHarder = !this.tryHarder;
   }
 
   private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {

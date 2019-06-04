@@ -1,0 +1,13 @@
+<header>
+  Available formats:
+</header>
+
+<mat-selection-list #selectedFormats (selectionChange)="onSelectionChange($event)">
+  <mat-list-option *ngFor="let format of formatsAvailable" checkboxPosition="start" [selected]="isEnabled(format)" [value]="format">
+    {{ formatNames[format] }}
+  </mat-list-option>
+</mat-selection-list>
+
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="close()">Done</button>
+</mat-dialog-actions>
