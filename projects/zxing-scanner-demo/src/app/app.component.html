@@ -11,7 +11,7 @@
     </button>
   </header>
 
-  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)" [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true" (hasDevices)="hasDevices = $event" (permissionResponse)="hasPermission = $event"></zxing-scanner>
+  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)" [formats]="['QR_CODE']" [tryHarder]="true" (hasDevices)="hasDevices = $event" (permissionResponse)="hasPermission = $event"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
     <small>Result</small>
