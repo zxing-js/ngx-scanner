@@ -163,7 +163,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     // in order to change the device the codeReader gotta be reseted
-    this.reset();
+    this._reset();
 
     this._device = device;
 
@@ -253,7 +253,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this._enabled = Boolean(enabled);
 
     if (!this._enabled) {
-      this.resetAndEmit();
+      this.reset();
     } else if (this.device) {
       this.scanFromDevice(this.device.deviceId);
     }
@@ -413,7 +413,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.resetAndEmit();
+    this.reset();
   }
 
   /**
@@ -421,7 +421,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   restart(): void {
 
-    const prevDevice = this.reset();
+    const prevDevice = this._reset();
 
     if (!prevDevice) {
       return;
@@ -601,7 +601,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
 
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
-    const error = (err: any) => { this.dispatchScanError(err); this.resetAndEmit(); };
+    const error = (err: any) => { this.dispatchScanError(err); this.reset(); };
 
     scan$.subscribe(next, error);
   }
@@ -623,7 +623,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Stops the code reader and returns the previous selected device.
    */
-  private reset(): MediaDeviceInfo {
+  private _reset(): MediaDeviceInfo {
 
     if (!this._codeReader) {
       return;
@@ -639,10 +639,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Resets the scanner and emits a null device change.
+   * Resets the scanner and emits device change.
    */
-  private resetAndEmit() {
-    this.reset();
+  public reset() {
+    this._reset();
     this.deviceChange.emit(null);
   }
 
