@@ -26,11 +26,6 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   private _isTorchAvailable = new BehaviorSubject<boolean>(undefined);
 
   /**
-   * The track from camera.
-   */
-  protected track: MediaStreamTrack;
-
-  /**
    * The device id of the current media device.
    */
   protected deviceId: string;
@@ -67,7 +62,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     try {
       this.getStreamForDevice({ deviceId })
-        .then(stream => this.attachStreamToVideo(stream, videoSource))
+        .then(stream => this.attachStreamToVideoAndCheckTorch(stream, videoSource))
         .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
     } catch (e) {
       scan$.error(e);
@@ -99,7 +94,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     const scan$ = new BehaviorSubject<ResultAndError>({});
 
     try {
-      this.attachStreamToVideo(stream, videoSource)
+      this.attachStreamToVideoAndCheckTorch(stream, videoSource)
         .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
     } catch (e) {
       scan$.error(e);
@@ -109,21 +104,21 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   }
 
   /**
-   * {@inheritdoc}
-   * Also, checks for torch compatibility.
+   * Update the torch compatibility state and attachs the stream to the preview element.
    */
-  protected async attachStreamToVideo(stream: MediaStream, videoSource: HTMLVideoElement): Promise<HTMLVideoElement> {
-    this.checkTorchCompatibility(stream);
-    return super.attachStreamToVideo(stream, videoSource);
+  protected async attachStreamToVideoAndCheckTorch(stream: MediaStream, videoSource: HTMLVideoElement): Promise<HTMLVideoElement> {
+    this.updateTorchCompatibility(stream);
+    return this.attachStreamToVideo(stream, videoSource);
   }
 
   /**
    * Gets the media stream for certain device.
    * Falls back to any available device if no `deviceId` is defined.
    */
-  public getStreamForDevice({ deviceId }: Partial<MediaDeviceInfo>): Promise<MediaStream> {
+  public async getStreamForDevice({ deviceId }: Partial<MediaDeviceInfo>): Promise<MediaStream> {
     const constraints = this.getUserMediaConstraints(deviceId);
-    return navigator.mediaDevices.getUserMedia(constraints);
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    return stream;
   }
 
   /**
@@ -146,21 +141,39 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
    *
    * @param stream The media stream used to check.
    */
-  protected async checkTorchCompatibility(stream: MediaStream): Promise<void> {
+  protected async updateTorchCompatibility(stream: MediaStream): Promise<void> {
+
+    const tracks = this.getVideoTracks(stream);
+
+    for (const track of tracks) {
+      if (await this.isTorchCompatible(track)) {
+        this._isTorchAvailable.next(true);
+        break;
+      }
+    }
+  }
+
+  private getVideoTracks(stream: MediaStream) {
+    let tracks = [];
+    try {
+      tracks = stream.getVideoTracks();
+    }
+    finally {
+      return tracks || [];
+    }
+  }
+
+  private async isTorchCompatible(track: MediaStreamTrack) {
 
     let compatible = false;
-    let track = null;
 
     try {
-      track = getStreamFirstTrack(stream);
       const imageCapture = new ImageCapture(track);
       const capabilities = await imageCapture.getPhotoCapabilities();
-
       compatible = !!capabilities['torch'] || ('fillLightMode' in capabilities && capabilities.fillLightMode.length !== 0);
     }
     finally {
-      this._isTorchAvailable.next(compatible);
-      this.track = track;
+      return compatible;
     }
   }
 
@@ -174,14 +187,24 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       return;
     }
 
+    const tracks = this.getVideoTracks(this.stream);
+
     if (on) {
-      this.track.applyConstraints({
-        advanced: [<any>{ torch: true }]
-      });
+      this.applyTorchOnTracks(tracks, true);
     } else {
+      this.applyTorchOnTracks(tracks, false);
       // @todo check possibility to disable torch without restart
       this.restart();
     }
+  }
+
+  /**
+   * Apply the torch setting in all received tracks.
+   */
+  private applyTorchOnTracks(tracks: MediaStreamTrack[], state: boolean) {
+    tracks.forEach(track => track.applyConstraints({
+      advanced: [<any>{ torch: state, fillLightMode: state ? 'torch' : 'none' }]
+    }));
   }
 
   /**
@@ -263,8 +286,3 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   }
 
 }
-
-function getStreamFirstTrack(stream: MediaStream): MediaStreamTrack {
-  return stream.getVideoTracks()[0];
-}
-
