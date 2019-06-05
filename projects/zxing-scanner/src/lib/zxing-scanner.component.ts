@@ -306,13 +306,13 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this.hasDevices = new EventEmitter();
     this.deviceChange = new EventEmitter();
 
-    // computed data
+    this._device = null;
     this._hints = new Map<DecodeHintType, any>();
+    this.formats = [BarcodeFormat.QR_CODE];
+
+    // computed data
     this.hasNavigator = typeof navigator !== 'undefined';
     this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
-
-    // will start codeReader if needed.
-    this.formats = [BarcodeFormat.QR_CODE];
   }
 
   /**
