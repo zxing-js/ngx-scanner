@@ -689,10 +689,10 @@
   resolved "https://registry.npmjs.org/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@zxing/library@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.npmjs.org/@zxing/library/-/library-0.13.0.tgz#69ad9faa21ab925e20c421359c54f562617bf894"
-  integrity sha512-NizB8P2Vc/gcXjnFvMrCv5eBYa+PAeHnRv5DoczPcFZKw0H3iL4SvFdrVrmdXDzaws6SsT+a1SmN6w2MQ9f3cA==
+"@zxing/library@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/@zxing/library/-/library-0.14.0.tgz#125057fe5460ee6fbd804b2e9f58201d9cb71153"
+  integrity sha512-jEn6h4jCJauxdG6HzMN27Iw/77GgOp7/PlHwWi3G4orFJry/8AvYpcggqA6Q8rFxAMN5Rdn2URYQgUZMlGwBXw==
   dependencies:
     ts-custom-error "^3.0.0"
   optionalDependencies:
@@ -8314,20 +8314,6 @@ send@0.17.1, send@latest:
   version "0.17.1"
   resolved "https://registry.npmjs.org/send/-/send-0.17.1.tgz#c1d8b059f7900f7466dd4938bdc44e11ddb376c8"
   integrity sha512-BsVKsiGcQMFwT8UxypobUKyv7irCNRHk1T0G680vk88yf6LBByGcZJOTJCrTP2xVN6yI+XjPJcNuE3V4fT9sAg==
-  dependencies:
-    debug "2.6.9"
-    depd "~1.1.2"
-    destroy "~1.0.4"
-    encodeurl "~1.0.2"
-    escape-html "~1.0.3"
-    etag "~1.8.1"
-    fresh "0.5.2"
-    http-errors "~1.7.2"
-    mime "1.6.0"
-    ms "2.1.1"
-    on-finished "~2.3.0"
-    range-parser "~1.2.1"
-    statuses "~1.5.0"
 
 serialize-javascript@^1.4.0:
   version "1.7.0"
