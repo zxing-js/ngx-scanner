@@ -7,7 +7,8 @@ import {
   Input,
   OnDestroy,
   Output,
-  ViewChild
+  ViewChild,
+  NgZone
 } from '@angular/core';
 
 import {
@@ -293,7 +294,9 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Constructor to build the object and do some DI.
    */
-  constructor() {
+  constructor(
+    private readonly _zone: NgZone
+  ) {
     // instance based emitters
     this.torchCompatible = new EventEmitter();
     this.scanSuccess = new EventEmitter();
@@ -607,12 +610,15 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const videoElement = this.previewElemRef.nativeElement;
 
-    const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
-
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
     const error = (err: any) => { this.dispatchScanError(err); this.reset(); };
+    const _this = this;
 
-    scan$.subscribe(next, error);
+    this._zone.runOutsideAngular(() => {
+      _this.getCodeReader()
+        .continuousDecodeFromInputVideoDevice(deviceId, videoElement)
+        .subscribe(next, error);
+    });
   }
 
   /**
