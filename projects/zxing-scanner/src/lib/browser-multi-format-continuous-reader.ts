@@ -63,26 +63,82 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       return;
     }
 
-    const video = typeof deviceId === 'undefined'
-      ? { facingMode: 'environment' }
-      : { deviceId: { exact: deviceId } };
-
-    const constraints: MediaStreamConstraints = { video };
-
-    const scan$ = new BehaviorSubject<ResultAndError>({ result: undefined });
+    const scan$ = new BehaviorSubject<ResultAndError>({});
 
     try {
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then(stream => {
-          this.checkTorchCompatibility(stream);
-          return this.attachStreamToVideo(stream, videoSource);
-        })
+      this.getStreamForDevice({ deviceId })
+        .then(stream => this.attachStreamToVideo(stream, videoSource))
+        .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
+    } catch (e) {
+      scan$.error(e);
+    }
+
+    this._setScanStream(scan$);
+
+    return scan$.asObservable();
+  }
+
+  /**
+   * Starts the decoding from the media stream and adds the stream to the video element.
+   *
+   * @param callbackFn The callback to be executed after every scan attempt
+   * @param deviceId The device's to be used Id
+   * @param videoSource A new video element
+   */
+  public decodeFromMediaStream(
+    stream: MediaStream,
+    videoSource?: HTMLVideoElement
+  ): Observable<ResultAndError> {
+
+    this.reset();
+
+    if (typeof navigator === 'undefined') {
+      return;
+    }
+
+    const scan$ = new BehaviorSubject<ResultAndError>({});
+
+    try {
+      this.attachStreamToVideo(stream, videoSource)
         .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
     } catch (e) {
       scan$.error(e);
     }
 
     return scan$.asObservable();
+  }
+
+  /**
+   * {@inheritdoc}
+   * Also, checks for torch compatibility.
+   */
+  protected async attachStreamToVideo(stream: MediaStream, videoSource: HTMLVideoElement): Promise<HTMLVideoElement> {
+    this.checkTorchCompatibility(stream);
+    return super.attachStreamToVideo(stream, videoSource);
+  }
+
+  /**
+   * Gets the media stream for certain device.
+   * Falls back to any available device if no `deviceId` is defined.
+   */
+  public getStreamForDevice({ deviceId }: Partial<MediaDeviceInfo>): Promise<MediaStream> {
+    const constraints = this.getUserMediaConstraints(deviceId);
+    return navigator.mediaDevices.getUserMedia(constraints);
+  }
+
+  /**
+   * Creates media steram constraints for certain `deviceId`.
+   * Falls back to any environment available device if no `deviceId` is defined.
+   */
+  public getUserMediaConstraints(deviceId: string): MediaStreamConstraints {
+
+    const video = typeof deviceId === 'undefined'
+      ? { facingMode: 'environment' }
+      : { deviceId: { exact: deviceId } };
+
+    const constraints: MediaStreamConstraints = { video };
+
+    return constraints;
   }
 
   /**
@@ -96,7 +152,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     let track = null;
 
     try {
-      track = stream.getVideoTracks()[0];
+      track = getStreamFirstTrack(stream);
       const imageCapture = new ImageCapture(track);
       const capabilities = await imageCapture.getPhotoCapabilities();
 
@@ -129,14 +185,6 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   }
 
   /**
-   * Opens a decoding stream.
-   */
-  protected decodeOnSubject(scan$: BehaviorSubject<ResultAndError>, videoElement: HTMLVideoElement, delay: number = 500): void {
-    this._decodeOnStreamWithDelay(scan$, videoElement, delay);
-    this._setScanStream(scan$);
-  }
-
-  /**
    * Correctly sets a new scanStream value.
    */
   private _setScanStream(scan$: BehaviorSubject<ResultAndError>): void {
@@ -165,7 +213,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
    * @param videoElement The video element the decode will be applied.
    * @param delay The delay between decode results.
    */
-  private _decodeOnStreamWithDelay(scan$: BehaviorSubject<ResultAndError>, videoElement: HTMLVideoElement, delay: number): void {
+  protected decodeOnSubject(scan$: BehaviorSubject<ResultAndError>, videoElement: HTMLVideoElement, delay: number): void {
 
     // stops loop
     if (scan$.isStopped) {
@@ -193,7 +241,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       }
     } finally {
       const timeout = !result ? 0 : delay;
-      setTimeout(() => this._decodeOnStreamWithDelay(scan$, videoElement, delay), timeout);
+      setTimeout(() => this.decodeOnSubject(scan$, videoElement, delay), timeout);
     }
   }
 
@@ -215,3 +263,8 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   }
 
 }
+
+function getStreamFirstTrack(stream: MediaStream): MediaStreamTrack {
+  return stream.getVideoTracks()[0];
+}
+
