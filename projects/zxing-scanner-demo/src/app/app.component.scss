@@ -11,14 +11,7 @@ header {
   display: flex;
 
   button {
-
-    --color: #aaa;
-
-    border-radius: 5px;
-    background: none;
-    border: 2px solid var(--color);
-    color: var(--color);
-    cursor: pointer;
+    margin-left: 8px;
   }
 
   mat-form-field {
@@ -28,7 +21,12 @@ header {
 
     ::ng-deep {
       .mat-form-field-wrapper {
+
         padding: 0;
+
+        .mat-form-field-flex {
+          padding-top: 0;
+        }
       }
       .mat-form-field-underline {
         bottom: 0;
@@ -41,26 +39,6 @@ header {
       background: #474747;
       color: #fff;
     }
-  }
-}
-
-.btn-formats-container {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 0;
-  z-index: 1;
-  overflow: visible;
-
-  .btn-formats {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #333;
-    border: none;
-    border-radius: 0;
-    border-bottom-right-radius: 8px;
-    padding: 8px;
   }
 }
 
@@ -98,23 +76,4 @@ header {
 
 h2 {
   padding: 0 16px;
-}
-
-footer {
-
-  padding: 15px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  .table-scanner-state {
-    thead {
-      display: none;
-    }
-  }
-
-  .ng-version {
-    color: #ff6687;
-  }
 }

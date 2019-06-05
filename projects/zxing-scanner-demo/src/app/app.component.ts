@@ -1,8 +1,9 @@
-import { Component, VERSION } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
+import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,6 @@ export class AppComponent {
   hasDevices: boolean;
   hasPermission: boolean;
 
-  ngVersion = VERSION.full;
-
   qrResultString: string;
 
   torchEnabled = false;
@@ -40,7 +39,6 @@ export class AppComponent {
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
-    this._selectBackfaceCamera(devices);
   }
 
   onCodeResult(resultString: string) {
@@ -63,20 +61,17 @@ export class AppComponent {
       .subscribe(x => { if (x) { this.formatsEnabled = x; } });
   }
 
-  stateToEmoji(state: boolean): string {
-
-    const states = {
-      // not checked
-      undefined: '❔',
-      // failed to check
-      null: '⭕',
-      // success
-      true: '✔',
-      // can't touch that
-      false: '❌'
+  openInfoDialog() {
+    const data = {
+      hasDevices: this.hasDevices,
+      hasPermission: this.hasPermission,
     };
 
-    return states['' + state];
+    this._dialog.open(AppInfoDialogComponent, { data });
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
   }
 
   toggleTorch(): void {
@@ -85,15 +80,5 @@ export class AppComponent {
 
   toggleTryHarder(): void {
     this.tryHarder = !this.tryHarder;
-  }
-
-  private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {
-    // selects the devices's back camera by default
-    for (const device of devices) {
-      if (/back|rear|environment/gi.test(device.label)) {
-        this.currentDevice = device;
-        break;
-      }
-    }
   }
 }
