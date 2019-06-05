@@ -10,7 +10,7 @@ header {
   background: #333;
   display: flex;
 
-  button, select {
+  button {
 
     --color: #aaa;
 
@@ -21,11 +21,19 @@ header {
     cursor: pointer;
   }
 
-  select {
+  mat-form-field {
 
     width: 100%;
-    padding: 15px;
     font-weight: bold;
+
+    ::ng-deep {
+      .mat-form-field-wrapper {
+        padding: 0;
+      }
+      .mat-form-field-underline {
+        bottom: 0;
+      }
+    }
 
     option {
       padding: 10px;

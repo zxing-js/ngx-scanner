@@ -1,11 +1,13 @@
 <div class="scanner-shell" [hidden]="!hasDevices">
 
   <header>
-    <select (change)="onDeviceSelectChange($event.target.value)">
-      <option value="" [selected]="!currentDevice">No Device Selected</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId"
-        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
-    </select>
+    <mat-form-field appearance="fill">
+      <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
+        <option value="" [selected]="!currentDevice">No Device Selected</option>
+        <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+          [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+      </select>
+    </mat-form-field>
     <button mat-stroked-button (click)="toggleTryHarder()">
       <span *ngIf="!tryHarder" matTooltip="Enable Try-harder">🏋</span>
       <span *ngIf="tryHarder" matTooltip="Disable Try-harder">🚶</span>
@@ -22,7 +24,8 @@
 
   <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
     [formats]="formatsEnabled" [tryHarder]="tryHarder" (hasDevices)="hasDevices = $event"
-    (permissionResponse)="hasPermission = $event"></zxing-scanner>
+    (permissionResponse)="hasPermission = $event" (camerasFound)="onCamerasFound($event)"
+    (torchCompatible)="torchAvailable$.next($event)"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
     <div>
