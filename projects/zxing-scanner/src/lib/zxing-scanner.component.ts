@@ -456,14 +456,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Starts the scanner with the first available device.
    */
   private autostartScanner(devices: MediaDeviceInfo[]) {
-    const firstDevice = devices.find(device => !!device);
 
-    if (!firstDevice) {
+    // tries to find the rear camera.
+    let device = devices.find(d =>
+      /back|trás|rear|traseira|environment|ambiente/gi.test(d.label)
+    );
+
+    if (!device && devices.length) {
+      device = devices.pop();
+    }
+
+    if (!device) {
       throw new Error('Implossible to autostart, no input devices available.');
     }
 
-    this.device = firstDevice;
-    this.deviceChange.emit(firstDevice);
+    this.device = device;
+    this.deviceChange.emit(device);
   }
 
   /**
