@@ -154,16 +154,16 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   @Input()
   set device(device: MediaDeviceInfo | null) {
 
+    if (!device && device !== null) {
+      throw new ArgumentException('The `device` must be a valid MediaDeviceInfo or null.');
+    }
+
     if (this.isCurrentDevice(device)) {
       return;
     }
 
     // in order to change the device the codeReader gotta be reseted
     this.reset();
-
-    if (!device && device !== null) {
-      throw new ArgumentException('The `device` must be a valid MediaDeviceInfo or null.');
-    }
 
     this._device = device;
 
