@@ -471,6 +471,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     this.device = device;
+    // @note when listening to this change, callback code will sometimes run before the previous line.
     this.deviceChange.emit(device);
   }
 
