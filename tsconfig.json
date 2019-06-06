@@ -17,14 +17,6 @@
     "lib": [
       "es2018",
       "dom"
-    ],
-    "paths": {
-      "@zxing/ngx-scanner": [
-        "dist/zxing-scanner"
-      ],
-      "@zxing/ngx-scanner/*": [
-        "dist/zxing-scanner/*"
-      ]
-    }
+    ]
   }
 }
