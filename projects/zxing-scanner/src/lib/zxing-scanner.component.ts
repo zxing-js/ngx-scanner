@@ -19,7 +19,8 @@ import {
   Result
 } from '@zxing/library';
 
-import { BrowserMultiFormatContinuousReader, ResultAndError } from './browser-multi-format-continuous-reader';
+import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+import { ResultAndError } from './ResultAndError';
 
 import { take } from 'rxjs/operators';
 
