@@ -4,11 +4,11 @@ import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, Ma
 import { MatListModule } from '@angular/material/list';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.component';
 import { AppInfoComponent } from './app-info/app-info.component';
 import { AppComponent } from './app.component';
 import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
+import { ZXingScannerDemoModule } from './zxing-scanner-demo.module';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { FormatsDialogComponent } from './formats-dialog/formats-dialog.componen
     ReactiveFormsModule,
 
     // local
-    ZXingScannerModule,
+    ZXingScannerDemoModule,
 
     // Material
     MatDialogModule,
