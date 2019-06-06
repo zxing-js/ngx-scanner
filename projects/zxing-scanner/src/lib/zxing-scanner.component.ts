@@ -7,7 +7,8 @@ import {
   Input,
   OnDestroy,
   Output,
-  ViewChild
+  ViewChild,
+  NgZone
 } from '@angular/core';
 
 import {
@@ -18,7 +19,8 @@ import {
   Result
 } from '@zxing/library';
 
-import { BrowserMultiFormatContinuousReader, ResultAndError } from './browser-multi-format-continuous-reader';
+import { BrowserMultiFormatContinuousReader } from './browser-multi-format-continuous-reader';
+import { ResultAndError } from './ResultAndError';
 
 @Component({
   selector: 'zxing-scanner',
@@ -46,7 +48,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * The device that should be used to scan things.
    */
-  private _enabled = true;
+  private _enabled: boolean;
+
+  /**
+   *
+   */
+  private _isAutostarting: boolean;
 
   /**
    * Has `navigator` access.
@@ -73,13 +80,25 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Enable or disable autofocus of the camera (might have an impact on performance)
    */
   @Input()
-  autofocusEnabled = true;
+  autofocusEnabled: boolean;
+
+  /**
+   * Emits when and if the scanner is autostarted.
+   */
+  @Output()
+  autostarted: EventEmitter<void>;
+
+  /**
+   * True during autostart and false after. It will be null if won't autostart at all.
+   */
+  @Output()
+  autostarting: EventEmitter<boolean | null>;
 
   /**
    * If the scanner should autostart with the first available device.
    */
   @Input()
-  autostart = true;
+  autostart: boolean;
 
   /**
    * How the preview element shoud be fit inside the :host container.
@@ -154,16 +173,34 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   @Input()
   set device(device: MediaDeviceInfo | null) {
 
-    if (this.isCurrentDevice(device)) {
-      return;
-    }
-
-    // in order to change the device the codeReader gotta be reseted
-    this.reset();
-
     if (!device && device !== null) {
       throw new ArgumentException('The `device` must be a valid MediaDeviceInfo or null.');
     }
+
+    if (this.isCurrentDevice(device)) {
+      console.warn('Setting the same device is not allowed.');
+      return;
+    }
+
+    if (this.isAutostarting) {
+      // do not allow setting devices during auto-start, since it will set one and emit it.
+      console.warn('Avoid setting a device during auto-start.');
+      return;
+    }
+
+    if (!this.hasPermission) {
+      console.warn('Permissions not set yet, waiting for them to be set to apply device change.');
+      // this.permissionResponse
+      //   .pipe(
+      //     take(1),
+      //     tap(() => console.log(`Permissions set, applying device change${device ? ` (${device.deviceId})` : ''}.`))
+      //   )
+      //   .subscribe(() => this.device = device);
+      // return;
+    }
+
+    // in order to change the device the codeReader gotta be reseted
+    this._reset();
 
     this._device = device;
 
@@ -237,6 +274,21 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
+   *
+   */
+  set isAutostarting(state: boolean | null) {
+    this._isAutostarting = state;
+    this.autostarting.next(state);
+  }
+
+  /**
+   *
+   */
+  get isAutstarting(): boolean | null {
+    return this._isAutostarting;
+  }
+
+  /**
    * Allow start scan or not.
    */
   @Input()
@@ -253,7 +305,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this._enabled = Boolean(enabled);
 
     if (!this._enabled) {
-      this.resetAndEmit();
+      this.reset();
     } else if (this.device) {
       this.scanFromDevice(this.device.deviceId);
     }
@@ -295,6 +347,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   constructor() {
     // instance based emitters
+    this.autostarted = new EventEmitter();
+    this.autostarting = new EventEmitter();
     this.torchCompatible = new EventEmitter();
     this.scanSuccess = new EventEmitter();
     this.scanFailure = new EventEmitter();
@@ -302,23 +356,24 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     this.scanComplete = new EventEmitter();
     this.camerasFound = new EventEmitter();
     this.camerasNotFound = new EventEmitter();
-    this.permissionResponse = new EventEmitter();
+    this.permissionResponse = new EventEmitter(true);
     this.hasDevices = new EventEmitter();
     this.deviceChange = new EventEmitter();
 
-    // computed data
+    this._device = null;
+    this._enabled = true;
     this._hints = new Map<DecodeHintType, any>();
+    this.autofocusEnabled = true;
+    this.autostart = true;
+    this.formats = [BarcodeFormat.QR_CODE];
+
+    // computed data
     this.hasNavigator = typeof navigator !== 'undefined';
     this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
-
-    // will start codeReader if needed.
-    this.formats = [BarcodeFormat.QR_CODE];
   }
 
   /**
    * Gets and registers all cammeras.
-   *
-   * @todo Return a Promise.
    */
   async askForPermission(): Promise<boolean> {
 
@@ -335,15 +390,18 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     }
 
     let stream: MediaStream;
+    let permission: boolean;
 
     try {
       // Will try to ask for permission
-      stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+      stream = await this.getAnyVideoDevice();
+      permission = !!stream;
     } catch (err) {
       return this.handlePermissionException(err);
+    } finally {
+      this.terminateStream(stream);
     }
 
-    const permission = !!stream;
     this.setPermission(permission);
 
     // Returns the permission
@@ -351,14 +409,34 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
+   *
+   */
+  getAnyVideoDevice(): Promise<MediaStream> {
+    return navigator.mediaDevices.getUserMedia({ video: true });
+  }
+
+  /**
+   * Terminates a stream and it's tracks.
+   */
+  private terminateStream(stream: MediaStream) {
+
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+    }
+
+    stream = undefined;
+  }
+
+  /**
    * Initializes the component without starting the scanner.
    */
-  private async initAutostartOff(): Promise<void> {
+  private initAutostartOff(): void {
 
     // do not ask for permission when autostart is off
+    this.isAutostarting = null;
 
     // just update devices information
-    await this.updateVideoInputDevices();
+    this.updateVideoInputDevices();
   }
 
   /**
@@ -367,18 +445,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   private async initAutostartOn(): Promise<void> {
 
-    // Asks for permission before enumerating devices so it can get all the device's info
-    const hasPermission = await this.askForPermission();
+    this.isAutostarting = true;
 
-    const devices = await this.updateVideoInputDevices();
+    let hasPermission: boolean;
 
-    // from this point, things gonna need permissions
-    if (hasPermission !== true) {
-      // so we can return if we don't have'em
-      return;
+    try {
+      // Asks for permission before enumerating devices so it can get all the device's info
+      hasPermission = await this.askForPermission();
+    } catch (e) {
+      console.error(e);
     }
 
-    this.autostartScanner(devices);
+    // from this point, things gonna need permissions
+    if (hasPermission) {
+      const devices = await this.updateVideoInputDevices();
+      this.autostartScanner([...devices]);
+    }
   }
 
   /**
@@ -391,7 +473,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Executed after the view initialization.
    */
-  async ngAfterViewInit(): Promise<void> {
+  ngAfterViewInit(): void {
 
     // makes torch availability information available to user
     this.getCodeReader().isTorchAvailable.subscribe(x => this.torchCompatible.emit(x));
@@ -413,7 +495,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
-    this.resetAndEmit();
+    this.reset();
   }
 
   /**
@@ -421,7 +503,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   restart(): void {
 
-    const prevDevice = this.reset();
+    const prevDevice = this._reset();
 
     if (!prevDevice) {
       return;
@@ -438,14 +520,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   async updateVideoInputDevices(): Promise<MediaDeviceInfo[]> {
 
     // permissions aren't needed to get devices, but to access them and their info
-    const devices = await this.getCodeReader().listVideoInputDevices();
+    const devices = await this.getCodeReader().listVideoInputDevices() || [];
+    const hasDevices = devices && devices.length > 0;
 
     // stores discovered devices and updates information
-    if (devices && devices.length > 0) {
-      this.hasDevices.next(true);
-      this.camerasFound.next(devices);
-    } else {
-      this.hasDevices.next(false);
+    this.hasDevices.next(hasDevices);
+    this.camerasFound.next([...devices]);
+
+    if (!hasDevices) {
       this.camerasNotFound.next();
     }
 
@@ -456,14 +538,26 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Starts the scanner with the first available device.
    */
   private autostartScanner(devices: MediaDeviceInfo[]) {
-    const firstDevice = devices.find(device => !!device);
 
-    if (!firstDevice) {
+    const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
+
+    // tries to find the rear camera.
+    let device = devices.find(matcher);
+
+    if (!device && devices.length) {
+      device = devices.pop();
+    }
+
+    if (!device) {
       throw new Error('Implossible to autostart, no input devices available.');
     }
 
-    this.device = firstDevice;
-    this.deviceChange.emit(firstDevice);
+    this.device = device;
+    // @note when listening to this change, callback code will sometimes run before the previous line.
+    this.deviceChange.emit(device);
+
+    this.isAutostarting = false;
+    this.autostarted.next();
   }
 
   /**
@@ -598,12 +692,27 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const videoElement = this.previewElemRef.nativeElement;
 
-    const scan$ = this.getCodeReader().continuousDecodeFromInputVideoDevice(deviceId, videoElement);
+    const codeReader = this.getCodeReader();
+
+    const decodingStream = codeReader.continuousDecodeFromInputVideoDevice(deviceId, videoElement);
+
+    if (!decodingStream) {
+      throw new Error('Undefined decoding stream, aborting.');
+    }
 
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
-    const error = (err: any) => { this.dispatchScanError(err); this.resetAndEmit(); };
+    const error = (err: any) => this._onDecodeError(err);
+    const complete = () => { this.reset(); console.log('completed'); };
 
-    scan$.subscribe(next, error);
+    decodingStream.subscribe(next, error, complete);
+  }
+
+  /**
+   * Handles decode errors.
+   */
+  private _onDecodeError(err: any) {
+    this.dispatchScanError(err);
+    this.reset();
   }
 
   /**
@@ -623,7 +732,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Stops the code reader and returns the previous selected device.
    */
-  private reset(): MediaDeviceInfo {
+  private _reset(): MediaDeviceInfo {
 
     if (!this._codeReader) {
       return;
@@ -639,20 +748,19 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Resets the scanner and emits a null device change.
+   * Resets the scanner and emits device change.
    */
-  private resetAndEmit() {
-    this.reset();
+  public reset(): void {
+    this._reset();
     this.deviceChange.emit(null);
   }
 
   /**
    * Sets the permission value and emmits the event.
    */
-  private setPermission(hasPermission: boolean | null) {
+  private setPermission(hasPermission: boolean | null): void {
     this.hasPermission = hasPermission;
     this.permissionResponse.next(hasPermission);
-    return this.permissionResponse;
   }
 
 }

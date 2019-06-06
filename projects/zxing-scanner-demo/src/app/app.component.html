@@ -1,28 +1,36 @@
 <div class="scanner-shell" [hidden]="!hasDevices">
 
+  <mat-menu #appMenu="matMenu">
+    <mat-selection-list>
+      <mat-list-option checkboxPosition="start" (click)="toggleTryHarder()" [selected]="tryHarder">
+        Enable Try-harder
+      </mat-list-option>
+      <mat-list-option checkboxPosition="start" (click)="toggleTorch()" [selected]="torchEnabled"
+        *ngIf="torchAvailable$ | async">
+        Enable Torch
+      </mat-list-option>
+    </mat-selection-list>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="openFormatsDialog()">Barcode formats</button>
+    <button mat-menu-item (click)="openInfoDialog()">App info</button>
+  </mat-menu>
+
   <header>
-    <select (change)="onDeviceSelectChange($event.target.value)">
-      <option value="" [selected]="!currentDevice">No Device Selected</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId"
-        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
-    </select>
-    <button mat-stroked-button (click)="toggleTryHarder()">
-      <span *ngIf="!tryHarder" matTooltip="Enable Try-harder">🏋</span>
-      <span *ngIf="tryHarder" matTooltip="Disable Try-harder">🚶</span>
-    </button>
-    <button (click)="toggleTorch()" *ngIf="torchAvailable$ | async">
-      <span *ngIf="!torchEnabled" matTooltip="Enable Torch">📸</span>
-      <span *ngIf="torchEnabled" matTooltip="Disable Torch">📷</span>
+    <mat-form-field appearance="fill">
+      <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
+        <option value="" [selected]="!currentDevice">No Device Selected</option>
+        <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+          [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+      </select>
+    </mat-form-field>
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <mat-icon>more_vert</mat-icon>
     </button>
   </header>
 
-  <div class="btn-formats-container">
-    <button mat-button class="btn-formats" (click)="openFormatsDialog()" matTooltip="Barcode formats">🏉🏈</button>
-  </div>
-
-  <zxing-scanner #scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
-    [formats]="formatsEnabled" [tryHarder]="tryHarder" (hasDevices)="hasDevices = $event"
-    (permissionResponse)="hasPermission = $event"></zxing-scanner>
+  <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+    [formats]="formatsEnabled" [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)"
+    (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
 
   <section class="results" *ngIf="qrResultString">
     <div>
@@ -69,25 +77,3 @@
   </blockquote>
 
 </ng-container>
-
-<footer>
-  <table class="table-scanner-state">
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>Property</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ stateToEmoji(hasDevices) }}</td>
-        <td>Devices</td>
-      </tr>
-      <tr>
-        <td>{{ stateToEmoji(hasPermission) }}</td>
-        <td>Permissions</td>
-      </tr>
-    </tbody>
-  </table>
-  <p class="ng-version">Angular version: {{ ngVersion }}</p>
-</footer>

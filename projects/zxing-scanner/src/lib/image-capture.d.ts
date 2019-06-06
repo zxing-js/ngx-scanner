@@ -48,16 +48,16 @@ declare class MediaSettingsRange {
   /**
    * Returns the maximum value of this settings.
    */
-  max;
+  max: any;
 
   /**
    * Returns the minimum value of this setting.
    */
-  min;
+  min: any;
 
   /**
    * Returns the minimum difference between consecutive values of this setting.
    */
-  step;
+  step: any;
 
 }

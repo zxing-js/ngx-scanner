@@ -1,17 +1,16 @@
-import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BarcodeFormat } from '@zxing/library';
-import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { Observable } from 'rxjs';
-import { formatsAvailable } from './barcode-formats';
+import { BehaviorSubject } from 'rxjs';
 import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
+import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
 
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
@@ -26,15 +25,10 @@ export class AppComponent implements AfterViewInit {
   hasDevices: boolean;
   hasPermission: boolean;
 
-  ngVersion = VERSION.full;
-
   qrResultString: string;
 
-  @ViewChild('scanner')
-  scanner: ZXingScannerComponent;
-
   torchEnabled = false;
-  torchAvailable$: Observable<boolean>;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
   tryHarder = false;
 
   constructor(private readonly _dialog: MatDialog) { }
@@ -43,12 +37,9 @@ export class AppComponent implements AfterViewInit {
     this.qrResultString = null;
   }
 
-  ngAfterViewInit(): void {
-    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-      this.availableDevices = devices;
-      this._selectBackfaceCamera(devices);
-    });
-    this.torchAvailable$ = this.scanner.torchCompatible;
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
   }
 
   onCodeResult(resultString: string) {
@@ -71,20 +62,21 @@ export class AppComponent implements AfterViewInit {
       .subscribe(x => { if (x) { this.formatsEnabled = x; } });
   }
 
-  stateToEmoji(state: boolean): string {
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
 
-    const states = {
-      // not checked
-      undefined: '❔',
-      // failed to check
-      null: '⭕',
-      // success
-      true: '✔',
-      // can't touch that
-      false: '❌'
+  openInfoDialog() {
+    const data = {
+      hasDevices: this.hasDevices,
+      hasPermission: this.hasPermission,
     };
 
-    return states['' + state];
+    this._dialog.open(AppInfoDialogComponent, { data });
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
   }
 
   toggleTorch(): void {
@@ -93,15 +85,5 @@ export class AppComponent implements AfterViewInit {
 
   toggleTryHarder(): void {
     this.tryHarder = !this.tryHarder;
-  }
-
-  private _selectBackfaceCamera(devices: MediaDeviceInfo[]) {
-    // selects the devices's back camera by default
-    for (const device of devices) {
-      if (/back|rear|environment/gi.test(device.label)) {
-        this.currentDevice = device;
-        break;
-      }
-    }
   }
 }
