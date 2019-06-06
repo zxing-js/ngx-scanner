@@ -8,7 +8,7 @@ import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.compon
 import { AppInfoComponent } from './app-info/app-info.component';
 import { AppComponent } from './app.component';
 import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
-import { ZXingScannerDemoModule } from './zxing-scanner-demo.module';
+import { ZXingScannerModule } from './public_api';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { ZXingScannerDemoModule } from './zxing-scanner-demo.module';
     ReactiveFormsModule,
 
     // local
-    ZXingScannerDemoModule,
+    ZXingScannerModule,
 
     // Material
     MatDialogModule,

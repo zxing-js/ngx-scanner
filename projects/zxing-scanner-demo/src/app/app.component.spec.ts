@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { ZXingScannerModule } from './public_api';
 
 import { AppComponent } from './app.component';
 
@@ -13,7 +13,7 @@ describe('AppComponent', () => {
       imports: [
         BrowserModule,
         FormsModule,
-        ZXingScannerModule.forRoot()
+        ZXingScannerModule,
       ],
       declarations: [
         AppComponent
