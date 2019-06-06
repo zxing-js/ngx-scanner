@@ -63,12 +63,12 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
         .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
     } catch (e) {
       scan$.error(e);
-
-
-      this._setScanStream(scan$);
-
-      return scan$.asObservable();
     }
+
+    this._setScanStream(scan$);
+
+    return scan$.asObservable();
+  }
 
   /**
    * Gets the media stream for certain device.
