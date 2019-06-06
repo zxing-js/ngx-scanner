@@ -57,7 +57,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     const scan$ = new BehaviorSubject<ResultAndError>({});
 
     try {
-      // this.decodeFromInputVideoDeviceContinuously(deviceId, videoSource, result => scan$.next({ ...result }));
+      // this.decodeFromInputVideoDeviceContinuously(deviceId, videoSource, (result, error) => scan$.next({ result, error }));
       this.getStreamForDevice({ deviceId })
         .then(stream => this.attachStreamToVideoAndCheckTorch(stream, videoSource))
         .then(videoElement => this.decodeOnSubject(scan$, videoElement, this.timeBetweenScansMillis));
