@@ -67,6 +67,8 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     this._setScanStream(scan$);
 
+    // @todo Find a way to emit a complete event on the scan stream once it's finished.
+
     return scan$.asObservable();
   }
 
@@ -250,14 +252,6 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     // reset
     // start
     return this.continuousDecodeFromInputVideoDevice(this.deviceId, this.videoElement);
-  }
-
-  /**
-   * Stops the continuous scan and cleans the stream.
-   */
-  protected stopStreams(): void {
-    super.stopStreams();
-    this._cleanScanStream();
   }
 
 }
