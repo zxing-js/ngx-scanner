@@ -39,6 +39,7 @@ export class AppComponent {
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
   }
 
   onCodeResult(resultString: string) {
@@ -59,6 +60,10 @@ export class AppComponent {
       .open(FormatsDialogComponent, { data })
       .afterClosed()
       .subscribe(x => { if (x) { this.formatsEnabled = x; } });
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
   }
 
   openInfoDialog() {
