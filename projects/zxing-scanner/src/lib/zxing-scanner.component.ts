@@ -302,9 +302,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Constructor to build the object and do some DI.
    */
-  constructor(
-    private readonly _zone: NgZone,
-  ) {
+  constructor() {
     // instance based emitters
     this.torchCompatible = new EventEmitter();
     this.scanSuccess = new EventEmitter();
@@ -493,7 +491,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   private autostartScanner(devices: MediaDeviceInfo[]) {
 
-
     const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
 
     // tries to find the rear camera.
@@ -647,13 +644,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
     const error = (err: any) => { this.dispatchScanError(err); this.reset(); };
-    const codeReader = this.getCodeReader();
 
-    this._zone.runOutsideAngular(() => {
-      codeReader
-        .continuousDecodeFromInputVideoDevice(deviceId, videoElement)
-        .subscribe(next, error);
-    });
+    this.getCodeReader()
+      .continuousDecodeFromInputVideoDevice(deviceId, videoElement)
+      .subscribe(next, error);
   }
 
   /**
