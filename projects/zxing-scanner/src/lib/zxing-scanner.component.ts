@@ -453,7 +453,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       // Asks for permission before enumerating devices so it can get all the device's info
       hasPermission = await this.askForPermission();
     } catch (e) {
-      console.error(e);
+      console.error('Exception occurred while asking for permission:', e);
+      return;
     }
 
     // from this point, things gonna need permissions
