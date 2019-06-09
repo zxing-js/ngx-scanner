@@ -536,7 +536,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Starts the scanner with the back camera otherwise take the first
+   * Starts the scanner with the back camera otherwise take the last
    * available device.
    */
   private autostartScanner(devices: MediaDeviceInfo[]) {
