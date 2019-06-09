@@ -543,7 +543,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
 
-    // select the rear camera by default, otherwise take the first camera.
+    // select the rear camera by default, otherwise take the last camera.
     const device = devices.find(matcher) || devices.pop();
 
     if (!device) {
