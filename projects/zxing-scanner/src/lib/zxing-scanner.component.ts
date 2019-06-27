@@ -73,7 +73,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Reference to the preview element, should be the `video` tag.
    */
-  @ViewChild('preview')
+  @ViewChild('preview', { static: true })
   previewElemRef: ElementRef<HTMLVideoElement>;
 
   /**
