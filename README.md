@@ -36,7 +36,6 @@ Angular Barcode/QR-Code scanner component.
 
 - [Demo](https://zxing-js.github.io/ngx-scanner/)
 - [StackBlitz](https://zxing-ngx-scanner.stackblitz.io/)
-- [Plunkr](https://embed.plnkr.co/MN4riU/) (click open preview in separate window)
 
 _Some previews may not be fully updated, please check the version._ 😉
 
