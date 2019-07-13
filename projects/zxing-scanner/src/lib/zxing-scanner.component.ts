@@ -579,7 +579,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Dispatches the scan error event.
    *
-   * @param err the error thing.
+   * @param error the error thing.
    */
   private dispatchScanError(error: any): void {
     this.scanError.next(error);
