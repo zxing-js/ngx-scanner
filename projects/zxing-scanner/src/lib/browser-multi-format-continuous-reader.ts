@@ -145,7 +145,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
   /**
    *
-   * @param stream The media stream.
+   * @param stream The video stream where the tracks gonna be extracted from.
    */
   private getVideoTracks(stream: MediaStream) {
     let tracks = [];
@@ -159,7 +159,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
   /**
    *
-   * @param track The media stream track.
+   * @param track The media stream track that will be checked for compatibility.
    */
   private async isTorchCompatible(track: MediaStreamTrack) {
 
