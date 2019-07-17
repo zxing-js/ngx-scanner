@@ -16,6 +16,8 @@ import { AppInfoComponent } from './app-info/app-info.component';
 import { AppComponent } from './app.component';
 import { FormatsDialogComponent } from './formats-dialog/formats-dialog.component';
 import { ZXingScannerModule } from './public_api';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -39,6 +41,7 @@ import { ZXingScannerModule } from './public_api';
     MatInputModule,
     MatMenuModule,
     MatIconModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   declarations: [AppComponent, FormatsDialogComponent, AppInfoComponent, AppInfoDialogComponent],
   bootstrap: [AppComponent],

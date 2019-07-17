@@ -55,7 +55,9 @@
             "tsConfig": "projects/zxing-scanner-demo/tsconfig.app.json",
             "assets": [
               "projects/zxing-scanner-demo/src/favicon.ico",
-              "projects/zxing-scanner-demo/src/assets"
+              "projects/zxing-scanner-demo/src/assets",
+              "projects/zxing-scanner-demo/src/browserconfig.xml",
+              "projects/zxing-scanner-demo/src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
@@ -86,7 +88,9 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/zxing-scanner-demo/ngsw-config.json"
             }
           }
         },
@@ -121,7 +125,9 @@
             "scripts": [],
             "assets": [
               "projects/zxing-scanner-demo/src/favicon.ico",
-              "projects/zxing-scanner-demo/src/assets"
+              "projects/zxing-scanner-demo/src/assets",
+              "projects/zxing-scanner-demo/src/browserconfig.xml",
+              "projects/zxing-scanner-demo/src/manifest.webmanifest"
             ]
           }
         },
