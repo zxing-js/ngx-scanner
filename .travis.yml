@@ -13,6 +13,9 @@ addons:
 
 stages:
   - compile
+  - name: compile-gh-pages
+    # require the branch name to be master (note for PRs this is the base branch name)
+    if: branch = master
   - test
 
 jobs:
@@ -24,6 +27,10 @@ jobs:
         - npm run build
         - npm run build:demo
 
+    - stage: compile-gh-pages
+      script:
+        - npm run build:gh-pages
+
     - stage: test
       script:
         - npm run lint
@@ -34,6 +41,6 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: dist/zxing-scanner-demo
+  local_dir: dist/gh-pages
   on:
     branch: master
