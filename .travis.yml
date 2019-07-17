@@ -14,7 +14,6 @@ addons:
 stages:
   - compile
   - test
-  - deploy-demo
 
 jobs:
   include:
@@ -23,6 +22,7 @@ jobs:
       script:
         - npx npm-install-peers
         - npm run build
+        - npm run build:demo
 
     - stage: test
       script:
@@ -30,8 +30,10 @@ jobs:
         - npm run test
         # - npm run e2e
 
-    - stage: deploy-demo
-      if: branch = master
-      script:
-        - npm i
-        - npm run deploy:demo
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: dist/zxing-scanner-demo
+  on:
+    branch: master

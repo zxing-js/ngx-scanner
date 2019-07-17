@@ -32,7 +32,8 @@
     "ng": "ng",
     "start": "ng serve zxing-scanner-demo",
     "build": "ng build zxing-scanner && cp README.md ./dist/zxing-scanner",
-    "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner --watch=false --browsers=ChromeHeadless",
+    "build:demo": "ng build zxing-scanner-demo --prod",
+    "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner-demo --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint zxing-scanner && ng lint zxing-scanner-demo",
     "e2e": "ng e2e",
     "docs": "npm run docs:build",
@@ -41,7 +42,7 @@
     "docs:watch": "npm run docs:build -- -s -w",
     "publish:dist": "cd ./dist/zxing-scanner && npm publish --access=public",
     "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ZXing for JS? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/zxing-js/donate\\u001b[0m')\"",
-    "deploy:demo": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
+    "deploy:demo:ngh": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ && npx ngh --dir=dist/zxing-scanner-demo"
   },
   "dependencies": {
     "@angular/animations": ">=7.0.0 <8 || ^8.0.2",
