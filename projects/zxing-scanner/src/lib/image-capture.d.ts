@@ -13,8 +13,9 @@ declare class ImageCapture {
   readonly track: MediaStreamTrack;
 
   /**
-   * Creates a new ImageCapture object which can be used to capture still frames (photos) from a given MediaStreamTrack which represents a video stream.
-   * @param track
+   * Creates a new ImageCapture object which can be used to capture still frames
+   * (photos) from a given MediaStreamTrack which represents a video stream.
+   * @param track The MediaStreamTrack
    */
   constructor(track: MediaStreamTrack);
 
@@ -31,10 +32,10 @@ declare class ImageCapture {
  * is retrieved by calling ImageCapture.getPhotoCapabilities().
  */
 declare class PhotoCapabilities {
-  readonly redEyeReductionRead: "never" | "always" | "controllable";
+  readonly redEyeReductionRead: 'never' | 'always' | 'controllable';
   readonly imageHeightRead: MediaSettingsRange;
   readonly imageWidthRead: MediaSettingsRange;
-  readonly fillLightMode: "auto" | "off" | "flash";
+  readonly fillLightMode: 'auto' | 'off' | 'flash';
 }
 
 /**
