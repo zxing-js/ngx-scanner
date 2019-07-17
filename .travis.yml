@@ -14,8 +14,7 @@ addons:
 stages:
   - compile
   - test
-  - name: deploy
-    if: branch = master AND type != pull_request
+  - deploy-demo
 
 jobs:
   include:
@@ -31,7 +30,7 @@ jobs:
         - npm run test
         # - npm run e2e
 
-    - stage: deploy
+    - stage: deploy-demo
       if: branch = master
       script:
         - npm run deploy:demo
