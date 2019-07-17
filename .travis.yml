@@ -33,4 +33,5 @@ jobs:
     - stage: deploy-demo
       if: branch = master
       script:
+        - npm i
         - npm run deploy:demo
