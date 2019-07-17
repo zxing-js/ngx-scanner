@@ -13,9 +13,6 @@ addons:
 
 stages:
   - compile
-  - name: compile-gh-pages
-    # require the branch name to be master (note for PRs this is the base branch name)
-    if: branch = master
   - test
 
 jobs:
@@ -26,9 +23,6 @@ jobs:
         - npx npm-install-peers
         - npm run build
         - npm run build:demo
-
-    - stage: compile-gh-pages
-      script:
         - npm run build:gh-pages
 
     - stage: test
