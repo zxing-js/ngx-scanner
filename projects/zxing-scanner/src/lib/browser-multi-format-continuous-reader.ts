@@ -159,7 +159,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
   /**
    *
-   * @param track The track that will be checked for compatibility.
+   * @param track The media stream track that will be checked for compatibility.
    */
   private async isTorchCompatible(track: MediaStreamTrack) {
 
