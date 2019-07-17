@@ -453,7 +453,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       // Asks for permission before enumerating devices so it can get all the device's info
       hasPermission = await this.askForPermission();
     } catch (e) {
-      console.error(e);
+      console.error('Exception occurred while asking for permission:', e);
+      return;
     }
 
     // from this point, things gonna need permissions
@@ -535,21 +536,18 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Starts the scanner with the first available device.
+   * Starts the scanner with the back camera otherwise take the last
+   * available device.
    */
   private autostartScanner(devices: MediaDeviceInfo[]) {
 
     const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
 
-    // tries to find the rear camera.
-    let device = devices.find(matcher);
-
-    if (!device && devices.length) {
-      device = devices.pop();
-    }
+    // select the rear camera by default, otherwise take the last camera.
+    const device = devices.find(matcher) || devices.pop();
 
     if (!device) {
-      throw new Error('Implossible to autostart, no input devices available.');
+      throw new Error('Impossible to autostart, no input devices available.');
     }
 
     this.device = device;
@@ -579,7 +577,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Dispatches the scan error event.
    *
-   * @param err the error thing.
+   * @param error the error thing.
    */
   private dispatchScanError(error: any): void {
     this.scanError.next(error);
