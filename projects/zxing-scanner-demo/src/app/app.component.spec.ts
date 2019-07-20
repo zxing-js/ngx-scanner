@@ -1,24 +1,17 @@
-import { TestBed, async } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-
-import { ZXingScannerModule } from './public_api';
-
+import { async, TestBed } from '@angular/core/testing';
+import { AppUiModule } from './app-ui.module';
 import { AppComponent } from './app.component';
+
 
 describe('AppComponent', () => {
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        FormsModule,
-        ZXingScannerModule,
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+    TestBed
+      .configureTestingModule({
+        imports: [AppUiModule],
+        declarations: [AppComponent],
+      })
+      .compileComponents();
   }));
 
   it('should create the app', async(() => {

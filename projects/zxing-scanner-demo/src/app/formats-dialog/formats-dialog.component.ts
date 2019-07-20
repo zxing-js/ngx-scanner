@@ -21,7 +21,7 @@ export class FormatsDialogComponent {
     @Inject(MAT_DIALOG_DATA) readonly data: any,
     private readonly _dialogRef: MatDialogRef<FormatsDialogComponent>,
   ) {
-    this.formatsEnabled = data.formatsEnabled;
+    this.formatsEnabled = data!.formatsEnabled || [];
   }
 
   close() {
