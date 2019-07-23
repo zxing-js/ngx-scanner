@@ -31,10 +31,12 @@ jobs:
         - npm run test
         # - npm run e2e
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: dist/gh-pages
-  on:
-    branch: master
+    - stage: deploy
+      script: skip # usually you do not want to rerun any tests
+      deploy: &heroku
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: dist/gh-pages
+        on:
+          branch: master
