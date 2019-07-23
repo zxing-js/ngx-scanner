@@ -12,8 +12,9 @@ addons:
   chrome: stable
 
 stages:
-  - compile
   - test
+  - compile
+  - deploy
 
 jobs:
   include:
@@ -33,7 +34,7 @@ jobs:
 
     - stage: deploy
       script: skip # usually you do not want to rerun any tests
-      deploy: &heroku
+      deploy:
         provider: pages
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
