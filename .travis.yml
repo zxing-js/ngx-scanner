@@ -26,7 +26,6 @@ jobs:
         - npx npm-install-peers
         - npm run build
         - npm run build:demo
-        - npm run build:gh-pages
 
     - stage: test
       script:
@@ -35,7 +34,8 @@ jobs:
         # - npm run e2e
 
     - stage: deploy
-      script: skip # usually you do not want to rerun any tests
+      script:
+        - npm run build:gh-pages # rebuild for gh-pages
       deploy:
         provider: pages
         skip_cleanup: true
