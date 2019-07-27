@@ -12,8 +12,11 @@ addons:
   chrome: stable
 
 stages:
-  - compile
   - test
+  - compile
+  - name: deploy
+    # require the branch name to be master (note for PRs this is the base branch name)
+    if: branch = master
 
 jobs:
   include:
@@ -23,7 +26,6 @@ jobs:
         - npx npm-install-peers
         - npm run build
         - npm run build:demo
-        - npm run build:gh-pages
 
     - stage: test
       script:
@@ -31,10 +33,13 @@ jobs:
         - npm run test
         # - npm run e2e
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: dist/gh-pages
-  on:
-    branch: master
+    - stage: deploy
+      script:
+        - npm run build:gh-pages # rebuild for gh-pages
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: dist/gh-pages
+        on:
+          branch: master

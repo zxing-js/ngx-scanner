@@ -1,6 +1,7 @@
 <div align="center">
 
-[![Angular ZXing Scanner](https://user-images.githubusercontent.com/3942006/39460928-a44b0f92-4cdd-11e8-849b-4d34db99113a.png)](https://github.com/zxing-js/library)
+[![Angular ZXing Scanner](https://user-images.githubusercontent.com/3942006/61757715-28a44800-ad98-11e9-9f58-555d2f187c50.png)](https://github.com/zxing-js/ngx-scanner)
+
 
 ### @zxing/ngx-scanner
 
