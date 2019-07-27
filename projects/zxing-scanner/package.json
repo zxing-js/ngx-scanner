@@ -4,7 +4,7 @@
   "description": "High-performance Angular 8 barcode scanner component based on ZXing.",
   "private": false,
   "dependencies": {
-    "@zxing/library": "^0.14.0"
+    "@zxing/library": "^0.15.1"
   },
   "peerDependencies": {
     "@angular/common": ">=7.0.0 <8 || ^8.0.2",
