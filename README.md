@@ -64,7 +64,7 @@ Read our performance notes on the wiki: [Performance Considerations](https://git
 
 ## Limitations
 
-- On iOS <= 11.2 devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
+- On iOS devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 
 ## Generator
