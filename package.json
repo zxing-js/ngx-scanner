@@ -42,7 +42,7 @@
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
     "publish:dist": "cd ./dist/zxing-scanner && npm publish --access=public",
-    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ZXing for JS? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/zxing-js/donate\\u001b[0m')\"",
+    "postinstall": "node -e \"console.log('\\u001b[35m\\u001b[1mLove ZXing for JS? You can now donate to our open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[34mhttps://opencollective.com/zxing-js/donate\\u001b[0m')\" && ngcc",
     "deploy:demo:ngh": "npm run build:gh-pages && npx ngh --dir=dist/gh-pages"
   },
   "dependencies": {
