@@ -174,5 +174,8 @@
       }
     }
   },
-  "defaultProject": "ngx-scanner"
+  "defaultProject": "ngx-scanner",
+  "cli": {
+    "analytics": "3cefdb26-b867-48f4-b616-ac0543c0fa44"
+  }
 }
