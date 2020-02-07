@@ -8,7 +8,6 @@ import {
   OnDestroy,
   Output,
   ViewChild,
-  NgZone
 } from '@angular/core';
 
 import {

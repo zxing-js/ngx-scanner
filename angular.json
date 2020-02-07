@@ -14,6 +14,11 @@
           "options": {
             "tsConfig": "projects/zxing-scanner/tsconfig.lib.json",
             "project": "projects/zxing-scanner/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/zxing-scanner/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -48,6 +53,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/zxing-scanner-demo",
             "index": "projects/zxing-scanner-demo/src/index.html",
             "main": "projects/zxing-scanner-demo/src/main.ts",
@@ -87,6 +93,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ],
               "serviceWorker": true,
