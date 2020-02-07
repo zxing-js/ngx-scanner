@@ -14,13 +14,13 @@
           "options": {
             "tsConfig": "projects/zxing-scanner/tsconfig.lib.json",
             "project": "projects/zxing-scanner/ng-package.json"
-          }
-        ,          "configurations": {
+          },
+          "configurations": {
             "production": {
               "tsConfig": "projects/zxing-scanner/tsconfig.lib.prod.json"
             }
           }
-},
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -184,5 +184,8 @@
       }
     }
   },
-  "defaultProject": "ngx-scanner"
+  "defaultProject": "ngx-scanner",
+  "cli": {
+    "analytics": "bce5e0de-b0e1-46b0-9d78-937ef25c46c0"
+  }
 }
