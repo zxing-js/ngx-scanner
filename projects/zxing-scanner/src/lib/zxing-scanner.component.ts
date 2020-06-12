@@ -82,6 +82,12 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   autofocusEnabled: boolean;
 
   /**
+   * Modify delay between scans (default is 500ms)
+   */
+  @Input()
+  timeBetweenScansMillis = 500;
+
+  /**
    * Emits when and if the scanner is autostarted.
    */
   @Output()
@@ -674,7 +680,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   private getCodeReader(): BrowserMultiFormatContinuousReader {
 
     if (!this._codeReader) {
-      this._codeReader = new BrowserMultiFormatContinuousReader(this.hints);
+      this._codeReader = new BrowserMultiFormatContinuousReader(this.hints, this.timeBetweenScansMillis);
     }
 
     return this._codeReader;
