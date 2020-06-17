@@ -680,7 +680,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   private getCodeReader(): BrowserMultiFormatContinuousReader {
 
     if (!this._codeReader) {
-      this._codeReader = new BrowserMultiFormatContinuousReader(this.hints, this.timeBetweenScansMillis);
+      this._codeReader = new BrowserMultiFormatContinuousReader(this.hints, this.timeBetweenScans);
     }
 
     return this._codeReader;
