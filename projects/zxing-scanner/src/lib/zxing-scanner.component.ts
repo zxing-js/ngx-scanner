@@ -85,7 +85,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Modify delay between scans (default is 500ms)
    */
   @Input()
-  timeBetweenScansMillis = 500;
+  timeBetweenScans = 500;
 
   /**
    * Emits when and if the scanner is autostarted.
