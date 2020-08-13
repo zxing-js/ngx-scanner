@@ -1,7 +1,10 @@
 ---
 name: "Feature request \U0001F680"
-about: "Suggest an idea for this project. This is ~sadly~ not rocket engineering.
+about: "Suggest an idea for this project. This ~sadly~ is not rocket engineering.
   \U0001F609"
+title: ''
+labels: feature request
+assignees: ''
 
 ---
 
