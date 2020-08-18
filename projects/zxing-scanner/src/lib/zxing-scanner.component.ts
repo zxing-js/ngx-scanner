@@ -284,7 +284,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    *
    */
-  get isAutstarting(): boolean | null {
+  get isAutostarting(): boolean | null {
     return this._isAutostarting;
   }
 
