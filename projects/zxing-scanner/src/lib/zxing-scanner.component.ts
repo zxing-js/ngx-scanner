@@ -288,7 +288,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Allow start scan or not.
+   * Can turn on/off the device flashlight.
    */
   @Input()
   set torch(on: boolean) {
@@ -296,7 +296,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Allow start scan or not.
+   * Starts and Stops the scanning.
    */
   @Input()
   set enable(enabled: boolean) {
