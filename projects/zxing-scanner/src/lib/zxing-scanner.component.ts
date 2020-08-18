@@ -62,7 +62,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Says if some native API is supported.
    */
-  private isMediaDevicesSuported: boolean;
+  private isMediaDevicesSupported: boolean;
 
   /**
    * If the user-agent allowed the use of the camera or not.
@@ -294,7 +294,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Allow start scan or not.
+   * Can turn on/off the device flashlight.
    */
   @Input()
   set torch(on: boolean) {
@@ -302,7 +302,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Allow start scan or not.
+   * Starts and Stops the scanning.
    */
   @Input()
   set enable(enabled: boolean) {
@@ -374,7 +374,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     // computed data
     this.hasNavigator = typeof navigator !== 'undefined';
-    this.isMediaDevicesSuported = this.hasNavigator && !!navigator.mediaDevices;
+    this.isMediaDevicesSupported = this.hasNavigator && !!navigator.mediaDevices;
   }
 
   /**
@@ -388,7 +388,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return this.hasPermission;
     }
 
-    if (!this.isMediaDevicesSuported) {
+    if (!this.isMediaDevicesSupported) {
       console.error('@zxing/ngx-scanner', 'Can\'t get user media, this is not supported.');
       this.setPermission(null);
       return this.hasPermission;
