@@ -5,11 +5,11 @@
   "private": false,
   "license": "MIT",
   "dependencies": {
-    "@zxing/library": "^0.15.1"
+    "@zxing/library": "file:../../../zxing-library"
   },
   "peerDependencies": {
-    "@angular/common": "^9.0.0 <10",
-    "@angular/core": "^9.0.0 <10",
-    "rxjs": "^6.5.4"
+    "@angular/common": "10.1.5",
+    "@angular/core": "10.1.5",
+    "rxjs": "^6.6.3"
   }
 }

@@ -256,6 +256,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
 
     this.hints = hints;
+
+    this.restart();
   }
 
   /**
@@ -508,6 +510,8 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Stops old `codeReader` and starts scanning in a new one.
    */
   restart(): void {
+    // @note apenas necessario por enquanto causa da Torch
+    this._codeReader = undefined;
 
     const prevDevice = this._reset();
 
@@ -515,8 +519,6 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // @note apenas necessario por enquanto causa da Torch
-    this._codeReader = undefined;
     this.device = prevDevice;
   }
 
