@@ -13,7 +13,8 @@ import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.compon
 export class AppComponent {
 
   availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo = null;
+  deviceCurrent: MediaDeviceInfo;
+  deviceSelected: string;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -47,8 +48,14 @@ export class AppComponent {
   }
 
   onDeviceSelectChange(selected: string) {
+    this.deviceSelected = selected || '';
     const device = this.availableDevices.find(x => x.deviceId === selected);
-    this.currentDevice = device || null;
+    this.deviceCurrent = device;
+  }
+
+  onDeviceChange(device: MediaDeviceInfo) {
+    this.deviceSelected = device?.deviceId;
+    this.deviceCurrent = device;
   }
 
   openFormatsDialog() {

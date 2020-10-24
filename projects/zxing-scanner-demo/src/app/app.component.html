@@ -17,18 +17,17 @@
 
   <header>
     <mat-form-field appearance="fill">
-      <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
-        <option value="" [selected]="!currentDevice">No Device Selected</option>
-        <option *ngFor="let device of availableDevices" [value]="device.deviceId"
-          [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
-      </select>
+      <mat-select [value]="deviceSelected" (valueChange)="onDeviceSelectChange($event)">
+        <mat-option value="">No Device Selected</mat-option>
+        <mat-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{device.label}}</mat-option>
+      </mat-select>
     </mat-form-field>
     <button mat-icon-button [matMenuTriggerFor]="appMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
   </header>
 
-  <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+  <zxing-scanner [torch]="torchEnabled" [device]="deviceCurrent" (deviceChange)="onDeviceChange($event)" (scanSuccess)="onCodeResult($event)"
     [formats]="formatsEnabled" [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)"
     (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
 

@@ -56,9 +56,12 @@
     "@angular/platform-browser-dynamic": "10.1.6",
     "@angular/router": "10.1.6",
     "@angular/service-worker": "10.1.6",
-    "@zxing/library": "^0.17.1",
+    "@zxing/browser": "../browser/zxing-browser-0.0.1-dev.89hsad.tgz",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "@zxing/library": "^0.18.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.6",
