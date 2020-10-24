@@ -1744,15 +1744,10 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@zxing/browser@../browser/zxing-browser-0.0.1-dev.89hsad.tgz":
-  version "0.0.1-dev.89hsad"
-  resolved "../browser/zxing-browser-0.0.1-dev.89hsad.tgz#6a76f893bac16295e12396a93f8954207164e52f"
-  dependencies:
-    "@zxing/library" "^0.18.2"
-
-"@zxing/browser@../browser/zxing-browser-0.0.1-dev.da9hyd.tgz":
-  version "0.0.1-dev.da9hyd"
-  resolved "../browser/zxing-browser-0.0.1-dev.da9hyd.tgz#0acbdcc34b21709db36b9764a01e04916ec79db0"
+"@zxing/browser@0.0.1-dev.5228f6d":
+  version "0.0.1-dev.5228f6d"
+  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.1-dev.5228f6d.tgz#41eaf829a4f1b60b0fcfe2fa21e0a62f180d8379"
+  integrity sha512-s0KtMlOwYhoB3YNvaLEvmbGzQ42Sss2mNzSrFMzGXsZIB5VuQtTQe9Uz+pVOSrNb/QKgKfFQaVDnxCdV6Q09sw==
   dependencies:
     "@zxing/library" "^0.18.2"
 
