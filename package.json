@@ -57,11 +57,9 @@
     "@angular/router": "10.1.6",
     "@angular/service-worker": "10.1.6",
     "@zxing/browser": "~0.0.1",
+    "@zxing/library": "^0.18.2",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.3"
-  },
-  "peerDependencies": {
-    "@zxing/library": "^0.18.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.6",
@@ -86,7 +84,6 @@
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
     "ng-packagr": "^10.1.2",
-    "npm-install-peers": "^1.2.1",
     "protractor": "^7.0.0",
     "ts-node": "^9.0.0",
     "tslint": "^5.20.1",

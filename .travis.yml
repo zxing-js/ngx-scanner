@@ -5,7 +5,7 @@ sudo: required
 language: node_js
 
 node_js:
-  - '13'
+  - '12'
   - '10'
 
 addons:
@@ -23,7 +23,7 @@ jobs:
 
     - stage: compile
       script:
-        - npx npm-install-peers
+        - npm install
         - npm run build
         - npm run build:demo
 
