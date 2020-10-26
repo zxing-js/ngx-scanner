@@ -1744,10 +1744,10 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@zxing/browser@0.0.1-dev.5228f6d":
-  version "0.0.1-dev.5228f6d"
-  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.1-dev.5228f6d.tgz#41eaf829a4f1b60b0fcfe2fa21e0a62f180d8379"
-  integrity sha512-s0KtMlOwYhoB3YNvaLEvmbGzQ42Sss2mNzSrFMzGXsZIB5VuQtTQe9Uz+pVOSrNb/QKgKfFQaVDnxCdV6Q09sw==
+"@zxing/browser@~0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.1.tgz#efe82bf1c82b0cc5402870b20f5e344e472b988f"
+  integrity sha512-HHeRKGdM2kK6BfT3HUGrihtnoCBrJI92B6LxR5CJO4HyIoKNeUem46QTp7Q43UCdjuLpYKJshEsLyMnQ+kKoxQ==
   dependencies:
     "@zxing/library" "^0.18.2"
 
