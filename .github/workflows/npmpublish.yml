@@ -63,7 +63,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
 
-      - run: npm publish ./pack-artifact/package.tgz
+      - run: npm publish ./pack-artifact/package.tgz --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -94,11 +94,14 @@ jobs:
           jq -r --arg NAME $PACKAGE_NAME '.name |= $NAME' temp.json > package.json
           rm temp.json
 
+      # Setup .npmrc file to publish to GitHub Packages
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
-          registry-url: https://npm.pkg.github.com/
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@zxing-js'
 
-      - run: npm publish ./pack-artifact/package.tgz
+      - run: npm publish ./pack-artifact/package.tgz --access public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
