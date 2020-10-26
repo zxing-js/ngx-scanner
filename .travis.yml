@@ -18,24 +18,26 @@ stages:
     # require the branch name to be master (note for PRs this is the base branch name)
     if: branch = master
 
+cache: yarn
+
 jobs:
   include:
 
     - stage: compile
       script:
-        - npm install
-        - npm run build
-        - npm run build:demo
+        - yarn install --frozen-lockfile
+        - yarn run build
+        - yarn run build:demo
 
     - stage: test
       script:
-        - npm run lint
-        - npm run test
-        # - npm run e2e
+        - yarn run lint
+        - yarn run test
+        # - yarn run e2e
 
     - stage: deploy
       script:
-        - npm run build:gh-pages # rebuild for gh-pages
+        - yarn run build:gh-pages # rebuild for gh-pages
       deploy:
         provider: pages
         skip_cleanup: true
