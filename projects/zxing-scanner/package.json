@@ -7,7 +7,7 @@
   "peerDependencies": {
     "@angular/common": "10.1.5",
     "@angular/core": "10.1.5",
-    "@zxing/browser": "~0.0.2",
+    "@zxing/browser": "~0.0.3",
     "@zxing/library": "^0.18.2",
     "rxjs": "^6.6.3"
   }
