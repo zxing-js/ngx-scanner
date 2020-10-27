@@ -64,39 +64,39 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
     try {
       const stream = await BrowserMultiFormatContinuousReader.getStreamForDevice({ deviceId });
-        this.scannerControls = await this.decodeFromStream(stream, previewEl, (result, error, controls) => {
+      this.scannerControls = await this.decodeFromStream(stream, previewEl, (result, error, controls) => {
 
-          // stops loop
-          if (scan$.isStopped) {
-            controls.stop();
-            this.scannerControls = undefined;
-            return;
-          }
-
-          if (!error) {
-            scan$.next({ result });
-            return;
-          }
-
-          const errorName = error.name;
-
-          // stream cannot stop on fails.
-          if (
-            // scan Failure - found nothing, no error
-            errorName === NotFoundException.name ||
-            // scan Error - found the QR but got error on decoding
-            errorName === ChecksumException.name ||
-            errorName === FormatException.name
-          ) {
-            scan$.next({ error });
-            return;
-          }
-
-          // probably fatal error
-          scan$.error(error);
+        // stops loop
+        if (scan$.isStopped) {
+          controls.stop();
           this.scannerControls = undefined;
           return;
-        });
+        }
+
+        if (!error) {
+          scan$.next({ result });
+          return;
+        }
+
+        const errorName = error.name;
+
+        // stream cannot stop on fails.
+        if (
+          // scan Failure - found nothing, no error
+          errorName === NotFoundException.name ||
+          // scan Error - found the QR but got error on decoding
+          errorName === ChecksumException.name ||
+          errorName === FormatException.name
+        ) {
+          scan$.next({ error });
+          return;
+        }
+
+        // probably fatal error
+        scan$.error(error);
+        this.scannerControls = undefined;
+        return;
+      });
     } catch (e) {
       scan$.error(e);
       this.scannerControls = undefined;

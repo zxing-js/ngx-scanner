@@ -66,7 +66,11 @@ export class AppComponent {
     this._dialog
       .open(FormatsDialogComponent, { data })
       .afterClosed()
-      .subscribe(x => { if (x) { this.formatsEnabled = x; } });
+      .subscribe(x => {
+        if (x) {
+          this.formatsEnabled = x;
+        }
+      });
   }
 
   onHasPermission(has: boolean) {
