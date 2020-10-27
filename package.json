@@ -56,7 +56,7 @@
     "@angular/platform-browser-dynamic": "10.2.0",
     "@angular/router": "10.2.0",
     "@angular/service-worker": "10.2.0",
-    "@zxing/browser": "~0.0.1",
+    "@zxing/browser": "~0.0.2",
     "@zxing/library": "^0.18.2",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.3"
