@@ -275,6 +275,23 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
+   * Sets the desired constraints in all video tracks.
+   * @experimental
+   */
+  @Input()
+  set videoConstraints(constraints: MediaTrackConstraints) {
+    // new instance with new hints.
+    const controls = this.codeReader?.getScannerControls();
+
+    if (!controls) {
+      // fails silently
+      return;
+    }
+
+    controls?.streamVideoConstraintsApply(constraints);
+  }
+
+  /**
    *
    */
   set isAutostarting(state: boolean | null) {
