@@ -294,7 +294,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    *
    */
-  set isAutostarting(state: boolean | null) {
+  set isAutostarting(state: boolean) {
     this._isAutostarting = state;
     this.autostarting.next(state);
   }
@@ -302,7 +302,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    *
    */
-  get isAutostarting(): boolean | null {
+  get isAutostarting(): boolean {
     return this._isAutostarting;
   }
 
@@ -475,7 +475,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   private initAutostartOff(): void {
 
     // do not ask for permission when autostart is off
-    this.isAutostarting = null;
+    this.isAutostarting = false;
 
     // just update devices information
     this.updateVideoInputDevices();
@@ -502,7 +502,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     // from this point, things gonna need permissions
     if (hasPermission) {
       const devices = await this.updateVideoInputDevices();
-      this.autostartScanner([...devices]);
+      await this.autostartScanner([...devices]);
     }
 
     this.isAutostarting = false;
@@ -597,7 +597,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * Starts the scanner with the back camera otherwise take the last
    * available device.
    */
-  private autostartScanner(devices: MediaDeviceInfo[]) {
+  private async autostartScanner(devices: MediaDeviceInfo[]): Promise<void> {
 
     const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
 
@@ -608,7 +608,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       throw new Error('Impossible to autostart, no input devices available.');
     }
 
-    this.setDevice(device);
+    await this.setDevice(device);
 
     this.deviceChange.next(device);
   }
@@ -745,29 +745,28 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    *
    * @param deviceId The deviceId from the device.
    */
-  private scanFromDevice(deviceId: string): void {
+  private async scanFromDevice(deviceId: string): Promise<void> {
 
     const videoElement = this.previewElemRef.nativeElement;
 
     const codeReader = this.getCodeReader();
 
-    codeReader.scanFromDeviceObservable(deviceId, videoElement).then(scanStream => {
+    const scanStream = await codeReader.scanFromDeviceObservable(deviceId, videoElement);
 
-      if (!scanStream) {
-        throw new Error('Undefined decoding stream, aborting.');
-      }
+    if (!scanStream) {
+      throw new Error('Undefined decoding stream, aborting.');
+    }
 
-      const controls = codeReader.getScannerControls();
-      const hasTorchControl = typeof controls.switchTorch !== 'undefined';
+    const controls = codeReader.getScannerControls();
+    const hasTorchControl = typeof controls.switchTorch !== 'undefined';
 
-      this.torchCompatible.next(hasTorchControl);
+    this.torchCompatible.next(hasTorchControl);
 
-      const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
-      const error = (err: any) => this._onDecodeError(err);
-      const complete = () => { console.log('completed'); };
+    const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
+    const error = (err: any) => this._onDecodeError(err);
+    const complete = () => { console.log('completed'); };
 
-      this._scanSubscription = scanStream.subscribe(next, error, complete);
-    });
+    this._scanSubscription = scanStream.subscribe(next, error, complete);
   }
 
   /**
@@ -821,7 +820,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   /**
    * Sets the current device.
    */
-  private setDevice(device: MediaDeviceInfo) {
+  private async setDevice(device: MediaDeviceInfo): Promise<void> {
 
     // instantly stops the scan before changing devices
     this.scanStop();
@@ -836,7 +835,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     // if enabled, starts scanning
     if (this._enabled && device) {
-      this.scanFromDevice(device.deviceId);
+      await this.scanFromDevice(device.deviceId);
     }
   }
 
