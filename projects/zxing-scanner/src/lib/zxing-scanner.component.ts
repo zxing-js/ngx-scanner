@@ -805,10 +805,14 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   private setDevice(device: MediaDeviceInfo) {
 
-    this._device = device || undefined;
+    // instantly stops the scan before changing devices
     this.scanStop();
 
+    // correctly sets the new (or none) device
+    this._device = device || undefined;
+
     if (!this._device) {
+      // cleans the video because user removed the device
       BrowserCodeReader.cleanVideoSource(this.previewElemRef.nativeElement);
     }
 
