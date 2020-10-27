@@ -1,6 +1,6 @@
 {
   "name": "@zxing/ngx-scanner",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "High-performance Angular 8 barcode scanner component based on ZXing.",
   "private": false,
   "license": "MIT",
