@@ -1744,7 +1744,7 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@zxing/browser@^0.0.3":
+"@zxing/browser@~0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.3.tgz#97b6f32a90ca45a1f4a78ad55196a7916bcf9b2f"
   integrity sha512-zOT5h51yUycpIsTtmbF0BlZ1zboUSozStR5g+UKJtIfhPDrq4iUVKmcimODKZWgtBbiI+4qMHLQKE9xocsg4RQ==
