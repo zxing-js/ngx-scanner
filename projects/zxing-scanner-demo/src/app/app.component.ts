@@ -48,14 +48,20 @@ export class AppComponent {
   }
 
   onDeviceSelectChange(selected: string) {
-    this.deviceSelected = selected || '';
+    const selectedStr = selected || '';
+    if (this.deviceSelected === selectedStr) { return; }
+    this.deviceSelected = selectedStr;
     const device = this.availableDevices.find(x => x.deviceId === selected);
-    this.deviceCurrent = device;
+    this.deviceCurrent = device || undefined;
+    console.log(this.deviceSelected, this.deviceCurrent);
   }
 
   onDeviceChange(device: MediaDeviceInfo) {
-    this.deviceSelected = device?.deviceId;
-    this.deviceCurrent = device;
+    const selectedStr = device?.deviceId || '';
+    if (this.deviceSelected === selectedStr) { return; }
+    this.deviceSelected = selectedStr;
+    this.deviceCurrent = device || undefined;
+    console.log(this.deviceSelected, this.deviceCurrent);
   }
 
   openFormatsDialog() {
