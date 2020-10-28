@@ -1,11 +1,11 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
   ViewChild
 } from '@angular/core';
@@ -27,7 +27,7 @@ import { ResultAndError } from './ResultAndError';
   styleUrls: ['./zxing-scanner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
+export class ZXingScannerComponent implements OnInit, OnDestroy {
 
   /**
    * Supported Hints map.
@@ -108,7 +108,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * True during autostart and false after. It will be null if won't autostart at all.
    */
   @Output()
-  autostarting: EventEmitter<boolean | null>;
+  autostarting: EventEmitter<boolean>;
 
   /**
    * If the scanner should autostart with the first available device.
@@ -176,6 +176,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   @Output()
   hasDevices: EventEmitter<boolean>;
 
+  private _ready = false;
+
+  private _devicePreStart: MediaDeviceInfo;
+
   /**
    * Exposes the current code reader, so the user can use it's APIs.
    */
@@ -187,16 +191,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * User device input
    */
   @Input()
-  set device(device: MediaDeviceInfo | null | undefined) {
+  set device(device: MediaDeviceInfo | undefined) {
 
-    if (this.isCurrentDevice(device)) {
-      console.warn('Setting the same device is not allowed.');
+    if (!this._ready) {
+      this._devicePreStart = device;
+      // let's ignore silently, users don't liek logs
       return;
     }
 
     if (this.isAutostarting) {
       // do not allow setting devices during auto-start, since it will set one and emit it.
       console.warn('Avoid setting a device during auto-start.');
+      return;
+    }
+
+    if (this.isCurrentDevice(device)) {
+      console.warn('Setting the same device is not allowed.');
       return;
     }
 
@@ -208,7 +218,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
       //     tap(() => console.log(`Permissions set, applying device change${device ? ` (${device.deviceId})` : ''}.`))
       //   )
       //   .subscribe(() => this.device = device);
-      // return;
+      return;
     }
 
     this.setDevice(device);
@@ -378,7 +388,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     // instance based emitters
     this.autostarted = new EventEmitter();
     this.autostarting = new EventEmitter();
-    this.torchCompatible = new EventEmitter();
+    this.torchCompatible = new EventEmitter(false);
     this.scanSuccess = new EventEmitter();
     this.scanFailure = new EventEmitter();
     this.scanError = new EventEmitter();
@@ -455,18 +465,22 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
     stream = undefined;
   }
 
-  private init() {
+  private async init() {
     if (!this.autostart) {
       console.warn('Feature \'autostart\' disabled. Permissions and devices recovery has to be run manually.');
 
       // does the necessary configuration without autostarting
       this.initAutostartOff();
 
+      this._ready = true;
+
       return;
     }
 
     // configurates the component and starts the scanner
-    this.initAutostartOn();
+    await this.initAutostartOn();
+
+    this._ready = true;
   }
 
   /**
@@ -479,6 +493,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
 
     // just update devices information
     this.updateVideoInputDevices();
+
+    if (this._device && this._devicePreStart) {
+      this.setDevice(this._devicePreStart);
+    }
   }
 
   /**
@@ -517,19 +535,17 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Executed after the view initialization.
-   */
-  ngAfterViewInit(): void {
-    // makes torch availability information available to user
-    this.torchCompatible.emit(false);
-    this.init();
-  }
-
-  /**
    * Executes some actions before destroy the component.
    */
   ngOnDestroy(): void {
     this.reset();
+  }
+
+  /**
+   *
+   */
+  ngOnInit(): void {
+    this.init();
   }
 
   /**
@@ -635,6 +651,10 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    * @param error the error thing.
    */
   private dispatchScanError(error: any): void {
+    if (!this.scanError.observers.some(x => Boolean(x))) {
+      console.error(`zxing scanner component: ${error.name}`, error);
+      console.warn('Use the `(scanError)` property to handle errors like this!');
+    }
     this.scanError.next(error);
   }
 
@@ -774,7 +794,7 @@ export class ZXingScannerComponent implements AfterViewInit, OnDestroy {
    */
   private _onDecodeError(err: any) {
     this.dispatchScanError(err);
-    this.reset();
+    // this.reset();
   }
 
   /**
