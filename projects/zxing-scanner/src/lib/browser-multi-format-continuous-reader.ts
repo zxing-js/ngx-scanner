@@ -15,31 +15,6 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   protected scannerControls: IScannerControls;
 
   /**
-   * Gets the media stream for certain device.
-   * Falls back to any available device if no `deviceId` is defined.
-   */
-  public static async getStreamForDevice({ deviceId }: Partial<MediaDeviceInfo>): Promise<MediaStream> {
-    const constraints = BrowserMultiFormatContinuousReader.getUserMediaConstraints(deviceId);
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    return stream;
-  }
-
-  /**
-   * Creates media steram constraints for certain `deviceId`.
-   * Falls back to any environment available device if no `deviceId` is defined.
-   */
-  public static getUserMediaConstraints(deviceId: string): MediaStreamConstraints {
-
-    const video = typeof deviceId === 'undefined'
-      ? { facingMode: { exact: 'environment' } }
-      : { deviceId: { exact: deviceId } };
-
-    const constraints: MediaStreamConstraints = { video };
-
-    return constraints;
-  }
-
-  /**
    * Returns the code reader scanner controls.
    */
   public getScannerControls(): IScannerControls {
@@ -63,15 +38,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
     const scan$ = new BehaviorSubject<ResultAndError>({});
 
     try {
-      const stream = await BrowserMultiFormatContinuousReader.getStreamForDevice({ deviceId });
-      this.scannerControls = await this.decodeFromStream(stream, previewEl, (result, error, controls) => {
-
-        // stops loop
-        if (scan$.isStopped) {
-          controls.stop();
-          this.scannerControls = undefined;
-          return;
-        }
+      const controls = await this.decodeFromVideoDevice(deviceId, previewEl, (result, error) => {
 
         if (!error) {
           scan$.next({ result });
@@ -94,15 +61,23 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
         // probably fatal error
         scan$.error(error);
+        this.scannerControls.stop();
         this.scannerControls = undefined;
         return;
       });
+
+      this.scannerControls = {
+        ...controls,
+        stop() {
+          controls.stop();
+          scan$.complete();
+        },
+      };
     } catch (e) {
       scan$.error(e);
+      this.scannerControls.stop();
       this.scannerControls = undefined;
     }
-
-    // @todo Find a way to emit a complete event on the scan stream once it's finished.
 
     return scan$.asObservable();
   }

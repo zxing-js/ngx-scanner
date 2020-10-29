@@ -552,8 +552,11 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    * Stops the scanning, if any.
    */
   public scanStop() {
-    this._scanSubscription?.unsubscribe();
-    this._scanSubscription = undefined;
+    if (this._scanSubscription) {
+      this.codeReader?.getScannerControls().stop();
+      this._scanSubscription?.unsubscribe();
+      this._scanSubscription = undefined;
+    }
     this.torchCompatible.next(false);
   }
 
