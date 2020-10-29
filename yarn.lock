@@ -1585,17 +1585,17 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@zxing/browser@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.4.tgz#de3eb13f41e9c0241833a6d077d0120c94c8e3bc"
-  integrity sha512-weQuafHGgaZ+JP25muDNsEBHEY2lxuRu2s3Gdrxiuv2RLMxRkkWK5dt8vsnWvSDfqzYzKZi2QkCX1JY1puC7Aw==
+"@zxing/browser@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.0.5.tgz#cf54a4eaf5551a871df7e58d091a420768586e34"
+  integrity sha512-nIdOV3Yx6NKNuHYRvcSng9qnYoe0Apu8T0E9NNk7tinCGpF/vjnBXMaiugAy00NDI+UyKr3QTWYQrpweDuMMdw==
   optionalDependencies:
     "@zxing/text-encoding" "^0.9.0"
 
-"@zxing/library@^0.18.2":
-  version "0.18.2"
-  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.18.2.tgz#7c84375cd38ff6204f9e751f677c7c25d60fa847"
-  integrity sha512-4Do7Lp52g01FtQzbXDi8sbjGo12HTeakkkdO16vqlJzHR7HRxB55xzdUuLOcXRAxYw+pZgEDK7EZzmgAjk09YA==
+"@zxing/library@^0.18.3":
+  version "0.18.3"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.18.3.tgz#50f20703cf3b7d357bd8801b23f27f24aa1f5e4d"
+  integrity sha512-7ny4JjUu2UfIiuyjewxeRZViXJ8GsSOoNZ+o6o0AdPvUQlaISdsGnIUVGDviJerEYeT1MKhaL7jUtjdYs3KO/Q==
   dependencies:
     ts-custom-error "^3.0.0"
   optionalDependencies:
