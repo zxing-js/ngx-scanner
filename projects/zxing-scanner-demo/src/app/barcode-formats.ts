@@ -1,12 +1,15 @@
 import { BarcodeFormat } from '@zxing/library';
 
 export const formatsAvailable = [
+  BarcodeFormat.AZTEC,
+  BarcodeFormat.CODE_39,
   BarcodeFormat.CODE_128,
   BarcodeFormat.DATA_MATRIX,
   BarcodeFormat.EAN_13,
   BarcodeFormat.EAN_8,
   BarcodeFormat.ITF,
   BarcodeFormat.QR_CODE,
+  BarcodeFormat.PDF_417,
   BarcodeFormat.RSS_14,
 ];
 
