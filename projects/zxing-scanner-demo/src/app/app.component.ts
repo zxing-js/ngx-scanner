@@ -53,7 +53,6 @@ export class AppComponent {
     this.deviceSelected = selectedStr;
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.deviceCurrent = device || undefined;
-    console.log(this.deviceSelected, this.deviceCurrent);
   }
 
   onDeviceChange(device: MediaDeviceInfo) {
@@ -61,7 +60,6 @@ export class AppComponent {
     if (this.deviceSelected === selectedStr) { return; }
     this.deviceSelected = selectedStr;
     this.deviceCurrent = device || undefined;
-    console.log(this.deviceSelected, this.deviceCurrent);
   }
 
   openFormatsDialog() {

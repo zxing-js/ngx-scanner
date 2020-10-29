@@ -787,7 +787,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
 
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
     const error = (err: any) => this._onDecodeError(err);
-    const complete = () => { console.log('completed'); };
+    const complete = () => { };
 
     this._scanSubscription = scanStream.subscribe(next, error, complete);
   }
