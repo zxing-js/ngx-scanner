@@ -1,4 +1,4 @@
-import { ChecksumException, FormatException, NotFoundException } from '@zxing/library';
+import { ChecksumException, Exception, FormatException, NotFoundException } from '@zxing/library';
 import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ResultAndError } from './ResultAndError';
@@ -45,15 +45,15 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
           return;
         }
 
-        const errorName = error.name;
+        const errorKind = error.getKind();
 
         // stream cannot stop on fails.
         if (
           // scan Failure - found nothing, no error
-          errorName === NotFoundException.name ||
+          errorKind === NotFoundException.kind ||
           // scan Error - found the QR but got error on decoding
-          errorName === ChecksumException.name ||
-          errorName === FormatException.name
+          errorKind === ChecksumException.kind ||
+          errorKind === FormatException.kind
         ) {
           scan$.next({ error });
           return;
