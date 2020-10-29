@@ -61,7 +61,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
         // probably fatal error
         scan$.error(error);
-        this.scannerControls.stop();
+        controls.stop();
         this.scannerControls = undefined;
         return;
       });
@@ -75,7 +75,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
       };
     } catch (e) {
       scan$.error(e);
-      this.scannerControls.stop();
+      this.scannerControls?.stop();
       this.scannerControls = undefined;
     }
 
