@@ -780,16 +780,20 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       throw new Error('Undefined decoding stream, aborting.');
     }
 
-    const controls = codeReader.getScannerControls();
-    const hasTorchControl = typeof controls.switchTorch !== 'undefined';
-
-    this.torchCompatible.next(hasTorchControl);
-
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
     const error = (err: any) => this._onDecodeError(err);
     const complete = () => { };
 
     this._scanSubscription = scanStream.subscribe(next, error, complete);
+
+    if (this._scanSubscription.closed) {
+      return;
+    }
+
+    const controls = codeReader.getScannerControls();
+    const hasTorchControl = typeof controls.switchTorch !== 'undefined';
+
+    this.torchCompatible.next(hasTorchControl);
   }
 
   /**
