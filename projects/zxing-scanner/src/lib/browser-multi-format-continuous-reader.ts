@@ -36,9 +36,10 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
   ): Promise<Observable<ResultAndError>> {
 
     const scan$ = new BehaviorSubject<ResultAndError>({});
+    let ctrls
 
     try {
-      const controls = await this.decodeFromVideoDevice(deviceId, previewEl, (result, error) => {
+      ctrls = await this.decodeFromVideoDevice(deviceId, previewEl, (result, error) => {
 
         if (!error) {
           scan$.next({ result });
@@ -53,7 +54,8 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
           errorName === NotFoundException.name ||
           // scan Error - found the QR but got error on decoding
           errorName === ChecksumException.name ||
-          errorName === FormatException.name
+          errorName === FormatException.name || 
+          error.message.includes('No MultiFormat Readers were able to detect the code.')
         ) {
           scan$.next({ error });
           return;
@@ -61,15 +63,15 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
         // probably fatal error
         scan$.error(error);
-        controls.stop();
+        this.scannerControls.stop();
         this.scannerControls = undefined;
         return;
       });
 
       this.scannerControls = {
-        ...controls,
+        ...ctrls,
         stop() {
-          controls.stop();
+          ctrls.stop();
           scan$.complete();
         },
       };
