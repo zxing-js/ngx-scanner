@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppInfoComponent } from '../app-info/app-info.component';
 import { AppUiModule } from '../app-ui.module';
@@ -9,7 +9,7 @@ describe('AppInfoDialogComponent', () => {
   let component: AppInfoDialogComponent;
   let fixture: ComponentFixture<AppInfoDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed
       .configureTestingModule({
         declarations: [AppInfoDialogComponent, AppInfoComponent],

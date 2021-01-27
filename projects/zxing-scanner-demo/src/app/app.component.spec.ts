@@ -1,11 +1,11 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { AppUiModule } from './app-ui.module';
 import { AppComponent } from './app.component';
 
 
 describe('AppComponent', () => {
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed
       .configureTestingModule({
         imports: [AppUiModule],
@@ -14,13 +14,13 @@ describe('AppComponent', () => {
       .compileComponents();
   }));
 
-  it('should create the app', async(() => {
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
 
-  it('should render zxing-scanner tag', async(() => {
+  it('should render zxing-scanner tag', waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
