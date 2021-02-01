@@ -35,7 +35,7 @@ jobs:
         - yarn run test
         # - yarn run e2e
 
-    - stage: deploy
+    - stage: deploy-gh-pages
       script:
         - yarn run build:gh-pages # rebuild for gh-pages
       deploy:
