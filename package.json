@@ -1,10 +1,10 @@
 {
   "name": "@zxing/ngx-scanner",
   "version": "1.0.0",
-  "private": true,
+  "homepage": "https://github.com/zxing-js/ngx-scanner#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zxing-js/ngx-scanner"
+    "url": "https://github.com/zxing-js/ngx-scanner.git"
   },
   "authors": [
     {
