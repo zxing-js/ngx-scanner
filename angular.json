@@ -53,7 +53,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/zxing-scanner-demo",
             "index": "projects/zxing-scanner-demo/src/index.html",
             "main": "projects/zxing-scanner-demo/src/main.ts",
@@ -69,7 +68,13 @@
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "projects/zxing-scanner-demo/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -79,12 +84,10 @@
                   "with": "projects/zxing-scanner-demo/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -102,7 +105,8 @@
               "serviceWorker": true,
               "ngswConfigPath": "projects/zxing-scanner-demo/ngsw-config.json"
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
