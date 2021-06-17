@@ -70,6 +70,8 @@ jobs:
   publish-gpr:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      REPOSITORY_NAME: ngx-scanner
     steps:
 
       - name: Download build artifacts
@@ -79,10 +81,6 @@ jobs:
 
       - name: Install JQ for JSON handling
         run: sudo apt-get install jq
-
-      - name: Get repository name
-        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
-        shell: bash
 
       - name: Rename NPM package
         run: |
