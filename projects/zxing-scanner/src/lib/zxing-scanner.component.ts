@@ -341,6 +341,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
 
     if (!this._enabled) {
       this.reset();
+      BrowserMultiFormatContinuousReader.releaseAllStreams();
     } else {
       if (this.device) {
         this.scanFromDevice(this.device.deviceId);
@@ -539,6 +540,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.reset();
+    BrowserMultiFormatContinuousReader.releaseAllStreams();
   }
 
   /**
