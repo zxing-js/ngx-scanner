@@ -31,9 +31,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve zxing-scanner-demo",
-    "build": "ng build zxing-scanner --prod && cp README.md ./dist/zxing-scanner",
-    "build:demo": "ng build zxing-scanner-demo --prod",
-    "build:gh-pages": "ng build zxing-scanner-demo --prod --base-href /ngx-scanner/ --output-path dist/gh-pages",
+    "build": "ng build zxing-scanner --configuration production && cp README.md ./dist/zxing-scanner",
+    "build:demo": "ng build zxing-scanner-demo --configuration production",
+    "build:gh-pages": "ng build zxing-scanner-demo --configuration production --base-href /ngx-scanner/ --output-path dist/gh-pages",
     "test": "ng test zxing-scanner --watch=false --browsers=ChromeHeadless && ng test zxing-scanner-demo --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint zxing-scanner && ng lint zxing-scanner-demo",
     "e2e": "ng e2e",
