@@ -10,18 +10,14 @@ import { FormatsDialogComponent } from './formats-dialog/formats-dialog.componen
 
 
 @NgModule({
-  imports: [
-
-    // Angular
-    BrowserModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-
-    // Local
-    AppUiModule,
-
-  ],
-  declarations: [AppComponent, FormatsDialogComponent, AppInfoComponent, AppInfoDialogComponent],
-  bootstrap: [AppComponent],
-  entryComponents: [FormatsDialogComponent, AppInfoDialogComponent]
+    imports: [
+        // Angular
+        BrowserModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+        // Local
+        AppUiModule,
+    ],
+    declarations: [AppComponent, FormatsDialogComponent, AppInfoComponent, AppInfoDialogComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

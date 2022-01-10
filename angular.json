@@ -28,18 +28,6 @@
             "tsConfig": "projects/zxing-scanner/tsconfig.spec.json",
             "karmaConfig": "projects/zxing-scanner/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/zxing-scanner/tsconfig.lib.json",
-              "projects/zxing-scanner/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -86,7 +74,6 @@
               ],
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -144,18 +131,6 @@
               "projects/zxing-scanner-demo/src/manifest.webmanifest"
             ]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/zxing-scanner-demo/tsconfig.app.json",
-              "projects/zxing-scanner-demo/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -174,15 +149,6 @@
             "production": {
               "devServerTarget": "zxing-scanner-demo:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "projects/zxing-scanner-demo-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
