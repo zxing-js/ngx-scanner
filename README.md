@@ -31,6 +31,10 @@ Angular Barcode/QR-Code scanner component.
 
 <br>
 
+### Attention
+
+>NOTE: While we do not have the time to actively maintain zxing-js anymore, we are open to new maintainers taking the lead.
+
 ## Demo
 
 > Previews needs to be opened in new standalone windows.
