@@ -582,7 +582,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    * Stops old `codeReader` and starts scanning in a new one.
    */
   restart(): void {
-    // @note apenas necessario por enquanto causa da Torch
+    // note only necessary for now because of the Torch
     this._codeReader = undefined;
 
     const prevDevice = this._reset();
