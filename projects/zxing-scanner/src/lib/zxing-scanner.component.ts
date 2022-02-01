@@ -52,7 +52,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  private _isAutostarting: boolean;
+  private _isAutoStarting: boolean;
 
   /**
    * Has `navigator` access.
@@ -99,16 +99,16 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   delayBetweenScanSuccess = 500;
 
   /**
-   * Emits when and if the scanner is autostarted.
+   * Emits when and if the scanner is autoStarted.
    */
   @Output()
-  autostarted: EventEmitter<void>;
+  autoStarted: EventEmitter<void>;
 
   /**
    * True during autostart and false after. It will be null if won't autostart at all.
    */
   @Output()
-  autostarting: EventEmitter<boolean>;
+  autoStarting: EventEmitter<boolean>;
 
   /**
    * If the scanner should autostart with the first available device.
@@ -123,55 +123,55 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
 
   /**
-   * Emitts events when the torch compatibility is changed.
+   * Emits events when the torch compatibility is changed.
    */
   @Output()
   torchCompatible: EventEmitter<boolean>;
 
   /**
-   * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
+   * Emits events when a scan is successful performed, will inject the string value of the QR-code to the callback.
    */
   @Output()
   scanSuccess: EventEmitter<string>;
 
   /**
-   * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
+   * Emits events when a scan fails without errors, useful to know how much scan tries where made.
    */
   @Output()
   scanFailure: EventEmitter<Exception | undefined>;
 
   /**
-   * Emitts events when a scan throws some error, will inject the error to the callback.
+   * Emits events when a scan throws some error, will inject the error to the callback.
    */
   @Output()
   scanError: EventEmitter<Error>;
 
   /**
-   * Emitts events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
+   * Emits events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
    */
   @Output()
   scanComplete: EventEmitter<Result>;
 
   /**
-   * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+   * Emits events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
   camerasFound: EventEmitter<MediaDeviceInfo[]>;
 
   /**
-   * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+   * Emits events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
   camerasNotFound: EventEmitter<any>;
 
   /**
-   * Emitts events when the users answers for permission.
+   * Emits events when the users answers for permission.
    */
   @Output()
   permissionResponse: EventEmitter<boolean>;
 
   /**
-   * Emitts events when has devices status is update.
+   * Emits events when has devices status is update.
    */
   @Output()
   hasDevices: EventEmitter<boolean>;
@@ -195,11 +195,11 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
 
     if (!this._ready) {
       this._devicePreStart = device;
-      // let's ignore silently, users don't liek logs
+      // let's ignore silently, users don't like logs
       return;
     }
 
-    if (this.isAutostarting) {
+    if (this.isAutoStarting) {
       // do not allow setting devices during auto-start, since it will set one and emit it.
       console.warn('Avoid setting a device during auto-start.');
       return;
@@ -231,7 +231,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   deviceChange: EventEmitter<MediaDeviceInfo>;
 
   /**
-   * User device acessor.
+   * User device accessor.
    */
   get device() {
     return this._device;
@@ -304,16 +304,16 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  set isAutostarting(state: boolean) {
-    this._isAutostarting = state;
-    this.autostarting.next(state);
+  set isAutoStarting(state: boolean) {
+    this._isAutoStarting = state;
+    this.autoStarting.next(state);
   }
 
   /**
    *
    */
-  get isAutostarting(): boolean {
-    return this._isAutostarting;
+  get isAutoStarting(): boolean {
+    return this._isAutoStarting;
   }
 
   /**
@@ -387,8 +387,8 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   constructor() {
     // instance based emitters
-    this.autostarted = new EventEmitter();
-    this.autostarting = new EventEmitter();
+    this.autoStarted = new EventEmitter();
+    this.autoStarting = new EventEmitter();
     this.torchCompatible = new EventEmitter(false);
     this.scanSuccess = new EventEmitter();
     this.scanFailure = new EventEmitter();
@@ -412,7 +412,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Gets and registers all cammeras.
+   * Gets and registers all cameras.
    */
   async askForPermission(): Promise<boolean> {
 
@@ -470,7 +470,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     if (!this.autostart) {
       console.warn('Feature \'autostart\' disabled. Permissions and devices recovery has to be run manually.');
 
-      // does the necessary configuration without autostarting
+      // does the necessary configuration without autoStarting
       this.initAutostartOff();
 
       this._ready = true;
@@ -478,7 +478,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // configurates the component and starts the scanner
+    // configures the component and starts the scanner
     await this.initAutostartOn();
 
     this._ready = true;
@@ -490,7 +490,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   private initAutostartOff(): void {
 
     // do not ask for permission when autostart is off
-    this.isAutostarting = false;
+    this.isAutoStarting = false;
 
     // just update devices information
     this.updateVideoInputDevices();
@@ -506,7 +506,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   private async initAutostartOn(): Promise<void> {
 
-    this.isAutostarting = true;
+    this.isAutoStarting = true;
 
     let hasPermission: boolean;
 
@@ -524,8 +524,8 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       await this.autostartScanner([...devices]);
     }
 
-    this.isAutostarting = false;
-    this.autostarted.next();
+    this.isAutoStarting = false;
+    this.autoStarted.next();
   }
 
   /**
@@ -568,7 +568,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   public scanStart() {
 
     if (this._scanSubscription) {
-      throw new Error('There is already a scan proccess running.');
+      throw new Error('There is already a scan process running.');
     }
 
     if (!this._device) {
@@ -750,7 +750,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retorna um code reader, cria um se nenhume existe.
+   * Return a code reader, create one if non exist
    */
   private getCodeReader(): BrowserMultiFormatContinuousReader {
 
@@ -869,7 +869,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Sets the permission value and emmits the event.
+   * Sets the permission value and emits the event.
    */
   private setPermission(hasPermission: boolean | null): void {
     this.hasPermission = hasPermission;
