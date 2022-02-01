@@ -117,7 +117,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   autostart: boolean;
 
   /**
-   * How the preview element shoud be fit inside the :host container.
+   * How the preview element should be fit inside the :host container.
    */
   @Input()
   previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
@@ -608,7 +608,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     this.camerasFound.next([...devices]);
 
     if (!hasDevices) {
-      this.camerasNotFound.next();
+      this.camerasNotFound.next(null);
     }
 
     return devices;
