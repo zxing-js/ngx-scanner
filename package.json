@@ -57,9 +57,9 @@
     "@angular/router": "^13.1.1",
     "@angular/service-worker": "^13.1.1",
     "@zxing/browser": "^0.0.10",
-    "@zxing/library": "^0.18.6",
-    "rxjs": "^6.6.3",
-    "tslib": "^2.2.0"
+    "@zxing/library": "^0.19.1",
+    "rxjs": "^7.5.2",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.1.2",
