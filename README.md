@@ -53,6 +53,10 @@ I promise that it's **very** easy to use:
 <zxing-scanner></zxing-scanner>
 ```
 
+## Getting Started
+
+[click here](https://github.com/zxing-js/ngx-scanner/wiki/Getting-Started)
+
 ### Wiki
 
 Check our nice wiki for more info: [click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
