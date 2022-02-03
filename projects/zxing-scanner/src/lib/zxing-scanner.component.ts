@@ -99,10 +99,10 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   delayBetweenScanSuccess = 500;
 
   /**
-   * Emits when and if the scanner is autoStarted.
+   * Emits when and if the scanner is autostarted.
    */
   @Output()
-  autoStarted: EventEmitter<void>;
+  autostarted: EventEmitter<void>;
 
   /**
    * True during autostart and false after. It will be null if won't autostart at all.
@@ -387,7 +387,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   constructor() {
     // instance based emitters
-    this.autoStarted = new EventEmitter();
+    this.autostarted = new EventEmitter();
     this.autoStarting = new EventEmitter();
     this.torchCompatible = new EventEmitter(false);
     this.scanSuccess = new EventEmitter();
@@ -525,7 +525,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     }
 
     this.isAutoStarting = false;
-    this.autoStarted.next();
+    this.autostarted.next();
   }
 
   /**
