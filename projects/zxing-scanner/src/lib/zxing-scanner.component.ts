@@ -52,7 +52,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  private _isAutoStarting: boolean;
+  private _iAutostarting: boolean;
 
   /**
    * Has `navigator` access.
@@ -199,7 +199,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.isAutoStarting) {
+    if (this.iAutostarting) {
       // do not allow setting devices during auto-start, since it will set one and emit it.
       console.warn('Avoid setting a device during auto-start.');
       return;
@@ -304,16 +304,16 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  set isAutoStarting(state: boolean) {
-    this._isAutoStarting = state;
+  set iAutostarting(state: boolean) {
+    this._iAutostarting = state;
     this.autoStarting.next(state);
   }
 
   /**
    *
    */
-  get isAutoStarting(): boolean {
-    return this._isAutoStarting;
+  get iAutostarting(): boolean {
+    return this._iAutostarting;
   }
 
   /**
@@ -490,7 +490,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   private initAutostartOff(): void {
 
     // do not ask for permission when autostart is off
-    this.isAutoStarting = false;
+    this.iAutostarting = false;
 
     // just update devices information
     this.updateVideoInputDevices();
@@ -506,7 +506,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   private async initAutostartOn(): Promise<void> {
 
-    this.isAutoStarting = true;
+    this.iAutostarting = true;
 
     let hasPermission: boolean;
 
@@ -524,7 +524,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       await this.autostartScanner([...devices]);
     }
 
-    this.isAutoStarting = false;
+    this.iAutostarting = false;
     this.autostarted.next();
   }
 
