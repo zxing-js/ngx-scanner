@@ -108,7 +108,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    * True during autostart and false after. It will be null if won't autostart at all.
    */
   @Output()
-  autoStarting: EventEmitter<boolean>;
+  autostarting: EventEmitter<boolean>;
 
   /**
    * If the scanner should autostart with the first available device.
@@ -306,7 +306,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   set iAutostarting(state: boolean) {
     this._iAutostarting = state;
-    this.autoStarting.next(state);
+    this.autostarting.next(state);
   }
 
   /**
@@ -388,7 +388,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   constructor() {
     // instance based emitters
     this.autostarted = new EventEmitter();
-    this.autoStarting = new EventEmitter();
+    this.autostarting = new EventEmitter();
     this.torchCompatible = new EventEmitter(false);
     this.scanSuccess = new EventEmitter();
     this.scanFailure = new EventEmitter();
@@ -470,7 +470,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     if (!this.autostart) {
       console.warn('Feature \'autostart\' disabled. Permissions and devices recovery has to be run manually.');
 
-      // does the necessary configuration without autoStarting
+      // does the necessary configuration without autostarting
       this.initAutostartOff();
 
       this._ready = true;
