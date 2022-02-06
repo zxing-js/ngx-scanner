@@ -117,61 +117,61 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   autostart: boolean;
 
   /**
-   * How the preview element shoud be fit inside the :host container.
+   * How the preview element should be fit inside the :host container.
    */
   @Input()
   previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
 
   /**
-   * Emitts events when the torch compatibility is changed.
+   * Emits events when the torch compatibility is changed.
    */
   @Output()
   torchCompatible: EventEmitter<boolean>;
 
   /**
-   * Emitts events when a scan is successful performed, will inject the string value of the QR-code to the callback.
+   * Emits events when a scan is successful performed, will inject the string value of the QR-code to the callback.
    */
   @Output()
   scanSuccess: EventEmitter<string>;
 
   /**
-   * Emitts events when a scan fails without errors, usefull to know how much scan tries where made.
+   * Emits events when a scan fails without errors, useful to know how much scan tries where made.
    */
   @Output()
   scanFailure: EventEmitter<Exception | undefined>;
 
   /**
-   * Emitts events when a scan throws some error, will inject the error to the callback.
+   * Emits events when a scan throws some error, will inject the error to the callback.
    */
   @Output()
   scanError: EventEmitter<Error>;
 
   /**
-   * Emitts events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
+   * Emits events when a scan is performed, will inject the Result value of the QR-code scan (if available) to the callback.
    */
   @Output()
   scanComplete: EventEmitter<Result>;
 
   /**
-   * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+   * Emits events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
   camerasFound: EventEmitter<MediaDeviceInfo[]>;
 
   /**
-   * Emitts events when no cameras are found, will inject an exception (if available) to the callback.
+   * Emits events when no cameras are found, will inject an exception (if available) to the callback.
    */
   @Output()
   camerasNotFound: EventEmitter<any>;
 
   /**
-   * Emitts events when the users answers for permission.
+   * Emits events when the users answers for permission.
    */
   @Output()
   permissionResponse: EventEmitter<boolean>;
 
   /**
-   * Emitts events when has devices status is update.
+   * Emits events when has devices status is update.
    */
   @Output()
   hasDevices: EventEmitter<boolean>;
@@ -195,7 +195,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
 
     if (!this._ready) {
       this._devicePreStart = device;
-      // let's ignore silently, users don't liek logs
+      // let's ignore silently, users don't like logs
       return;
     }
 
@@ -231,7 +231,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   deviceChange: EventEmitter<MediaDeviceInfo>;
 
   /**
-   * User device acessor.
+   * User device accessor.
    */
   get device() {
     return this._device;
@@ -412,7 +412,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Gets and registers all cammeras.
+   * Gets and registers all cameras.
    */
   async askForPermission(): Promise<boolean> {
 
@@ -478,7 +478,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // configurates the component and starts the scanner
+    // configures the component and starts the scanner
     await this.initAutostartOn();
 
     this._ready = true;
@@ -568,7 +568,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   public scanStart() {
 
     if (this._scanSubscription) {
-      throw new Error('There is already a scan proccess running.');
+      throw new Error('There is already a scan process running.');
     }
 
     if (!this._device) {
@@ -582,7 +582,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    * Stops old `codeReader` and starts scanning in a new one.
    */
   restart(): void {
-    // @note apenas necessario por enquanto causa da Torch
+    // note only necessary for now because of the Torch
     this._codeReader = undefined;
 
     const prevDevice = this._reset();
@@ -608,7 +608,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     this.camerasFound.next([...devices]);
 
     if (!hasDevices) {
-      this.camerasNotFound.next();
+      this.camerasNotFound.next(null);
     }
 
     return devices;
@@ -750,7 +750,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retorna um code reader, cria um se nenhume existe.
+   * Return a code reader, create one if non exist
    */
   private getCodeReader(): BrowserMultiFormatContinuousReader {
 
@@ -869,7 +869,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Sets the permission value and emmits the event.
+   * Sets the permission value and emits the event.
    */
   private setPermission(hasPermission: boolean | null): void {
     this.hasPermission = hasPermission;

@@ -10,7 +10,7 @@ export class BrowserMultiFormatContinuousReader extends BrowserMultiFormatReader
 
   /**
    * Allows to call scanner controls API while scanning.
-   * Will be undefined if no scanning is runnig.
+   * Will be undefined if no scanning is running.
    */
   protected scannerControls: IScannerControls;
 
