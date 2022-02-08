@@ -17,9 +17,7 @@ Angular Barcode/QR-Code scanner component.
 
 [![NPM version](https://img.shields.io/npm/v/@zxing/ngx-scanner.svg?&label=npm)](https://www.npmjs.com/package/@zxing/ngx-scanner )
 [![Downloads](https://img.shields.io/npm/dm/@zxing/ngx-scanner.svg)](https://npmjs.org/package/@zxing/ngx-scanner )
-[![dependencies Status](https://david-dm.org/zxing-js/ngx-scanner/status.svg)](https://david-dm.org/zxing-js/ngx-scanner)
 [![Build Status](https://travis-ci.com/zxing-js/ngx-scanner.svg?branch=master)](https://travis-ci.com/zxing-js/ngx-scanner)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2a948ce56d16433fb4087f99ec17bd92)](https://www.codacy.com/app/zxing/ngx-scanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing-js/ngx-scanner&amp;utm_campaign=Badge_Grade)
 [![BCH compliance](https://bettercodehub.com/edge/badge/zxing-js/ngx-scanner?branch=master)](https://bettercodehub.com/)
 [![Made with Angular](https://img.shields.io/badge/Made%20with-Angular-E13137.svg)](https://angular.io)
 
@@ -69,10 +67,6 @@ Check our nice wiki for more info: [click here to take a look!](https://github.c
 
 Read our performance notes on the wiki: [Performance Considerations](https://github.com/zxing-js/ngx-scanner/wiki/Performance-Considerations).
 
-
-## Limitations
-
-- On iOS devices camera access works only in native Safari. **This is limited WebRTC support by Apple.**
 
 
 ## Generator
