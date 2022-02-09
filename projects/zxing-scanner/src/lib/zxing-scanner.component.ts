@@ -656,7 +656,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    * @param error the error thing.
    */
   private dispatchScanError(error: any): void {
-    if (!this.scanError.observers.some(x => Boolean(x))) {
+    if (!this.scanError.observed) {
       console.error(`zxing scanner component: ${error.name}`, error);
       console.warn('Use the `(scanError)` property to handle errors like this!');
     }
