@@ -22,7 +22,6 @@ Angular Barcode/QR-Code scanner component.
 [![Made with Angular](https://img.shields.io/badge/Made%20with-Angular-E13137.svg)](https://angular.io)
 [![Maintainer wanted](https://img.shields.io/badge/maintained-help%20wanted-red)](https://npmjs.org/package/@zxing/ngx-scanner)
 
-[![Join the chat at https://gitter.im/zxing-js/ngx-scanner](https://badges.gitter.im/zxing-js/ngx-scanner.svg)](https://gitter.im/zxing-js/ngx-scanner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Backers on Open Collective](https://opencollective.com/zxing-js/backers/badge.svg)](#backers) 
 [![Sponsors on Open Collective](https://opencollective.com/zxing-js/sponsors/badge.svg)](#sponsors)
 
