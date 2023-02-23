@@ -829,11 +829,13 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // clearing codeReader first to prevent setOptions error appearing in several Chromium versions
+    this._codeReader = undefined;
+
     const device = this._device;
     // do not set this.device inside this method, it would create a recursive loop
     this.device = undefined;
 
-    this._codeReader = undefined;
 
     return device;
   }
