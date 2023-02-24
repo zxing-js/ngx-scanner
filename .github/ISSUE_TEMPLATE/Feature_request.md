@@ -7,6 +7,7 @@ labels: feature request
 assignees: ''
 
 ---
+* Attention! This Project is looking for maintainers. Your issues will not be resolved by the authors. You are more than welcome to fix the issue and open a pull-request*
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

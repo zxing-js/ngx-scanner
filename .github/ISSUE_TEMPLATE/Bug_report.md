@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+* Attention! This Project is looking for maintainers. Your issues will not be resolved by the authors. You are more than welcome to fix the issue and open a pull-request*
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
