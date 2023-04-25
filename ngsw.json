@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1612218410583,
+  "timestamp": 1682400679321,
   "index": "/ngx-scanner/index.html",
   "assetGroups": [
     {
@@ -13,14 +13,11 @@
       "urls": [
         "/ngx-scanner/favicon.ico",
         "/ngx-scanner/index.html",
-        "/ngx-scanner/main-es2015.ed8c552e47503dec9611.js",
-        "/ngx-scanner/main-es5.ed8c552e47503dec9611.js",
+        "/ngx-scanner/main.1d652f585708237a.js",
         "/ngx-scanner/manifest.webmanifest",
-        "/ngx-scanner/polyfills-es2015.3e0f977fc54cb1016305.js",
-        "/ngx-scanner/polyfills-es5.6ed1a2fee686389a69cb.js",
-        "/ngx-scanner/runtime-es2015.d6c52737d4587c65265f.js",
-        "/ngx-scanner/runtime-es5.d6c52737d4587c65265f.js",
-        "/ngx-scanner/styles.2be8feac6a8253dc61ad.css"
+        "/ngx-scanner/polyfills.dc25fddfc7eb34c8.js",
+        "/ngx-scanner/runtime.de0da83d116d6440.js",
+        "/ngx-scanner/styles.fea3a4fc425ef0a0.css"
       ],
       "patterns": []
     },
@@ -63,15 +60,12 @@
     "/ngx-scanner/assets/icons/mstile-150x150.png": "97db6b63f6214367fa49e266add632bc8af3f5a4",
     "/ngx-scanner/assets/icons/safari-pinned-tab.svg": "03d482e5aa20cb76842fcf984d28cd65c0423987",
     "/ngx-scanner/favicon.ico": "a2eaf72bbac9bea51761890d3665734f0bc390f4",
-    "/ngx-scanner/index.html": "301575698289c786ccfcb26a3825408b5610ef53",
-    "/ngx-scanner/main-es2015.ed8c552e47503dec9611.js": "eb82188198eef21505a7dabb83ca800e63a752ed",
-    "/ngx-scanner/main-es5.ed8c552e47503dec9611.js": "5bc0cb3608e1a98c18c0d6c00c8a9e7e62d643d1",
+    "/ngx-scanner/index.html": "2724e5c83e49a7304346070b6c23a420662e8e19",
+    "/ngx-scanner/main.1d652f585708237a.js": "1e756f9f3f213e930db42cc4c9ac23c81206d944",
     "/ngx-scanner/manifest.webmanifest": "51807fd77aff1ac5c3b6bb2c06722f4e20516182",
-    "/ngx-scanner/polyfills-es2015.3e0f977fc54cb1016305.js": "edf782cb4ec3a305614ea3ff922b8980f1e49ff7",
-    "/ngx-scanner/polyfills-es5.6ed1a2fee686389a69cb.js": "22d5120a4d29b114db72e03309e812844477278d",
-    "/ngx-scanner/runtime-es2015.d6c52737d4587c65265f.js": "d5db3397a9ac50a48747b8727b71e0a1751d57fe",
-    "/ngx-scanner/runtime-es5.d6c52737d4587c65265f.js": "d5db3397a9ac50a48747b8727b71e0a1751d57fe",
-    "/ngx-scanner/styles.2be8feac6a8253dc61ad.css": "1a212dfc210e86fcadeb535791c178e8ef77ed2a"
+    "/ngx-scanner/polyfills.dc25fddfc7eb34c8.js": "e580ac310a208408b18347c5ed3b5042ad6271ec",
+    "/ngx-scanner/runtime.de0da83d116d6440.js": "27c8a1737e4b547f3a115c2e39086664017d4505",
+    "/ngx-scanner/styles.fea3a4fc425ef0a0.css": "df86418071b28c9cc82fd61f1707fc2cd0b8a496"
   },
   "navigationUrls": [
     {
@@ -90,5 +84,6 @@
       "positive": false,
       "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
-  ]
+  ],
+  "navigationRequestStrategy": "performance"
 }
