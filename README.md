@@ -54,6 +54,25 @@ I promise that it's **very** easy to use:
 
 [click here](https://github.com/zxing-js/ngx-scanner/wiki/Getting-Started)
 
+### Angular version compatibility
+
+Angular version compatibility table:
+
+| Angular         | @zxing/ngx-scanner |
+|-----------------|--------------------|
+| 16.x.x | 3.9.1 & 16.0.0     |
+| 15.x.x  | 3.9.0              |
+| 14.x.x | 3.6.2              |
+| 13.x.x | 3.5.0              |
+| 12.x.x | 3.3.0              |
+| 10.x.x  | 3.1.3              |
+| 9.x.x   | 3.0.1              |
+| 8.x.x   | 2.0.1              |
+| 5.x.x   | 1.7.1              |
+| 4.x.x   | 0.3.4              |
+
+(Sorry for not using semver in the past, future releases will use the same major as the supported Angular version)
+
 ### Wiki
 
 Check our nice wiki for more info: [click here to take a look!](https://github.com/zxing-js/ngx-scanner/wiki)**
