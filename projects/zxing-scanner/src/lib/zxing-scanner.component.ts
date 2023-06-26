@@ -123,6 +123,12 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   previewFitMode: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none' = 'cover';
 
   /**
+   * Url of the HTML video poster
+   */
+  @Input()
+  poster: string = '';
+
+  /**
    * Emits events when the torch compatibility is changed.
    */
   @Output()
@@ -757,7 +763,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
     if (!this._codeReader) {
       const options = {
         delayBetweenScanAttempts: this.timeBetweenScans,
-        delayBetweenScanSuccess: this.delayBetweenScanSuccess,
+        delayBetweenScanSuccess: this.delayBetweenScanSuccess
       };
       this._codeReader = new BrowserMultiFormatContinuousReader(this.hints, options);
     }
@@ -784,7 +790,8 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
 
     const next = (x: ResultAndError) => this._onDecodeResult(x.result, x.error);
     const error = (err: any) => this._onDecodeError(err);
-    const complete = () => { };
+    const complete = () => {
+    };
 
     this._scanSubscription = scanStream.subscribe(next, error, complete);
 
