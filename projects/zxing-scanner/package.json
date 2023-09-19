@@ -1,6 +1,6 @@
 {
   "name": "@zxing/ngx-scanner",
-  "version": "16.0.1",
+  "version": "16.1.0",
   "description": "High-performance Angular barcode scanner component based on ZXing.",
   "homepage": "https://github.com/zxing-js/ngx-scanner#readme",
   "private": false,
