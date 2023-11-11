@@ -62,7 +62,7 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1600.0",
+    "@angular-devkit/architect": "^0.1700.0",
     "@angular-devkit/build-angular": "^17.0.0",
     "@angular-devkit/core": "^17.0.0",
     "@angular-devkit/schematics": "^17.0.0",
@@ -83,7 +83,7 @@
     "karma-coverage-istanbul-reporter": "^3.0.3",
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "ng-packagr": "^16.0.0",
+    "ng-packagr": "^17.0.0",
     "protractor": "^7.0.0",
     "ts-node": "^10.4.0",
     "tslint": "^6.1.3",
