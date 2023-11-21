@@ -58,13 +58,14 @@ I promise that it's **very** easy to use:
 
 Angular version compatibility table:
 
-| Angular         | @zxing/ngx-scanner |
-|-----------------|--------------------|
-| 16.x.x | 3.9.1 & 16.0.0     |
+| Angular | @zxing/ngx-scanner |
+|---------|--------------------|
+| 17.x.x  | 17.0.0             |
+| 16.x.x  | 3.9.1 & 16.0.0     |
 | 15.x.x  | 3.9.0              |
-| 14.x.x | 3.6.2              |
-| 13.x.x | 3.5.0              |
-| 12.x.x | 3.3.0              |
+| 14.x.x  | 3.6.2              |
+| 13.x.x  | 3.5.0              |
+| 12.x.x  | 3.3.0              |
 | 10.x.x  | 3.1.3              |
 | 9.x.x   | 3.0.1              |
 | 8.x.x   | 2.0.1              |
