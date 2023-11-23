@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSelectionListChange } from '@angular/material/list';
 import { BarcodeFormat } from '@zxing/library';
 import { formatNames, formatsAvailable } from '../barcode-formats';
 
@@ -19,8 +19,7 @@ export class FormatsDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly data: any,
-    private readonly _dialogRef: MatDialogRef<FormatsDialogComponent>,
-  ) {
+    private readonly _dialogRef: MatDialogRef<FormatsDialogComponent>) {
     this.formatsEnabled = data.formatsEnabled || [];
   }
 
