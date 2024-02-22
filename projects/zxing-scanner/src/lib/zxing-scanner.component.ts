@@ -546,6 +546,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.reset();
+    BrowserCodeReader.cleanVideoSource(this.previewElemRef.nativeElement);
     BrowserMultiFormatContinuousReader.releaseAllStreams();
   }
 
