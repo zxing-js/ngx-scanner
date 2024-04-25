@@ -837,6 +837,18 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.scanStop();
+    try {
+      const videoElement = this.previewElemRef.nativeElement;
+      BrowserCodeReader.cleanVideoSource(videoElement);
+    } catch (err) {
+    }
+
+    try {
+      BrowserCodeReader.releaseAllStreams();
+    } catch (err) {
+    }
+
     // clearing codeReader first to prevent setOptions error appearing in several Chromium versions
     this._codeReader = undefined;
 
