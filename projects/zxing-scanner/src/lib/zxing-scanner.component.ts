@@ -343,6 +343,10 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
   @Input()
   set enable(enabled: boolean) {
 
+    if (this._enabled === Boolean(enabled)) {
+      return;
+    }
+
     this._enabled = Boolean(enabled);
 
     if (!this._enabled) {
