@@ -570,7 +570,6 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       this._scanSubscription?.unsubscribe();
       this._scanSubscription = undefined;
     }
-    this.torchCompatible.next(false);
   }
 
   /**
