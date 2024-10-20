@@ -732,7 +732,15 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
         // tells the listener about the error
         this.camerasNotFound.next(err);
         break;
-
+      case 'AbortError':
+        console.warn('@zxing/ngx-scanner', 'It seems that the required permissions have been granted, but something else failed', err);
+        // permissions claimed
+        permission = true;
+        // can't check devices
+        this.hasDevices.next(null);
+        // tells the listener about the error
+        this.camerasNotFound.next(err);
+        break;
       default:
         console.warn('@zxing/ngx-scanner', 'I was not able to define if I have permissions for camera or not.', err);
         // unknown
