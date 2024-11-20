@@ -6,9 +6,10 @@ import { FormatsDialogComponent } from './formats-dialog/formats-dialog.componen
 import { AppInfoDialogComponent } from './app-info-dialog/app-info-dialog.component';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
 
