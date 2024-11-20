@@ -22,10 +22,11 @@ import { ResultAndError } from './ResultAndError';
 
 
 @Component({
-  selector: 'zxing-scanner',
-  templateUrl: './zxing-scanner.component.html',
-  styleUrls: ['./zxing-scanner.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'zxing-scanner',
+    templateUrl: './zxing-scanner.component.html',
+    styleUrls: ['./zxing-scanner.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ZXingScannerComponent implements OnInit, OnDestroy {
 

@@ -39,12 +39,15 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/zxing-scanner-demo",
+            "outputPath": {
+              "base": "dist/zxing-scanner-demo"
+            },
             "index": "projects/zxing-scanner-demo/src/index.html",
-            "main": "projects/zxing-scanner-demo/src/main.ts",
-            "polyfills": "projects/zxing-scanner-demo/src/polyfills.ts",
+            "polyfills": [
+              "projects/zxing-scanner-demo/src/polyfills.ts"
+            ],
             "tsConfig": "projects/zxing-scanner-demo/tsconfig.app.json",
             "assets": [
               "projects/zxing-scanner-demo/src/favicon.ico",
@@ -57,12 +60,11 @@
               "projects/zxing-scanner-demo/src/styles.css"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/zxing-scanner-demo/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -76,8 +78,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -89,8 +89,7 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "serviceWorker": true,
-              "ngswConfigPath": "projects/zxing-scanner-demo/ngsw-config.json"
+              "serviceWorker": "projects/zxing-scanner-demo/ngsw-config.json"
             }
           },
           "defaultConfiguration": ""
@@ -98,18 +97,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "zxing-scanner-demo:build"
+            "buildTarget": "zxing-scanner-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "zxing-scanner-demo:build:production"
+              "buildTarget": "zxing-scanner-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "zxing-scanner-demo:build"
+            "buildTarget": "zxing-scanner-demo:build"
           }
         },
         "test": {

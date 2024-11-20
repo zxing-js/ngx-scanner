@@ -5,9 +5,10 @@ import { BarcodeFormat } from '@zxing/library';
 import { formatNames, formatsAvailable } from '../barcode-formats';
 
 @Component({
-  selector: 'app-formats-dialog',
-  templateUrl: './formats-dialog.component.html',
-  styleUrls: ['./formats-dialog.component.scss']
+    selector: 'app-formats-dialog',
+    templateUrl: './formats-dialog.component.html',
+    styleUrls: ['./formats-dialog.component.scss'],
+    standalone: false
 })
 export class FormatsDialogComponent {
 
