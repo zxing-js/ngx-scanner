@@ -5,10 +5,12 @@
       <mat-list-option checkboxPosition="start" (click)="toggleTryHarder()" [selected]="tryHarder">
         Enable Try-harder
       </mat-list-option>
-      <mat-list-option checkboxPosition="start" (click)="toggleTorch()" [selected]="torchEnabled"
-        *ngIf="torchAvailable$ | async">
-        Enable Torch
-      </mat-list-option>
+      @if (torchAvailable$ | async) {
+        <mat-list-option checkboxPosition="start" (click)="toggleTorch()" [selected]="torchEnabled"
+          >
+          Enable Torch
+        </mat-list-option>
+      }
     </mat-selection-list>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="openFormatsDialog()">Barcode formats</button>
@@ -19,7 +21,9 @@
     <mat-form-field appearance="fill">
       <mat-select [value]="deviceSelected" (valueChange)="onDeviceSelectChange($event)">
         <mat-option value="">No Device Selected</mat-option>
-        <mat-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{device.label}}</mat-option>
+        @for (device of availableDevices; track device) {
+          <mat-option [value]="device.deviceId">{{device.label}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <button mat-icon-button [matMenuTriggerFor]="appMenu">
@@ -29,50 +33,41 @@
 
   <zxing-scanner [torch]="torchEnabled" [device]="deviceCurrent" (deviceChange)="onDeviceChange($event)" (scanSuccess)="onCodeResult($event)"
     [formats]="formatsEnabled" [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)"
-    (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
+  (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
 
-  <section class="results" *ngIf="qrResultString">
-    <div>
-      <small>Result</small>
-      <strong>{{ qrResultString }}</strong>
-    </div>
-    <button mat-icon-button (click)="clearResult()">&times;</button>
-  </section>
+  @if (qrResultString) {
+    <section class="results">
+      <div>
+        <small>Result</small>
+        <strong>{{ qrResultString }}</strong>
+      </div>
+      <button mat-icon-button (click)="clearResult()">&times;</button>
+    </section>
+  }
 
 </div>
 
-<ng-container *ngIf="hasPermission === undefined">
-
+@if (hasPermission === undefined) {
   <h2>Waiting for permissions.</h2>
-
   <blockquote>
     If your device does not has cameras, no permissions will be asked.
   </blockquote>
+}
 
-</ng-container>
-
-<ng-container *ngIf="hasPermission === false">
-
+@if (hasPermission === false) {
   <h2>You denied the camera permission, we can't scan anything without it. 😪</h2>
+}
 
-</ng-container>
-
-<ng-container *ngIf="hasDevices === undefined">
-
+@if (hasDevices === undefined) {
   <h2>Couldn't check for devices.</h2>
-
   <blockquote>
     This may be caused by some security error.
   </blockquote>
+}
 
-</ng-container>
-
-<ng-container *ngIf="hasDevices === false">
-
+@if (hasDevices === false) {
   <h2>No devices were found.</h2>
-
   <blockquote>
     I believe your device has no media devices attached to.
   </blockquote>
-
-</ng-container>
+}
