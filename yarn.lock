@@ -307,12 +307,12 @@
   optionalDependencies:
     lmdb "3.4.3"
 
-"@angular/cdk@^20.0.0":
-  version "20.0.1"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-20.0.1.tgz"
-  integrity sha512-llJIyKdF9D0hJ9/PNy9A5vmayNgHr7MtQrtjpeLyPuK8qkUnxQd9Hzv5olqixRrbxxDs/Lt0l1T2ViHGy7WYhg==
+"@angular/cdk@^21.0.1":
+  version "21.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-21.0.1.tgz#776291a9acfaa7bc26d4755a307d0affe5cff4d8"
+  integrity sha512-9u1oUf6TGf9Wh+XuQFb9txIGAqfXbAX9ba+dyOTIJ7V3weX3kTRWeGjxad4ydjTPkJ3RaF1/upMwzLuZgnhDMQ==
   dependencies:
-    parse5 "^7.1.2"
+    parse5 "^8.0.0"
     tslib "^2.3.0"
 
 "@angular/cli@^21.0.1":
@@ -397,10 +397,10 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-21.0.2.tgz#bf06fe2f4b66014f3062d7e1a7719f89f57185c3"
   integrity sha512-wE6LkRoXaer+hWBMgW6Y5zKi7EPi4pQ1TJwa/N7XK7BhkOrDQPi6CWcJSnRjI71rR4AByScPMJLVUnhU3hd3UQ==
 
-"@angular/material@^20.0.0":
-  version "20.0.1"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-20.0.1.tgz"
-  integrity sha512-ip1hLYSVi2+UtMsONnRFocof0bk+0mCXErrdfH3MLg1j5ZtJ8XEOUY9TeGqWFCkVf8J37mIAI5g2TZW1YuJLUg==
+"@angular/material@^21.0.1":
+  version "21.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-21.0.1.tgz#fd0bf27789dcbd1f1dec12ce14074c6b39ab98dd"
+  integrity sha512-UJ/8r7n2JN5Iz2qrQ/1xMGz0diUc/SUFC4t+KMlF6KIdnGlNdGlGOA0Js1uOSXvo/YCCnDVw4IyLCG9CAVZ/4Q==
   dependencies:
     tslib "^2.3.0"
 
@@ -8018,7 +8018,7 @@ parse5-sax-parser@^8.0.0:
   dependencies:
     parse5 "^8.0.0"
 
-parse5@^7.0.0, parse5@^7.1.2:
+parse5@^7.0.0:
   version "7.2.1"
   resolved "https://registry.npmjs.org/parse5/-/parse5-7.2.1.tgz"
   integrity sha512-BuBYQYlv1ckiPdQi/ohiivi9Sagc9JG+Ozs0r7b/0iK3sKmrb0b9FdWdBbOdx6hBCM/F9Ir82ofnBhtZOjCRPQ==
