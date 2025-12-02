@@ -56,21 +56,10 @@ I promise that it's **very** easy to use:
 
 ### Angular version compatibility
 
-Angular version compatibility table:
+Angular version compatibility:
 
-| Angular | @zxing/ngx-scanner |
-|---------|--------------------|
-| 17.x.x  | 17.0.0             |
-| 16.x.x  | 3.9.1 & 16.0.0     |
-| 15.x.x  | 3.9.0              |
-| 14.x.x  | 3.6.2              |
-| 13.x.x  | 3.5.0              |
-| 12.x.x  | 3.3.0              |
-| 10.x.x  | 3.1.3              |
-| 9.x.x   | 3.0.1              |
-| 8.x.x   | 2.0.1              |
-| 5.x.x   | 1.7.1              |
-| 4.x.x   | 0.3.4              |
+The main version of @zxing/ngx-scanner will be compatible with the corresponding Angular version.
+That means e.g. @zxing/ngx-scanner@21.0.0 will be compatible with Angular 21.
 
 (Sorry for not using semver in the past, future releases will use the same major as the supported Angular version)
 
