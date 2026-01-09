@@ -67,7 +67,7 @@
     "@angular-devkit/core": "^21.0.1",
     "@angular-devkit/schematics": "^21.0.1",
     "@angular/cli": "^21.0.1",
-    "@angular/compiler": "^21.0.2",
+    "@angular/compiler": "^21.0.7",
     "@angular/compiler-cli": "^21.0.2",
     "@angular/language-service": "^21.0.2",
     "@compodoc/compodoc": "^1.1.32",
