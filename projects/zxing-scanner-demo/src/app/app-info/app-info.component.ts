@@ -30,6 +30,6 @@ export class AppInfoComponent {
       false: '❌'
     };
 
-    return states['' + state];
+    return states['' + state as keyof typeof states];
   }
 }

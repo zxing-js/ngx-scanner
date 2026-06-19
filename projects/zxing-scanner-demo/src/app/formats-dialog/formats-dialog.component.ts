@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectionListChange } from '@angular/material/list';
 import { BarcodeFormat } from '@zxing/library';
@@ -8,6 +8,7 @@ import { formatNames, formatsAvailable } from '../barcode-formats';
     selector: 'app-formats-dialog',
     templateUrl: './formats-dialog.component.html',
     styleUrls: ['./formats-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class FormatsDialogComponent {
@@ -28,8 +29,8 @@ export class FormatsDialogComponent {
     this._dialogRef.close(this.formatsEnabled);
   }
 
-  isEnabled(format: BarcodeFormat) {
-    return this.formatsEnabled.find(x => x === format);
+  isEnabled(format: BarcodeFormat): boolean {
+    return this.formatsEnabled.some(x => x === format);
   }
 
   onSelectionChange(event: MatSelectionListChange) {

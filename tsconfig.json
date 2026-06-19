@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "esModuleInterop": true,
     "sourceMap": true,
@@ -11,6 +10,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
+    "strictNullChecks": false,
     "typeRoots": [
       "node_modules/@types"
     ],

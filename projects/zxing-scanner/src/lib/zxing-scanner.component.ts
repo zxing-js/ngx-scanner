@@ -446,7 +446,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
       // Will try to ask for permission
       stream = await this.getAnyVideoDevice();
       permission = !!stream;
-    } catch (err) {
+    } catch (err: any) {
       return this.handlePermissionException(err);
     } finally {
       this.terminateStream(stream);
@@ -631,7 +631,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   private async autostartScanner(devices: MediaDeviceInfo[]): Promise<void> {
 
-    const matcher = ({ label }) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
+    const matcher = ({ label }: MediaDeviceInfo) => /back|trás|rear|traseira|environment|ambiente/gi.test(label);
 
     // select the rear camera by default, otherwise take the last camera.
     const device = devices.find(matcher) || devices.pop();
@@ -764,7 +764,7 @@ export class ZXingScannerComponent implements OnInit, OnDestroy {
    */
   private getBarcodeFormatOrFail(format: string | BarcodeFormat): BarcodeFormat {
     return typeof format === 'string'
-      ? BarcodeFormat[format.trim().toUpperCase()]
+      ? BarcodeFormat[format.trim().toUpperCase() as keyof typeof BarcodeFormat]
       : format;
   }
 
