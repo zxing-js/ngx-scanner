@@ -5,6 +5,10 @@
   "homepage": "https://github.com/zxing-js/ngx-scanner#readme",
   "private": false,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zxing-js/ngx-scanner.git"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
