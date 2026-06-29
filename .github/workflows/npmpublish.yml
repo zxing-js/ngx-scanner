@@ -55,9 +55,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Update NPM
-        run: npm install -g npm@latest
-
       - name: Download build artifacts
         uses: actions/download-artifact@v8
         with:
@@ -65,7 +62,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
           registry-url: https://registry.npmjs.org/
 
       - run: npm publish ./package.tgz
