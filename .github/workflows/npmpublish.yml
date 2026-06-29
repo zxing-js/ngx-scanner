@@ -45,7 +45,7 @@ jobs:
           mv zxing-ngx-scanner-*.tgz ./package.tgz
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pack-artifact
           path: ./package.tgz
@@ -54,6 +54,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+
+      - name: Update NPM
+        run: npm install -g npm@latest
 
       - name: Download build artifacts
         uses: actions/download-artifact@v8
@@ -65,4 +68,4 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org/
 
-      - run: npm publish ./package.tgz --access public
+      - run: npm publish ./package.tgz
